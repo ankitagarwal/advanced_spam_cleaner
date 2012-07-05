@@ -1,30 +1,35 @@
 <?php
+defined('MOODLE_INTERNAL') || die();
 
-echo $OUTPUT->box_start();     // The forms section at the top
+require_once("$CFG->libdir/formslib.php");
+class tool_advanced_spam_cleaner extends moodleform {
+    // Define the form
+    function definition() {
+        global $CFG;
 
-?>
+        $mform = $this->_form;
+        $options = array (
+                'spamauto' => get_string('spamauto', 'tool_advancedspamcleaner'),
+                'usekeywords' => get_string('usekeywords', 'tool_advancedspamcleaner'));
+        $subplugins = advancedspam_get_subplugins();
 
-<div class="mdl-align">
+        $options = array_merge($options, $subplugins);
 
-<form method="post" action="index.php">
-  <div>
-    <input type="text" name="keyword" id="keyword_el" value="<?php p($keyword) ?>" />
-    <input type="hidden" name="sesskey" value="<?php echo sesskey();?>" />
-    <input type="submit" value="<?php echo get_string('spamsearch', 'tool_spamcleaner')?>" />
-  </div>
-</form>
-<p><?php echo get_string('spameg', 'tool_spamcleaner');?></p>
+        $mform->addElement('header', 'allowheader', get_string('roleallowheader', 'role'));
 
-<hr />
+        $mform->addElement('select', 'method', get_string('method', 'tool_advancedspamcleaner'), $options);
+        $mform->addRule('method', get_string('missingmethod', 'tool_advancedspamcleaner'), 'required', null, 'client');
 
-<form method="post"  action="index.php">
-  <div>
-    <input type="submit" name="autodetect" value="<?php echo get_string('spamauto', 'tool_spamcleaner');?>" />
-  </div>
-</form>
+        $mform->addElement('hidden','sesskey');
+        $mform->setType('sesskey', PARAM_TEXT);
+        $mform->setDefault('sesskey', sesskey());
+
+        $mform->addElement('text','keyword');
+        $mform->setType('keyword', PARAM_TEXT);
 
 
-</div>
 
-<?php
-echo $OUTPUT->box_end();
+        $this->add_action_buttons(true, get_string('spamsearch', 'tool_advancedspamcleaner'));
+    }
+    // add validations
+}
