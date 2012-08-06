@@ -13,14 +13,80 @@ class base_advanced_spam_cleaner {
      */
     function detect_spam ($data) {
         // Implement wrapper for your sub-plugins api in here
-        return false;
+        return true;
     }
 }
 
 
 
 
+class display_advanced_spam_cleaner {
 
+    static function print_table($users_rs, $keywords = null) {
+        global $CFG, $SESSION;
+print_r($users_rs);
+        // reset session everytime this function is called
+        $SESSION->users_result = array();
+        $count = 0;
+
+        // Define table columns
+        $columns = array();
+        $headers = array();
+        $columns[]= 'checkbox';
+        $headers[]= null;
+        $columns[]= 'picture';
+        $headers[]= '';
+        $columns[]= 'fullname';
+        $headers[]= get_string('name');
+
+
+        $columns[]= 'spamcount';
+        $headers[]= get_string('spamcount', 'tool_advancedspamcleaner');
+        $columns[]= 'spamtype';
+        $headers[]= get_string('spamtype', 'tool_advancedspamcleaner');
+        $columns[]= 'spamtext';
+        $headers[]= get_string('spamtext', 'tool_advancedspamcleaner');
+
+
+        $table = new flexible_table('advanced-spam-cleaner');
+
+        $table->define_columns($columns);
+        $table->define_headers($headers);
+        $table->define_baseurl($PAGE->url);
+
+        $table->sortable(true);
+        $table->collapsible(true);
+
+        // This is done to prevent redundant data, when a user has multiple attempts
+        $table->column_suppress('picture');
+        $table->column_suppress('fullname');
+
+        $table->no_sorting('spamtype');
+        $table->no_sorting('spamtext');
+        $table->no_sorting('score');
+
+        $table->column_class('picture', 'picture');
+        $table->column_class('fullname', 'bold');
+        $table->column_class('spamcount', 'bold');
+
+        $table->set_attribute('cellspacing', '0');
+        $table->set_attribute('id', 'attempts');
+        $table->set_attribute('class', 'generaltable generalbox');
+        foreach ($users_rs as $userid => $user) {
+            $row = array();
+            $row['name'] = $user['user']->firstname . " " . $user['user']->lastname;
+            $row['spamcount'] = $user['spamcount'];
+            foreach($user['spamtext'] as $spamcount => $spamdata) {
+                echo "Ad";
+                print_r($spamdata);
+                $row['spamtype'] = $spamtype;
+                $row['spamtext'] = $spamdata;
+                $table->add_data($row);
+            }
+        }
+        $table->finish_output();
+    }
+}
 
 
 

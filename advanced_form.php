@@ -9,7 +9,8 @@ class tool_advanced_spam_cleaner extends moodleform {
         $mform = $this->_form;
         $options = array (
                 'spamauto' => get_string('spamauto', 'tool_advancedspamcleaner'),
-                'usekeywords' => get_string('usekeywords', 'tool_advancedspamcleaner'));
+                'usekeywords' => get_string('usekeywords', 'tool_advancedspamcleaner'),
+                 'base' =>'sadda');
         $subplugins = array();
         //$subplugins = advancedspam_get_subplugins();
 

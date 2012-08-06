@@ -10,8 +10,9 @@
  */
 
 
-require_once($CFG->libdir.'config.php');
+require_once('../../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
+require_once($CFG->libdir.'/tablelib.php');
 require_once('advanced_form.php');
 require_once('lib.php');
 
@@ -108,7 +109,7 @@ if( $data = $mform->get_data()) {
         $plugin = new $pluginclassname();
         $params = array('userid' => $USER->id);
 
-        if(isset($data['searchusers'])) {
+        if(isset($data->searchusers)) {
             $sql  = "SELECT * FROM {user} WHERE deleted = 0 AND id <> :userid";  // Exclude oneself
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
@@ -121,10 +122,15 @@ if( $data = $mform->get_data()) {
                 $is_spam = $plugin->detect_spam($data);
                 if ($is_spam) {
                     $spamusers[$user->id]['user'] = $user;
-                    $spamusers[$user->id]['spamtext'][] = array ('userdesc' => $user->desc);
-                    $spamusers[$user->id]['spamcount']++;
+                    if(empty($spamusers[$user->id]['spamcount'])) {
+                        $spamusers[$user->id]['spamcount'] = 1;
+                    } else {
+                        $spamusers[$user->id]['spamcount']++;
+                    }
+                    $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('userdesc' => $user->description);
                 }
             }
+            display_advanced_spam_cleaner::print_table($spamusers);
         }
 
     }
