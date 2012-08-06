@@ -15,7 +15,7 @@ class tool_advanced_spam_cleaner extends moodleform {
 
         $options = array_merge($options, $subplugins);
 
-        $mform->addElement('header', 'allowheader', get_string('roleallowheader', 'role'));
+        $mform->addElement('header', 'methodoptions', get_string('methodoptions', 'tool_advancedspamcleaner'));
 
         $mform->addElement('select', 'method', get_string('method', 'tool_advancedspamcleaner'), $options);
         $mform->addRule('method', get_string('missingmethod', 'tool_advancedspamcleaner'), 'required', null, 'client');
@@ -33,7 +33,6 @@ class tool_advanced_spam_cleaner extends moodleform {
         $mform->addElement('checkbox', 'searchcomments', get_string('searchcomments', 'tool_advancedspamcleaner'));
         $mform->addElement('checkbox', 'searchmsgs', get_string('searchmsgs', 'tool_advancedspamcleaner'));
         $mform->addElement('checkbox', 'searchforums', get_string('searchforums', 'tool_advancedspamcleaner'));
-        $mform->addElement('checkbox', 'repeat', get_string('repeatevent', 'calendar'), null, 'repeat');
 
         $this->add_action_buttons(true, get_string('spamsearch', 'tool_advancedspamcleaner'));
     }

@@ -5,22 +5,17 @@
  *
  * Helps an admin to clean up spam in Moodle
  *
- * @authors Ankit Agarwal
+ * @copytight Ankit Agarwal
  * @license GPL3 or later
  */
 
-// List of known spammy keywords, please add more here
 
-/////////////////////////////////////////////////////////////////////////////////
-
-require_once('../../../config.php');
+require_once($CFG->libdir.'config.php');
 require_once($CFG->libdir.'/adminlib.php');
 require_once('advanced_form.php');
 require_once('lib.php');
 
-
-// Configuration
-
+// List of known spammy keywords, please add more here
 $autokeywords = array(
                     "<img",
                     "fuck",
@@ -37,7 +32,6 @@ $autokeywords = array(
 $del = optional_param('del', '', PARAM_RAW);
 $delall = optional_param('delall', '', PARAM_RAW);
 $ignore = optional_param('ignore', '', PARAM_RAW);
-$reset = optional_param('reset', '', PARAM_RAW);
 $id = optional_param('id', '', PARAM_INT);
 
 require_login();
@@ -109,6 +103,29 @@ if( $data = $mform->get_data()) {
         search_spammers($keywords);
     // use the specified sub-plugin
     } else {
+        $plugin = $data->method;
+        $pluginclassname = "$plugin" . "_advanced_spam_cleaner";
+        $plugin = new $pluginclassname();
+        $params = array('userid' => $USER->id);
+
+        if(isset($data['searchusers'])) {
+            $sql  = "SELECT * FROM {user} WHERE deleted = 0 AND id <> :userid";  // Exclude oneself
+            $users = $DB->get_recordset_sql($sql, $params);
+            foreach ($users as $user) {
+                // Data should be consistent for the sub-plugins
+                $data = new stdClass();
+                $data->email = $user->email;
+                $data->ip = $user->lastip;
+                $data->text = $user->description;
+                $data->type = 'userdesc';
+                $is_spam = $plugin->detect_spam($data);
+                if ($is_spam) {
+                    $spamusers[$user->id]['user'] = $user;
+                    $spamusers[$user->id]['spamtext'][] = array ('userdesc' => $user->desc);
+                    $spamusers[$user->id]['spamcount']++;
+                }
+            }
+        }
 
     }
     echo '</div>';

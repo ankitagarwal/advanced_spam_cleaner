@@ -26,6 +26,7 @@
 
 $string['keywordstouse'] = 'Keywords to use';
 $string['method'] = 'Method to use';
+$string['methodoptions'] = 'Method options';
 $string['missingkeywords'] = 'Keywords cannot be empty';
 $string['missingmethod'] = 'Method to use cannot be empty';
 $string['pluginname'] = 'Advanced spam cleaner';

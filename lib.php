@@ -1,4 +1,29 @@
 <?php
+
+/* Base sub-plugin class
+ * All sub -plugins must extend this class
+ * The name of the extend class should be $pluginname_advanced_spam_cleaner
+ */
+class base_advanced_spam_cleaner {
+
+    /* Detect if the supplied data is probable spam or not
+     * @param stdClass $data data to be examined
+     *
+     * @return bool true if $data is probable spam else false
+     */
+    function detect_spam ($data) {
+        // Implement wrapper for your sub-plugins api in here
+        return false;
+    }
+}
+
+
+
+
+
+
+
+
 function search_spammers($keywords) {
 
     global $CFG, $USER, $DB, $OUTPUT;
