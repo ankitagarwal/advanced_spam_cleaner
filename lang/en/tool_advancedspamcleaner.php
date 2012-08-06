@@ -23,8 +23,18 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'Spam cleaner';
-$string['spamauto'] = 'Autodetect common spam patterns';
+
+$string['keywordstouse'] = 'Keywords to use';
+$string['method'] = 'Method to use';
+$string['missingkeywords'] = 'Keywords cannot be empty';
+$string['missingmethod'] = 'Method to use cannot be empty';
+$string['pluginname'] = 'Advanced spam cleaner';
+$string['searchblogs'] = 'Include blogs';
+$string['searchcomments'] = 'Include comments';
+$string['searchforums'] = 'Include forums';
+$string['searchmsgs'] = 'Include messages';
+$string['searchscope'] = 'Scope of spam search';
+$string['searchusers'] = 'Include user profiles';
 $string['spamcannotdelete'] = 'Cannot delete this user';
 $string['spamcannotfinduser'] = 'No users matching your search';
 $string['spamcleanerintro'] = 'This script allows you to search all user profiles for certain strings and then delete those accounts which are obviously created by spammers.  You can search for multiple keywords using commas (eg casino, porn)<br /><br />Moodle docs has more information about <a href="http://docs.moodle.org/en/Reducing_spam_in_Moodle">Reducing spam in Moodle</a>.';
@@ -41,3 +51,4 @@ $string['spaminvalidresult'] = 'Unknown but invalid result';
 $string['spamoperation'] = 'Operation';
 $string['spamresult'] = 'Results of searching user profiles containing:';
 $string['spamsearch'] = 'Search for these keywords';
+$string['usekeywords'] = 'Use the entered keywords';

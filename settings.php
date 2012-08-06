@@ -28,6 +28,6 @@
 defined('MOODLE_INTERNAL') || die;
 
 if ($hassiteconfig) {
-    $ADMIN->add('reports', new admin_externalpage('toolspamcleaner', get_string('pluginname', 'tool_spamcleaner'), "$CFG->wwwroot/$CFG->admin/tool/spamcleaner/index.php", 'moodle/site:config'));
+    $ADMIN->add('reports', new admin_externalpage('tooladvancedspamcleaner', get_string('pluginname', 'tool_advancedspamcleaner'), "$CFG->wwwroot/$CFG->admin/tool/advancedspamcleaner/index.php", 'moodle/site:config'));
 }
 
