@@ -28,14 +28,14 @@ class tool_advanced_spam_cleaner extends moodleform {
         $mform->addElement('text','keyword', get_string('keywordstouse', 'tool_advancedspamcleaner'));
         $mform->setType('keyword', PARAM_TEXT);
 
-        $mform->addElement('header', 'repeatedevents', get_string('searchscope', 'tool_advancedspamcleaner'));
+        $mform->addElement('header', 'searchscope', get_string('searchscope', 'tool_advancedspamcleaner'));
         $mform->addElement('checkbox', 'searchblogs', get_string('searchblogs', 'tool_advancedspamcleaner'));
         $mform->addElement('checkbox', 'searchusers', get_string('searchusers', 'tool_advancedspamcleaner'));
         $mform->addElement('checkbox', 'searchcomments', get_string('searchcomments', 'tool_advancedspamcleaner'));
         $mform->addElement('checkbox', 'searchmsgs', get_string('searchmsgs', 'tool_advancedspamcleaner'));
         $mform->addElement('checkbox', 'searchforums', get_string('searchforums', 'tool_advancedspamcleaner'));
 
-        $this->add_action_buttons(true, get_string('spamsearch', 'tool_advancedspamcleaner'));
+        $this->add_action_buttons(false, get_string('spamsearch', 'tool_advancedspamcleaner'));
     }
     // add validations
     function validation($data, $files) {
@@ -45,6 +45,5 @@ class tool_advanced_spam_cleaner extends moodleform {
             $errors['keyword'] = get_string('missingkeywords', 'tool_advancedspamcleaner');
         }
         return $errors;
-
     }
 }

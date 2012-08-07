@@ -87,30 +87,29 @@ echo $OUTPUT->header();
 echo $OUTPUT->box(get_string('spamcleanerintro', 'tool_spamcleaner'));
 
 $mform = new tool_advanced_spam_cleaner();
+$mform->set_data(null);
 $mform->display();
-if( $data = $mform->get_data()) {
-    print_r($data);
+if( $formdata = $mform->get_data()) {
     echo '<div id="result" class="mdl-align">';
-    $keywords = explode(',', $data->keyword);
-    if ($data->method == 'usekeywords' && empty($data->keyword)) {
-        echo "dd";
+    $keywords = explode(',', $formdata->keyword);
+    if ($formdata->method == 'usekeywords' && empty($formdata->keyword)) {
         print_error(get_string('missingkeywords', 'tool_advancedspamcleaner'));
     }
     // Find spam using keywords
-    if($data->method == 'usekeywords' || $data->method == 'spamauto') {
+    if($formdata->method == 'usekeywords' || $formdata->method == 'spamauto') {
         if (empty($keywords)) {
             $keywords = $autokeywords;
         }
         search_spammers($keywords);
     // use the specified sub-plugin
     } else {
-        $plugin = $data->method;
+        $plugin = $formdata->method;
         $pluginclassname = "$plugin" . "_advanced_spam_cleaner";
         $plugin = new $pluginclassname();
         $params = array('userid' => $USER->id);
 
-        if(isset($data->searchusers)) {
-            $sql  = "SELECT * FROM {user} WHERE deleted = 0 AND id <> :userid";  // Exclude oneself
+        if(isset($formdata->searchusers)) {
+            $sql  = "SELECT * FROM {user} WHERE deleted = 0 AND id <> :userid AND description != ''";  // Exclude oneself
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
                 // Data should be consistent for the sub-plugins
@@ -127,12 +126,99 @@ if( $data = $mform->get_data()) {
                     } else {
                         $spamusers[$user->id]['spamcount']++;
                     }
-                    $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('userdesc' , $user->description);
+                    $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('userdesc' , $data->text);
                 }
             }
-            display_advanced_spam_cleaner::print_table($spamusers,'',true);
         }
-
+        if(isset($formdata->searchcomments)) {
+            $sql  = "SELECT u.*, c.content FROM {user} AS u, {comments} AS c WHERE u.deleted = 0 AND u.id=c.userid AND u.id <> :userid";
+            $users = $DB->get_recordset_sql($sql, $params);
+            foreach ($users as $user) {
+                // Data should be consistent for the sub-plugins
+                $data = new stdClass();
+                $data->email = $user->email;
+                $data->ip = $user->lastip;
+                $data->text = $user->comments;
+                $data->type = 'comment';
+                $is_spam = $plugin->detect_spam($data);
+                if ($is_spam) {
+                    $spamusers[$user->id]['user'] = $user;
+                    if(empty($spamusers[$user->id]['spamcount'])) {
+                        $spamusers[$user->id]['spamcount'] = 1;
+                    } else {
+                        $spamusers[$user->id]['spamcount']++;
+                    }
+                    $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('comment' , $data->text);
+                }
+            }
+        }
+        if(isset($formdata->searchmsgs)) {
+            $sql  = "SELECT u.*, m.fullmessage FROM {user} AS u, {message} AS m WHERE u.deleted = 0 AND u.id=m.useridfrom AND u.id <> :userid";
+            $users = $DB->get_recordset_sql($sql, $params);
+            foreach ($users as $user) {
+                // Data should be consistent for the sub-plugins
+                $data = new stdClass();
+                $data->email = $user->email;
+                $data->ip = $user->lastip;
+                $data->text = $user->fullmessage;
+                $data->type = 'message';
+                $is_spam = $plugin->detect_spam($data);
+                if ($is_spam) {
+                    $spamusers[$user->id]['user'] = $user;
+                    if(empty($spamusers[$user->id]['spamcount'])) {
+                        $spamusers[$user->id]['spamcount'] = 1;
+                    } else {
+                        $spamusers[$user->id]['spamcount']++;
+                    }
+                    $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('message' , $data->text);
+                }
+            }
+        }
+        if(isset($formdata->searchforums)) {
+            $sql = "SELECT u.*, fp.message FROM {user} AS u, {forum_posts} AS fp WHERE u.deleted = 0 AND u.id=fp.userid AND u.id <> :userid";
+            $users = $DB->get_recordset_sql($sql, $params);
+            foreach ($users as $user) {
+                // Data should be consistent for the sub-plugins
+                $data = new stdClass();
+                $data->email = $user->email;
+                $data->ip = $user->lastip;
+                $data->text = $user->message;
+                $data->type = 'forummessage';
+                $is_spam = $plugin->detect_spam($data);
+                if ($is_spam) {
+                    $spamusers[$user->id]['user'] = $user;
+                    if(empty($spamusers[$user->id]['spamcount'])) {
+                        $spamusers[$user->id]['spamcount'] = 1;
+                    } else {
+                        $spamusers[$user->id]['spamcount']++;
+                    }
+                    $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('forummessage' , $data->text);
+                }
+            }
+        }
+        if(isset($formdata->searchforums)) {
+            $sql = "SELECT u.*, p.summary FROM {user} AS u, {post} AS p WHERE u.deleted = 0 AND u.id=p.userid AND u.id <> :userid";
+            $users = $DB->get_recordset_sql($sql, $params);
+            foreach ($users as $user) {
+                // Data should be consistent for the sub-plugins
+                $data = new stdClass();
+                $data->email = $user->email;
+                $data->ip = $user->lastip;
+                $data->text = $user->summary;
+                $data->type = 'blogpost';
+                $is_spam = $plugin->detect_spam($data);
+                if ($is_spam) {
+                    $spamusers[$user->id]['user'] = $user;
+                    if(empty($spamusers[$user->id]['spamcount'])) {
+                        $spamusers[$user->id]['spamcount'] = 1;
+                    } else {
+                        $spamusers[$user->id]['spamcount']++;
+                    }
+                    $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('blogpost' , $data->text);
+                }
+            }
+        }
+        display_advanced_spam_cleaner::print_table($spamusers,'',true);
     }
     echo '</div>';
 }
