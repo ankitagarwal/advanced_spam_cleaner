@@ -95,6 +95,19 @@ if( $formdata = $mform->get_data()) {
     if ($formdata->method == 'usekeywords' && empty($formdata->keyword)) {
         print_error(get_string('missingkeywords', 'tool_advancedspamcleaner'));
     }
+
+    if (is_number($formdata->apilimit)) {
+        $apilimit = $formdata->apilimit;
+    } else {
+        $apilimit = 0;
+    }
+
+    if (is_number($formdata->hitlimit)) {
+        $hitlimit = $formdata->hitlimit;
+    } else {
+        $hitlimit = 0;
+    }
+
     // Find spam using keywords
     if($formdata->method == 'usekeywords' || $formdata->method == 'spamauto') {
         if (empty($keywords)) {

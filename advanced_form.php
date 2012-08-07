@@ -35,6 +35,14 @@ class tool_advanced_spam_cleaner extends moodleform {
         $mform->addElement('checkbox', 'searchmsgs', get_string('searchmsgs', 'tool_advancedspamcleaner'));
         $mform->addElement('checkbox', 'searchforums', get_string('searchforums', 'tool_advancedspamcleaner'));
 
+        $mform->addElement('header', 'limits', get_string('limits', 'tool_advancedspamcleaner'));
+        $mform->addElement('text', 'apilimit', get_string('apilimit', 'tool_advancedspamcleaner'));
+        $mform->setType('apilimit', PARAM_INT);
+        $mform->addHelpButton('apilimit', 'apilimit', 'tool_advancedspamcleaner');
+        $mform->addElement('text', 'hitlimit', get_string('hitlimit', 'tool_advancedspamcleaner'));
+        $mform->setType('hitlimit', PARAM_INT);
+        $mform->addHelpButton('hitlimit', 'hitlimit', 'tool_advancedspamcleaner');
+
         $this->add_action_buttons(false, get_string('spamsearch', 'tool_advancedspamcleaner'));
     }
     // add validations

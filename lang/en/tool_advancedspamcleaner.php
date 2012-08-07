@@ -23,8 +23,12 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
+$string['apilimit'] = 'Api limit';
+$string['apilimit_help'] = 'Maximum amount of Api calls to make. (Not used for keyword based methods)';
+$string['hitlimit'] = 'Hit limit';
+$string['hitlimit_help'] = 'Stop after this amount of spam entries have been detected';
 $string['keywordstouse'] = 'Keywords to use';
+$string['limits'] = 'Limits';
 $string['method'] = 'Method to use';
 $string['methodoptions'] = 'Method options';
 $string['missingkeywords'] = 'Keywords cannot be empty';
