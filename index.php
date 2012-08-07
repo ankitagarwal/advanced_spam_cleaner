@@ -87,8 +87,8 @@ echo $OUTPUT->header();
 echo $OUTPUT->box(get_string('spamcleanerintro', 'tool_spamcleaner'));
 
 $mform = new tool_advanced_spam_cleaner();
-$mform->set_data(null);
 $mform->display();
+
 if( $formdata = $mform->get_data()) {
     echo '<div id="result" class="mdl-align">';
     $keywords = explode(',', $formdata->keyword);
@@ -100,7 +100,7 @@ if( $formdata = $mform->get_data()) {
         if (empty($keywords)) {
             $keywords = $autokeywords;
         }
-        search_spammers($keywords);
+        display_advanced_spam_cleaner::search_spammers($formdata, $keywords, false );
     // use the specified sub-plugin
     } else {
         $plugin = $formdata->method;
@@ -196,7 +196,7 @@ if( $formdata = $mform->get_data()) {
                 }
             }
         }
-        if(isset($formdata->searchforums)) {
+        if(isset($formdata->searchblogs)) {
             $sql = "SELECT u.*, p.summary FROM {user} AS u, {post} AS p WHERE u.deleted = 0 AND u.id=p.userid AND u.id <> :userid";
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
