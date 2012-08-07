@@ -127,10 +127,10 @@ if( $data = $mform->get_data()) {
                     } else {
                         $spamusers[$user->id]['spamcount']++;
                     }
-                    $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('userdesc' => $user->description);
+                    $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('userdesc' , $user->description);
                 }
             }
-            display_advanced_spam_cleaner::print_table($spamusers);
+            display_advanced_spam_cleaner::print_table($spamusers,'',true);
         }
 
     }

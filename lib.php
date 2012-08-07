@@ -22,12 +22,20 @@ class base_advanced_spam_cleaner {
 
 class display_advanced_spam_cleaner {
 
-    static function print_table($users_rs, $keywords = null) {
-        global $CFG, $SESSION;
-print_r($users_rs);
-        // reset session everytime this function is called
-        $SESSION->users_result = array();
-        $count = 0;
+    static function print_table($users_rs = null, $keywords = null, $resetsession = false) {
+        global $CFG, $SESSION, $OUTPUT, $PAGE;
+        /*if ($resetsession) {
+            // reset session
+            $SESSION->users_result = array();
+            $SESSION->users_result = $users_rs;
+        } else {
+            if (is_array($SESSION->users_result)) {
+                $users_rs = $SESSION->users_result;
+            } else {
+                $users_rs = array();
+            }
+        }
+        $count = 0;*/
 
         // Define table columns
         $columns = array();
@@ -42,10 +50,17 @@ print_r($users_rs);
 
         $columns[]= 'spamcount';
         $headers[]= get_string('spamcount', 'tool_advancedspamcleaner');
-        $columns[]= 'spamtype';
-        $headers[]= get_string('spamtype', 'tool_advancedspamcleaner');
         $columns[]= 'spamtext';
         $headers[]= get_string('spamtext', 'tool_advancedspamcleaner');
+        $columns[]= 'spamtype';
+        $headers[]= get_string('spamtype', 'tool_advancedspamcleaner');
+
+        $columns[]= 'deleteuser';
+        $headers[]= get_string('deleteuser', 'admin');
+        $columns[]= 'ignoreuser';
+        $headers[]= get_string('ignore', 'admin');
+        //$columns[]= 'spamtype';;
+        //$headers[]= get_string('spamtype', 'tool_advancedspamcleaner');
 
 
         $table = new flexible_table('advanced-spam-cleaner');
@@ -54,33 +69,32 @@ print_r($users_rs);
         $table->define_headers($headers);
         $table->define_baseurl($PAGE->url);
 
-        $table->sortable(true);
+        $table->sortable(false);
         $table->collapsible(true);
 
         // This is done to prevent redundant data, when a user has multiple attempts
         $table->column_suppress('picture');
         $table->column_suppress('fullname');
 
-        $table->no_sorting('spamtype');
-        $table->no_sorting('spamtext');
-        $table->no_sorting('score');
-
         $table->column_class('picture', 'picture');
-        $table->column_class('fullname', 'bold');
-        $table->column_class('spamcount', 'bold');
 
         $table->set_attribute('cellspacing', '0');
         $table->set_attribute('id', 'attempts');
         $table->set_attribute('class', 'generaltable generalbox');
-        foreach ($users_rs as $userid => $user) {
-            $row = array();
-            $row['name'] = $user['user']->firstname . " " . $user['user']->lastname;
-            $row['spamcount'] = $user['spamcount'];
-            foreach($user['spamtext'] as $spamcount => $spamdata) {
-                echo "Ad";
-                print_r($spamdata);
-                $row['spamtype'] = $spamtype;
-                $row['spamtext'] = $spamdata;
+        $table->setup();
+        foreach ($users_rs as $userid => $userdata) {
+            $user = (object)$userdata['user'];
+
+            foreach($userdata['spamtext'] as $spamcount => $spamdata) {
+                $row = array();
+                $row[] = '<input type="checkbox" name="userid[]" value="'. $userid .'" />';
+                $row[] = $OUTPUT->user_picture($user);
+                $row[] = '<a href="'.$CFG->wwwroot.'/user/view.php?id='.$userid.'">'.fullname($user).'</a>';
+                $row[] = $userdata['spamcount'];
+                $row[] = array_pop($spamdata);
+                $row[] = array_pop($spamdata);
+                $row[] .= '<button onclick="M.tool_spamcleaner.del_user(this,'.$userid.')">'.get_string('deleteuser', 'admin').'</button><br />';
+                $row[] .= '<button onclick="M.tool_spamcleaner.ignore_user(this,'.$userid.')">'.get_string('ignore', 'admin').'</button>';
                 $table->add_data($row);
             }
         }
