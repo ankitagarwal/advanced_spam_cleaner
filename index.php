@@ -96,15 +96,21 @@ if( $formdata = $mform->get_data()) {
         print_error(get_string('missingkeywords', 'tool_advancedspamcleaner'));
     }
 
-    if (is_number($formdata->apilimit)) {
-        $apilimit = $formdata->apilimit;
+    // Set limits
+    if(!empty($formdata->uselimits)) {
+        if (is_number($formdata->apilimit)) {
+            $apilimit = $formdata->apilimit;
+        } else {
+            $apilimit = 0;
+        }
+
+        if (is_number($formdata->hitlimit)) {
+            $hitlimit = $formdata->hitlimit;
+        } else {
+            $hitlimit = 0;
+        }
     } else {
         $apilimit = 0;
-    }
-
-    if (is_number($formdata->hitlimit)) {
-        $hitlimit = $formdata->hitlimit;
-    } else {
         $hitlimit = 0;
     }
 

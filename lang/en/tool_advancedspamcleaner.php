@@ -61,3 +61,4 @@ $string['spamoperation'] = 'Operation';
 $string['spamresult'] = 'Results of searching user profiles containing:';
 $string['spamsearch'] = 'Search for these keywords';
 $string['usekeywords'] = 'Use the entered keywords';
+$string['uselimits'] = 'Use limits';
