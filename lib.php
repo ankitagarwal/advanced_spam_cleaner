@@ -13,6 +13,11 @@ class base_advanced_spam_cleaner {
      */
     function detect_spam ($data) {
         // Implement wrapper for your sub-plugins api in here
+        return false;
+    }
+
+    function can_view($context) {
+        // Implement your custom cap checks here
         return true;
     }
 }
@@ -20,8 +25,37 @@ class base_advanced_spam_cleaner {
 
 
 
-class display_advanced_spam_cleaner {
+class advanced_spam_cleaner {
 
+
+    /* Generates and returns list of available Advanced spam cleaner sub-plugins
+     *
+    * @param context context level to check caps against
+    * @return array list of valid reports present
+    */
+    function plugin_list($context) {
+        global $CFG;
+        static $pluginlist;
+        if (!empty($pluginlist)) {
+            return $pluginlist;
+        }
+        $installed = get_plugin_list('advancedspamcleaner');
+        foreach ($installed as $pluginname => $notused) {
+            $pluginfile = $CFG->dirroot.'/admin/tool/advancedspamcleaner/'.$pluginname.'/api.php';
+            if (is_readable($pluginfile)) {
+                include_once($pluginfile);
+                $pluginclassname = "{$pluginname}_advanced_spam_cleaner";
+                if (class_exists($pluginclassname)) {
+                    $plugin = new $pluginclassname();
+
+                    if ($plugin->canview($context)) {
+                        $pluginlist[] = $pluginname;
+                    }
+                }
+            }
+        }
+        return $pluginlist;
+    }
 
     static function search_spammers($data, $keywords = null, $return = false) {
 
@@ -164,8 +198,8 @@ class display_advanced_spam_cleaner {
         if ($return) {
             return $spamusers;
         } else {
-            echo $OUTPUT->box(get_string('spamresult', 'tool_spamcleaner').s(implode(', ', $keywords))).' ...';
-            display_advanced_spam_cleaner::print_table($spamusers, $keywords, true);
+            echo $OUTPUT->box(get_string('spamresult', 'tool_advancedspamcleaner').s(implode(', ', $keywords))).' ...';
+            advanced_spam_cleaner::print_table($spamusers, $keywords, true);
         }
     }
 

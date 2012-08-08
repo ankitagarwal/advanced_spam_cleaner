@@ -5,14 +5,11 @@ require_once("$CFG->libdir/formslib.php");
 class tool_advanced_spam_cleaner extends moodleform {
     // Define the form
     function definition() {
-
         $mform = $this->_form;
         $options = array (
                 'spamauto' => get_string('spamauto', 'tool_advancedspamcleaner'),
-                'usekeywords' => get_string('usekeywords', 'tool_advancedspamcleaner'),
-                 'base' =>'sadda');
-        $subplugins = array();
-        //$subplugins = advancedspam_get_subplugins();
+                'usekeywords' => get_string('usekeywords', 'tool_advancedspamcleaner'));
+        $subplugins = (array)$this->_customdata['pluginlist'];
 
         $options = array_merge($options, $subplugins);
 

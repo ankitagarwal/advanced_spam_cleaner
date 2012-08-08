@@ -86,7 +86,10 @@ echo $OUTPUT->header();
 // Print headers and things
 echo $OUTPUT->box(get_string('spamcleanerintro', 'tool_spamcleaner'));
 
-$mform = new tool_advanced_spam_cleaner();
+$spamcleaner = new advanced_spam_cleaner();
+$pluginlist = $spamcleaner->plugin_list(get_system_context());
+
+$mform = new tool_advanced_spam_cleaner(null, array ('pluginlist' => $pluginlist));
 $mform->display();
 
 if( $formdata = $mform->get_data()) {
@@ -119,10 +122,13 @@ if( $formdata = $mform->get_data()) {
         if (empty($keywords)) {
             $keywords = $autokeywords;
         }
-        display_advanced_spam_cleaner::search_spammers($formdata, $keywords, false );
+        $spamcleaner->search_spammers($formdata, $keywords, false );
     // use the specified sub-plugin
     } else {
         $plugin = $formdata->method;
+        if (in_array($plugin, $pluginlist)) {
+            print_error("Invalid sub plugin");
+        }
         $pluginclassname = "$plugin" . "_advanced_spam_cleaner";
         $plugin = new $pluginclassname();
         $params = array('userid' => $USER->id);
@@ -237,7 +243,7 @@ if( $formdata = $mform->get_data()) {
                 }
             }
         }
-        display_advanced_spam_cleaner::print_table($spamusers,'',true);
+        $spamcleaner->print_table($spamusers,'',true);
     }
     echo '</div>';
 }
