@@ -34,6 +34,7 @@ class tool_advanced_spam_cleaner extends moodleform {
 
         $mform->addElement('header', 'limits', get_string('limits', 'tool_advancedspamcleaner'));
         $mform->addElement('checkbox', 'uselimits', get_string('uselimits', 'tool_advancedspamcleaner'));
+        $mform->addHelpButton('uselimits', 'uselimits', 'tool_advancedspamcleaner');
         $mform->addElement('text', 'apilimit', get_string('apilimit', 'tool_advancedspamcleaner'));
         $mform->setType('apilimit', PARAM_INT);
         $mform->setDefault('apilimit', 500);

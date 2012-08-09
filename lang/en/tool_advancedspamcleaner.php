@@ -24,11 +24,12 @@
  */
 
 $string['apilimit'] = 'Api limit';
-$string['apilimit_help'] = 'Maximum amount of Api calls to make. (Not used for keyword based methods)';
+$string['apilimit_help'] = 'Maximum amount of Api calls to make. (0 = unlimited)';
 $string['hitlimit'] = 'Hit limit';
-$string['hitlimit_help'] = 'Stop after this amount of spam entries have been detected';
+$string['hitlimit_help'] = 'Stop after this amount of spam entries have been detected (0 = unlimited)';
 $string['keywordstouse'] = 'Keywords to use';
 $string['limits'] = 'Limits';
+$string['limithit'] = 'Set limit was hit. Results that follow may not be complete..';
 $string['method'] = 'Method to use';
 $string['methodoptions'] = 'Method options';
 $string['missingkeywords'] = 'Keywords cannot be empty';
@@ -62,3 +63,4 @@ $string['spamresult'] = 'Results of searching user profiles containing:';
 $string['spamsearch'] = 'Search for these keywords';
 $string['usekeywords'] = 'Use the entered keywords';
 $string['uselimits'] = 'Use limits';
+$string['uselimits_help'] = 'Use limits to reduce CPU usage <br /> (Note that limits are not used for auto detect and keyword methods';

@@ -116,6 +116,9 @@ if( $formdata = $mform->get_data()) {
         $apilimit = 0;
         $hitlimit = 0;
     }
+    $apicount = 0;
+    $hitcount = 0;
+    $limitflag = false;
 
     // Find spam using keywords
     if($formdata->method == 'usekeywords' || $formdata->method == 'spamauto') {
@@ -132,11 +135,19 @@ if( $formdata = $mform->get_data()) {
         $pluginclassname = "$plugin" . "_advanced_spam_cleaner";
         $plugin = new $pluginclassname();
         $params = array('userid' => $USER->id);
+        $spamusers = array();
 
         if(isset($formdata->searchusers)) {
             $sql  = "SELECT * FROM {user} WHERE deleted = 0 AND id <> :userid AND description != ''";  // Exclude oneself
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
+                // Limit checks
+                if(($apilimit != 0 && $apilimit <= $apicount) || ($hitlimit !=0 && $hitlimit <= $hitcount)) {
+                    $limitflag = true;
+                    break;
+                }
+                $apicount++;
+
                 // Data should be consistent for the sub-plugins
                 $data = new stdClass();
                 $data->email = $user->email;
@@ -152,6 +163,7 @@ if( $formdata = $mform->get_data()) {
                         $spamusers[$user->id]['spamcount']++;
                     }
                     $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('userdesc' , $data->text);
+                    $hitcount++;
                 }
             }
         }
@@ -159,6 +171,13 @@ if( $formdata = $mform->get_data()) {
             $sql  = "SELECT u.*, c.content FROM {user} AS u, {comments} AS c WHERE u.deleted = 0 AND u.id=c.userid AND u.id <> :userid";
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
+                // Limit checks
+                if(($apilimit != 0 && $apilimit <= $apicount) || ($hitlimit !=0 && $hitlimit <= $hitcount)) {
+                    $limitflag = true;
+                    break;
+                }
+                $apicount++;
+
                 // Data should be consistent for the sub-plugins
                 $data = new stdClass();
                 $data->email = $user->email;
@@ -173,6 +192,7 @@ if( $formdata = $mform->get_data()) {
                     } else {
                         $spamusers[$user->id]['spamcount']++;
                     }
+                    $hitcount++;
                     $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('comment' , $data->text);
                 }
             }
@@ -181,6 +201,13 @@ if( $formdata = $mform->get_data()) {
             $sql  = "SELECT u.*, m.fullmessage FROM {user} AS u, {message} AS m WHERE u.deleted = 0 AND u.id=m.useridfrom AND u.id <> :userid";
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
+                // Limit checks
+                if(($apilimit != 0 && $apilimit <= $apicount) || ($hitlimit !=0 && $hitlimit <= $hitcount)) {
+                    $limitflag = true;
+                    break;
+                }
+                $apicount++;
+
                 // Data should be consistent for the sub-plugins
                 $data = new stdClass();
                 $data->email = $user->email;
@@ -195,6 +222,7 @@ if( $formdata = $mform->get_data()) {
                     } else {
                         $spamusers[$user->id]['spamcount']++;
                     }
+                    $hitcount++;
                     $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('message' , $data->text);
                 }
             }
@@ -203,6 +231,13 @@ if( $formdata = $mform->get_data()) {
             $sql = "SELECT u.*, fp.message FROM {user} AS u, {forum_posts} AS fp WHERE u.deleted = 0 AND u.id=fp.userid AND u.id <> :userid";
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
+                // Limit checks
+                if(($apilimit != 0 && $apilimit <= $apicount) || ($hitlimit !=0 && $hitlimit <= $hitcount)) {
+                    $limitflag = true;
+                    break;
+                }
+                $apicount++;
+
                 // Data should be consistent for the sub-plugins
                 $data = new stdClass();
                 $data->email = $user->email;
@@ -217,6 +252,7 @@ if( $formdata = $mform->get_data()) {
                     } else {
                         $spamusers[$user->id]['spamcount']++;
                     }
+                    $hitcount++;
                     $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('forummessage' , $data->text);
                 }
             }
@@ -225,6 +261,13 @@ if( $formdata = $mform->get_data()) {
             $sql = "SELECT u.*, p.summary FROM {user} AS u, {post} AS p WHERE u.deleted = 0 AND u.id=p.userid AND u.id <> :userid";
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
+                // Limit checks
+                if(($apilimit != 0 && $apilimit <= $apicount) || ($hitlimit !=0 && $hitlimit <= $hitcount)) {
+                    $limitflag = true;
+                    break;
+                }
+                $apicount++;
+
                 // Data should be consistent for the sub-plugins
                 $data = new stdClass();
                 $data->email = $user->email;
@@ -239,11 +282,12 @@ if( $formdata = $mform->get_data()) {
                     } else {
                         $spamusers[$user->id]['spamcount']++;
                     }
+                    $hitcount++;
                     $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('blogpost' , $data->text);
                 }
             }
         }
-        $spamcleaner->print_table($spamusers,'',true);
+        $spamcleaner->print_table($spamusers, '', true, $limitflag);
     }
     echo '</div>';
 }

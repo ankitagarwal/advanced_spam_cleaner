@@ -203,7 +203,7 @@ class advanced_spam_cleaner {
         }
     }
 
-    static function print_table($users_rs = null, $keywords = null, $resetsession = false) {
+    static function print_table($users_rs = null, $keywords = null, $resetsession = false, $limitflag = false) {
         global $CFG, $SESSION, $OUTPUT, $PAGE;
         /*if ($resetsession) {
             // reset session
@@ -263,6 +263,9 @@ class advanced_spam_cleaner {
         $table->set_attribute('id', 'attempts');
         $table->set_attribute('class', 'generaltable generalbox');
         $table->setup();
+        if ($limitflag) {
+            echo $OUTPUT->box(get_string('limithit', 'tool_advancedspamcleaner'));
+        }
         foreach ($users_rs as $userid => $userdata) {
             $user = (object)$userdata['user'];
 
