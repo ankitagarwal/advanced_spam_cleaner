@@ -16,7 +16,7 @@ class base_advanced_spam_cleaner {
         return false;
     }
 
-    function can_view($context) {
+    function canview($context) {
         // Implement your custom cap checks here
         return true;
     }
@@ -39,9 +39,9 @@ class advanced_spam_cleaner {
         if (!empty($pluginlist)) {
             return $pluginlist;
         }
-        $installed = get_plugin_list('advancedspamcleaner');
-        foreach ($installed as $pluginname => $notused) {
-            $pluginfile = $CFG->dirroot.'/admin/tool/advancedspamcleaner/'.$pluginname.'/api.php';
+        $installed = get_list_of_plugins('', '', $CFG->dirroot.'/admin/tool/advancedspamcleaner/plugins');
+        foreach ($installed as $pluginname) {
+            $pluginfile = $CFG->dirroot.'/admin/tool/advancedspamcleaner/plugins/'.$pluginname.'/api.php';
             if (is_readable($pluginfile)) {
                 include_once($pluginfile);
                 $pluginclassname = "{$pluginname}_advanced_spam_cleaner";
@@ -49,7 +49,7 @@ class advanced_spam_cleaner {
                     $plugin = new $pluginclassname();
 
                     if ($plugin->canview($context)) {
-                        $pluginlist[] = $pluginname;
+                        $pluginlist[$pluginname] =  ucfirst($pluginname);
                     }
                 }
             }

@@ -17,4 +17,5 @@ class akismet_advanced_spam_cleaner extends base_advanced_spam_cleaner {
         } else {
             return false;
         }
+    }
 }

@@ -6,6 +6,7 @@
  * @package   advancedspamcleaner
  * @copyright 2012 Ankit Agarwal
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * This is just a dummy file...Moodle doesnt support sub-plugins for tool plugins
  */
 
 defined('MOODLE_INTERNAL') || die();
