@@ -133,7 +133,7 @@ if( $formdata = $mform->get_data()) {
             print_error("Invalid sub plugin");
         }
         $pluginclassname = "$plugin" . "_advanced_spam_cleaner";
-        $plugin = new $pluginclassname();
+        $plugin = new $pluginclassname($plugin);
         $params = array('userid' => $USER->id);
         $spamusers = array();
 
@@ -287,6 +287,7 @@ if( $formdata = $mform->get_data()) {
                 }
             }
         }
+        echo $OUTPUT->box(get_string('methodused', 'tool_advancedspamcleaner', $plugin->pluginname));
         $spamcleaner->print_table($spamusers, '', true, $limitflag);
     }
     echo '</div>';

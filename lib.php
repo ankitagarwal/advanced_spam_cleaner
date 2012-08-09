@@ -5,7 +5,11 @@
  * The name of the extend class should be $pluginname_advanced_spam_cleaner
  */
 class base_advanced_spam_cleaner {
+    public $pluginname;
 
+    function __construct($pluginname) {
+        $this->pluginname = $pluginname;
+    }
     /* Detect if the supplied data is probable spam or not
      * @param stdClass $data data to be examined
      *
@@ -46,7 +50,7 @@ class advanced_spam_cleaner {
                 include_once($pluginfile);
                 $pluginclassname = "{$pluginname}_advanced_spam_cleaner";
                 if (class_exists($pluginclassname)) {
-                    $plugin = new $pluginclassname();
+                    $plugin = new $pluginclassname($pluginname);
 
                     if ($plugin->canview($context)) {
                         $pluginlist[$pluginname] =  ucfirst($pluginname);
