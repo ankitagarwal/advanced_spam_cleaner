@@ -1,5 +1,5 @@
 <?php
-// This file is part of Advanced Spam Cleaner tool for Moodle
+// This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,16 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin version info
+ * Strings for component 'tool_spamcleaner', language 'en', branch 'MOODLE_22_STABLE'
  *
- * @package    tool_advancedspamcleaner
- * @copyright  2012 Ankit Agarwal
+ * @package    advancedspamcleaner_akismet
+ * @copyright  2012 onwards Ankit Agarwal
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2012070700;
-$plugin->requires  = 2012061700;
-$plugin->component = 'tool_advancedspamcleaner'; // Full name of the plugin (used for diagnostics)
+$string['pluginname'] = 'Akismet Api plugin';
 
