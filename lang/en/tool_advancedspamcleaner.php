@@ -23,6 +23,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['akismetkey'] = 'Your akismet key';
+$string['akismetkey_desc'] = 'Enter the key that you got from akismet.com';
 $string['apilimit'] = 'Api limit';
 $string['apilimit_help'] = 'Maximum amount of Api calls to make. (0 = unlimited)';
 $string['hitlimit'] = 'Hit limit';
@@ -36,12 +38,14 @@ $string['methodoptions'] = 'Method options';
 $string['missingkeywords'] = 'Keywords cannot be empty';
 $string['missingmethod'] = 'Method to use cannot be empty';
 $string['pluginname'] = 'Advanced spam cleaner';
+$string['pluginsettings'] = 'Advanced spam cleaner sub-plugins settings for {$a}';
 $string['searchblogs'] = 'Include blogs';
 $string['searchcomments'] = 'Include comments';
 $string['searchforums'] = 'Include forums';
 $string['searchmsgs'] = 'Include messages';
 $string['searchscope'] = 'Scope of spam search';
 $string['searchusers'] = 'Include user profiles';
+$string['settingpage'] = 'Advanced spam cleaner settings';
 $string['spamauto'] = 'Auto detect spam using common spam keywords';
 $string['spamcannotdelete'] = 'Cannot delete this user';
 $string['spamcannotfinduser'] = 'No users matching your search';

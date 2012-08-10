@@ -1,5 +1,4 @@
 <?php
-
 /* Base sub-plugin class
  * All sub -plugins must extend this class
  * The name of the extend class should be $pluginname_advanced_spam_cleaner
