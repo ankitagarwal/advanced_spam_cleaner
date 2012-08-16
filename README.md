@@ -16,9 +16,10 @@ Things to do
 * Adding support to run the tool within custom date range
 * Adding support to remember last run time and search since last run
 * Highlight spam keywords in the results
-* Ability to complete nuke user with all comments, forum posts, blogs etc
+* Ability to completly nuke user with all comments, forum posts, blogs etc
 * Make sure delete button is working properly
 * Redo the ajax methods
+* Pro-active marking of spam!
 
 Maturity
 ====================
