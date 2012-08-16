@@ -60,7 +60,7 @@ class advanced_spam_cleaner {
         return $pluginlist;
     }
 
-    static function search_spammers($data, $keywords = null, $return = false) {
+    static function search_spammers($data, $keywords = null, $starttime = 0, $endtime = 0, $return = false) {
 
         global $CFG, $USER, $DB, $OUTPUT;
 
@@ -68,8 +68,11 @@ class advanced_spam_cleaner {
         if (!is_array($keywords)) {
             $keywords = array($keywords);    // Make it into an array
         }
+        if ($endtime == 0) {
+            $enttime = time();
+        }
 
-        $params = array('userid' => $USER->id);
+        $params = array('userid' => $USER->id, 'start' => $starttime, 'end' => $endtime);
 
         $keywordfull = array();
         $i = 0;
@@ -90,13 +93,13 @@ class advanced_spam_cleaner {
             $params['forumpostsubpat'.$i] = "%$keyword%";
             $i++;
         }
-        $conditions = '( '.implode(' OR ', $keywordfull).' )';
-        $conditions2 = '( '.implode(' OR ', $keywordfull2).' )';
-        $conditions3 = '( '.implode(' OR ', $keywordfull3).' )';
-        $conditions4 = '( '.implode(' OR ', $keywordfull4).' )';
-        $conditions5 = '( '.implode(' OR ', $keywordfull5).' )';
-        $conditions6 = '( '.implode(' OR ', $keywordfull6).' )';
-        $conditions7 = '( '.implode(' OR ', $keywordfull7).' )';
+        $conditions = '( '.implode(' OR ', $keywordfull).' ) AND u.lastmodified > :start AND u.lastmodified < :end';
+        $conditions2 = '( '.implode(' OR ', $keywordfull2).' ) AND p.lastmodified > :start AND p.lastmodified < :end';
+        $conditions3 = '( '.implode(' OR ', $keywordfull3).' ) AND p.lastmodified > :start AND p.lastmodified < :end';
+        $conditions4 = '( '.implode(' OR ', $keywordfull4).' ) AND c.timecreated > :start AND c.timecreated < :end';
+        $conditions5 = '( '.implode(' OR ', $keywordfull5).' ) AND m.timecreated > :start AND m.timecreated < :end';
+        $conditions6 = '( '.implode(' OR ', $keywordfull6).' ) AND fp.modified > :start AND fp.modified < :end';
+        $conditions7 = '( '.implode(' OR ', $keywordfull7).' ) AND fp.modified > :start AND fp.modified < :end';
 
         $sql  = "SELECT * FROM {user} WHERE deleted = 0 AND id <> :userid AND $conditions";  // Exclude oneself
         $sql2 = "SELECT u.*, p.summary FROM {user} AS u, {post} AS p WHERE $conditions2 AND u.deleted = 0 AND u.id=p.userid AND u.id <> :userid";

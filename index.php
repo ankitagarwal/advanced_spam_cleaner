@@ -120,12 +120,30 @@ if( $formdata = $mform->get_data()) {
     $hitcount = 0;
     $limitflag = false;
 
+    // Date limits
+    if(!empty($formdata->usedatestartlimit)) {
+        if (is_number($formdata->startdate)) {
+            $starttime = $formdata->startdate;
+        } else {
+            $starttime = 0;
+        }
+
+        if (is_number($formdata->enddate)) {
+            $endtime = $formdata->enddate;
+        } else {
+            $endtime = time();
+        }
+    } else {
+        $starttime = 0;
+        $endtime = time();
+    }
+
     // Find spam using keywords
     if($formdata->method == 'usekeywords' || $formdata->method == 'spamauto') {
         if (empty($keywords)) {
             $keywords = $autokeywords;
         }
-        $spamcleaner->search_spammers($formdata, $keywords, false );
+        $spamcleaner->search_spammers($formdata, $keywords, $starttime, $endtime, false );
     // use the specified sub-plugin
     } else {
         $plugin = $formdata->method;
