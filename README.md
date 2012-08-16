@@ -13,7 +13,6 @@ Installation Instruction
 Things to do
 =====================
 * Adding paging support
-* Adding support to run the tool within custom date range
 * Adding support to remember last run time and search since last run
 * Highlight spam keywords in the results
 * Ability to completly nuke user with all comments, forum posts, blogs etc
@@ -25,9 +24,18 @@ Maturity
 ====================
 Beta (use at your own risk)
 
+Features
+====================
+* Supports keyword based search
+* Can stop based on a specificed spam hit limit or api call limit
+* Can search for specified date range
+* Easy to implement any third party apis
+* Akismet Api support included by default
+
 Change log
 =====================
-* 2012070801 - First public release
+* 2012070801 - First public release - 1.0
+* 2012070816 - Adding support for custom date range - 1.1
 
 
 About Author
