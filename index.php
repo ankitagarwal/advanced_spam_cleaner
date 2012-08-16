@@ -152,11 +152,11 @@ if( $formdata = $mform->get_data()) {
         }
         $pluginclassname = "$plugin" . "_advanced_spam_cleaner";
         $plugin = new $pluginclassname($plugin);
-        $params = array('userid' => $USER->id);
+        $params = array('userid' => $USER->id, 'start' => $starttime, 'end' => $endtime);
         $spamusers = array();
 
         if(isset($formdata->searchusers)) {
-            $sql  = "SELECT * FROM {user} WHERE deleted = 0 AND id <> :userid AND description != ''";  // Exclude oneself
+            $sql  = "SELECT * FROM {user} WHERE deleted = 0 AND id <> :userid AND description != '' AND u.lastmodified > :start AND u.lastmodified < :end ";  // Exclude oneself
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
                 // Limit checks
@@ -186,7 +186,7 @@ if( $formdata = $mform->get_data()) {
             }
         }
         if(isset($formdata->searchcomments)) {
-            $sql  = "SELECT u.*, c.content FROM {user} AS u, {comments} AS c WHERE u.deleted = 0 AND u.id=c.userid AND u.id <> :userid";
+            $sql  = "SELECT u.*, c.content FROM {user} AS u, {comments} AS c WHERE u.deleted = 0 AND u.id=c.userid AND u.id <> :userid AND c.timecreated > :start AND c.timecreated < :end";
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
                 // Limit checks
@@ -216,7 +216,7 @@ if( $formdata = $mform->get_data()) {
             }
         }
         if(isset($formdata->searchmsgs)) {
-            $sql  = "SELECT u.*, m.fullmessage FROM {user} AS u, {message} AS m WHERE u.deleted = 0 AND u.id=m.useridfrom AND u.id <> :userid";
+            $sql  = "SELECT u.*, m.fullmessage FROM {user} AS u, {message} AS m WHERE u.deleted = 0 AND u.id=m.useridfrom AND u.id <> :userid AND m.timecreated > :start AND m.timecreated < :end";
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
                 // Limit checks
@@ -246,7 +246,7 @@ if( $formdata = $mform->get_data()) {
             }
         }
         if(isset($formdata->searchforums)) {
-            $sql = "SELECT u.*, fp.message FROM {user} AS u, {forum_posts} AS fp WHERE u.deleted = 0 AND u.id=fp.userid AND u.id <> :userid";
+            $sql = "SELECT u.*, fp.message FROM {user} AS u, {forum_posts} AS fp WHERE u.deleted = 0 AND u.id=fp.userid AND u.id <> :userid AND fp.modified > :start AND fp.modified < :end";
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
                 // Limit checks
@@ -276,7 +276,7 @@ if( $formdata = $mform->get_data()) {
             }
         }
         if(isset($formdata->searchblogs)) {
-            $sql = "SELECT u.*, p.summary FROM {user} AS u, {post} AS p WHERE u.deleted = 0 AND u.id=p.userid AND u.id <> :userid";
+            $sql = "SELECT u.*, p.summary FROM {user} AS u, {post} AS p WHERE u.deleted = 0 AND u.id=p.userid AND u.id <> :userid AND p.lastmodified > :start AND p.lastmodified < :end";
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
                 // Limit checks
