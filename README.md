@@ -16,7 +16,6 @@ Things to do
 * Adding support to remember last run time and search since last run
 * Highlight spam keywords in the results
 * Ability to completly nuke user with all comments, forum posts, blogs etc
-* Make sure delete button is working properly
 * Redo the ajax methods
 * Pro-active marking of spam!
 
@@ -36,6 +35,7 @@ Change log
 =====================
 * 2012070801 - First public release - 1.0
 * 2012070816 - Adding support for custom date range - 1.1
+* 2012070821 - Minor bug fixes - 1.2
 
 
 About Author
@@ -48,3 +48,7 @@ License
 =====================
 
 GPL 3 or later
+
+Report bugs
+=====================
+http://tracker.moodle.org/browse/CONTRIB/component/12336
