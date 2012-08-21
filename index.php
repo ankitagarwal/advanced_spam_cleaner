@@ -38,12 +38,11 @@ $id = optional_param('id', '', PARAM_INT);
 require_login();
 admin_externalpage_setup('tooladvancedspamcleaner');
 
-// Delete one user
+// Delete one user // sessions are not supported atm
 if (!empty($del) && confirm_sesskey() && ($id != $USER->id)) {
-    if (isset($SESSION->users_result[$id])) {
-        $user = $SESSION->users_result[$id];
+    if ($user = $DB->get_record("user", array('id' => $id))) {
         if (delete_user($user)) {
-            unset($SESSION->users_result[$id]);
+            //unset($SESSION->users_result[$id]);
             echo json_encode(true);
         } else {
             echo json_encode(false);
