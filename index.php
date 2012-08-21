@@ -156,7 +156,7 @@ if( $formdata = $mform->get_data()) {
         $spamusers = array();
 
         if(isset($formdata->searchusers)) {
-            $sql  = "SELECT * FROM {user} WHERE deleted = 0 AND id <> :userid AND description != '' AND u.lastmodified > :start AND u.lastmodified < :end ";  // Exclude oneself
+            $sql  = "SELECT * FROM {user} AS u WHERE deleted = 0 AND id <> :userid AND description != '' AND u.timemodified > :start AND u.timemodified < :end ";  // Exclude oneself
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
                 // Limit checks

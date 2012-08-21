@@ -93,7 +93,7 @@ class advanced_spam_cleaner {
             $params['forumpostsubpat'.$i] = "%$keyword%";
             $i++;
         }
-        $conditions = '( '.implode(' OR ', $keywordfull).' ) AND u.lastmodified > :start AND u.lastmodified < :end';
+        $conditions = '( '.implode(' OR ', $keywordfull).' ) AND u.timemodified > :start AND u.timemodified < :end';
         $conditions2 = '( '.implode(' OR ', $keywordfull2).' ) AND p.lastmodified > :start AND p.lastmodified < :end';
         $conditions3 = '( '.implode(' OR ', $keywordfull3).' ) AND p.lastmodified > :start AND p.lastmodified < :end';
         $conditions4 = '( '.implode(' OR ', $keywordfull4).' ) AND c.timecreated > :start AND c.timecreated < :end';
@@ -101,7 +101,7 @@ class advanced_spam_cleaner {
         $conditions6 = '( '.implode(' OR ', $keywordfull6).' ) AND fp.modified > :start AND fp.modified < :end';
         $conditions7 = '( '.implode(' OR ', $keywordfull7).' ) AND fp.modified > :start AND fp.modified < :end';
 
-        $sql  = "SELECT * FROM {user} WHERE deleted = 0 AND id <> :userid AND $conditions";  // Exclude oneself
+        $sql  = "SELECT * FROM {user} AS u WHERE deleted = 0 AND id <> :userid AND $conditions";  // Exclude oneself
         $sql2 = "SELECT u.*, p.summary FROM {user} AS u, {post} AS p WHERE $conditions2 AND u.deleted = 0 AND u.id=p.userid AND u.id <> :userid";
         $sql3 = "SELECT u.*, p.subject as postsubject FROM {user} AS u, {post} AS p WHERE $conditions3 AND u.deleted = 0 AND u.id=p.userid AND u.id <> :userid";
         $sql4 = "SELECT u.*, c.content FROM {user} AS u, {comments} AS c WHERE $conditions4 AND u.deleted = 0 AND u.id=c.userid AND u.id <> :userid";
