@@ -103,8 +103,8 @@ class advanced_spam_cleaner {
 
         $sql  = "SELECT * FROM {user} AS u WHERE deleted = 0 AND id <> :userid AND $conditions";  // Exclude oneself
         $sql2 = "SELECT u.*, p.summary FROM {user} AS u, {post} AS p WHERE $conditions2 AND u.deleted = 0 AND u.id=p.userid AND u.id <> :userid";
-        $sql3 = "SELECT u.*, p.subject as postsubject FROM {user} AS u, {post} AS p WHERE $conditions3 AND u.deleted = 0 AND u.id=p.userid AND u.id <> :userid";
-        $sql4 = "SELECT u.*, c.content FROM {user} AS u, {comments} AS c WHERE $conditions4 AND u.deleted = 0 AND u.id=c.userid AND u.id <> :userid";
+        $sql3 = "SELECT u.*, p.subject as subject FROM {user} AS u, {post} AS p WHERE $conditions3 AND u.deleted = 0 AND u.id=p.userid AND u.id <> :userid";
+        $sql4 = "SELECT u.*, c.content as comment FROM {user} AS u, {comments} AS c WHERE $conditions4 AND u.deleted = 0 AND u.id=c.userid AND u.id <> :userid";
         $sql5 = "SELECT u.*, m.fullmessage FROM {user} AS u, {message} AS m WHERE $conditions5 AND u.deleted = 0 AND u.id=m.useridfrom AND u.id <> :userid";
         $sql6 = "SELECT u.*, fp.message FROM {user} AS u, {forum_posts} AS fp WHERE $conditions6 AND u.deleted = 0 AND u.id=fp.userid AND u.id <> :userid";
         $sql7 = "SELECT u.*, fp.subject FROM {user} AS u, {forum_posts} AS fp WHERE $conditions7 AND u.deleted = 0 AND u.id=fp.userid AND u.id <> :userid";
@@ -227,8 +227,9 @@ class advanced_spam_cleaner {
         // Define table columns
         $columns = array();
         $headers = array();
-        $columns[]= 'checkbox';
-        $headers[]= null;
+        // checkbox is not used atm
+        //$columns[]= 'checkbox';
+        //$headers[]= null;
         $columns[]= 'picture';
         $headers[]= '';
         $columns[]= 'fullname';
@@ -262,6 +263,7 @@ class advanced_spam_cleaner {
         // This is done to prevent redundant data, when a user has multiple attempts
         $table->column_suppress('picture');
         $table->column_suppress('fullname');
+        $table->column_suppress('spamcount');
 
         $table->column_class('picture', 'picture');
 
@@ -277,7 +279,7 @@ class advanced_spam_cleaner {
 
             foreach($userdata['spamtext'] as $spamcount => $spamdata) {
                 $row = array();
-                $row[] = '<input type="checkbox" name="userid[]" value="'. $userid .'" />';
+               // $row[] = '<input type="checkbox" name="userid[]" value="'. $userid .'" />';
                 $row[] = $OUTPUT->user_picture($user);
                 $row[] = '<a href="'.$CFG->wwwroot.'/user/view.php?id='.$userid.'">'.fullname($user).'</a>';
                 $row[] = $userdata['spamcount'];

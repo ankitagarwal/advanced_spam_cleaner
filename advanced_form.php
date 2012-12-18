@@ -26,14 +26,14 @@ class tool_advanced_spam_cleaner extends moodleform {
         $mform->setType('keyword', PARAM_TEXT);
 
         $mform->addElement('header', 'searchscope', get_string('searchscope', 'tool_advancedspamcleaner'));
-        $mform->addElement('checkbox', 'searchblogs', get_string('searchblogs', 'tool_advancedspamcleaner'));
-        $mform->addElement('checkbox', 'searchusers', get_string('searchusers', 'tool_advancedspamcleaner'));
-        $mform->addElement('checkbox', 'searchcomments', get_string('searchcomments', 'tool_advancedspamcleaner'));
-        $mform->addElement('checkbox', 'searchmsgs', get_string('searchmsgs', 'tool_advancedspamcleaner'));
-        $mform->addElement('checkbox', 'searchforums', get_string('searchforums', 'tool_advancedspamcleaner'));
+        $mform->addElement('advcheckbox', 'searchblogs', get_string('searchblogs', 'tool_advancedspamcleaner'));
+        $mform->addElement('advcheckbox', 'searchusers', get_string('searchusers', 'tool_advancedspamcleaner'));
+        $mform->addElement('advcheckbox', 'searchcomments', get_string('searchcomments', 'tool_advancedspamcleaner'));
+        $mform->addElement('advcheckbox', 'searchmsgs', get_string('searchmsgs', 'tool_advancedspamcleaner'));
+        $mform->addElement('advcheckbox', 'searchforums', get_string('searchforums', 'tool_advancedspamcleaner'));
 
         $mform->addElement('header', 'limits', get_string('limits', 'tool_advancedspamcleaner'));
-        $mform->addElement('checkbox', 'uselimits', get_string('uselimits', 'tool_advancedspamcleaner'));
+        $mform->addElement('advcheckbox', 'uselimits', get_string('uselimits', 'tool_advancedspamcleaner'));
         $mform->addHelpButton('uselimits', 'uselimits', 'tool_advancedspamcleaner');
         $mform->addElement('text', 'apilimit', get_string('apilimit', 'tool_advancedspamcleaner'));
         $mform->setType('apilimit', PARAM_INT);
@@ -48,7 +48,7 @@ class tool_advanced_spam_cleaner extends moodleform {
 
         // Custome date range
         $mform->addElement('header', 'datelimits', get_string('datelimits', 'tool_advancedspamcleaner'));
-        $mform->addElement('checkbox', 'usedatestartlimit', get_string('usedatestartlimit', 'tool_advancedspamcleaner'));
+        $mform->addElement('advcheckbox', 'usedatestartlimit', get_string('usedatestartlimit', 'tool_advancedspamcleaner'));
         $mform->addHelpButton('usedatestartlimit', 'usedatestartlimit', 'tool_advancedspamcleaner');
         $mform->addElement('date_time_selector', 'startdate', get_string('startdate', 'tool_advancedspamcleaner'));
         $mform->disabledif('startdate', 'usedatestartlimit');
