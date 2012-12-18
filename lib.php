@@ -102,9 +102,9 @@ class advanced_spam_cleaner {
         $conditions7 = '( '.implode(' OR ', $keywordfull7).' ) AND fp.modified > :start AND fp.modified < :end';
 
         $sql  = "SELECT * FROM {user} AS u WHERE deleted = 0 AND id <> :userid AND $conditions";  // Exclude oneself
-        $sql2 = "SELECT u.*, p.summary FROM {user} AS u, {post} AS p WHERE $conditions2 AND u.deleted = 0 AND u.id=p.userid AND u.id <> :userid";
-        $sql3 = "SELECT u.*, p.subject as subject FROM {user} AS u, {post} AS p WHERE $conditions3 AND u.deleted = 0 AND u.id=p.userid AND u.id <> :userid";
-        $sql4 = "SELECT u.*, c.content as comment FROM {user} AS u, {comments} AS c WHERE $conditions4 AND u.deleted = 0 AND u.id=c.userid AND u.id <> :userid";
+        $sql2 = "SELECT u.*, p.id as pid, p.summary FROM {user} AS u, {post} AS p WHERE $conditions2 AND u.deleted = 0 AND u.id=p.userid AND u.id <> :userid";
+        $sql3 = "SELECT u.*, p.id as pid, p.subject as subject FROM {user} AS u, {post} AS p WHERE $conditions3 AND u.deleted = 0 AND u.id=p.userid AND u.id <> :userid";
+        $sql4 = "SELECT u.*, c.id as cid, c.content as comment FROM {user} AS u, {comments} AS c WHERE $conditions4 AND u.deleted = 0 AND u.id=c.userid AND u.id <> :userid";
         $sql5 = "SELECT u.*, m.fullmessage FROM {user} AS u, {message} AS m WHERE $conditions5 AND u.deleted = 0 AND u.id=m.useridfrom AND u.id <> :userid";
         $sql6 = "SELECT u.*, fp.message FROM {user} AS u, {forum_posts} AS fp WHERE $conditions6 AND u.deleted = 0 AND u.id=fp.userid AND u.id <> :userid";
         $sql7 = "SELECT u.*, fp.subject FROM {user} AS u, {forum_posts} AS fp WHERE $conditions7 AND u.deleted = 0 AND u.id=fp.userid AND u.id <> :userid";
@@ -121,7 +121,7 @@ class advanced_spam_cleaner {
                 } else {
                     $spamusers[$user->id]['spamcount']++;
                 }
-                $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('userdesc' , $user->description);
+                $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('userdesc' , $user->description, $user->id);
             }
         }
 
@@ -136,7 +136,7 @@ class advanced_spam_cleaner {
                 } else {
                     $spamusers[$user->id]['spamcount']++;
                 }
-                $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('blogsummary' , $user->summary);
+                $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('blogsummary' , $user->summary, $user->pid);
             }
             $users = $DB->get_recordset_sql($sql3, $params);
             foreach( $users as $user) {
@@ -146,7 +146,7 @@ class advanced_spam_cleaner {
                 } else {
                     $spamusers[$user->id]['spamcount']++;
                 }
-                $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('blogpost' , $user->subject);
+                $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('blogpost' , $user->subject, $user->pid);
             }
         }
 
@@ -160,7 +160,7 @@ class advanced_spam_cleaner {
                 } else {
                     $spamusers[$user->id]['spamcount']++;
                 }
-                $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('comment' , $user->comment);
+                $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('comment' , $user->comment, $user->cid);
             }
         }
 
@@ -206,6 +206,7 @@ class advanced_spam_cleaner {
         } else {
             echo $OUTPUT->box(get_string('spamresult', 'tool_advancedspamcleaner').s(implode(', ', $keywords))).' ...';
             advanced_spam_cleaner::print_table($spamusers, $keywords, true);
+            print_object($spamusers);
         }
     }
 
@@ -284,13 +285,36 @@ class advanced_spam_cleaner {
                 $row[] = '<a href="'.$CFG->wwwroot.'/user/view.php?id='.$userid.'">'.fullname($user).'</a>';
                 $row[] = $userdata['spamcount'];
                 $row[] = array_pop($spamdata);
-                $row[] = array_pop($spamdata);
+                $row[] = advanced_spam_cleaner::get_spam_url($type, $id);
                 $row[] .= '<button onclick="M.tool_spamcleaner.del_user(this,'.$userid.')">'.get_string('deleteuser', 'admin').'</button><br />';
                 $row[] .= '<button onclick="M.tool_spamcleaner.ignore_user(this,'.$userid.')">'.get_string('ignore', 'admin').'</button>';
                 $table->add_data($row);
             }
         }
         $table->finish_output();
+    }
+
+    /**
+     * Get url for a spam entry
+     *
+     * @param string  $type Type of spam
+     * @param int     $id   Id corrosponding to the spam entry
+     * @return string html to display
+     * @since V1.3
+     */
+    public static function get_spam_url($type, $id) {
+
+        switch($type) {
+            case 'userdesc': $url =  new moodle_url('user/profile.php', array('id' => $id));
+                             break;
+        }
+
+        if (!empty($url)) {
+            return html_writer::link($url, $type);
+        } else {
+            return $type;
+        }
+
     }
 }
 
