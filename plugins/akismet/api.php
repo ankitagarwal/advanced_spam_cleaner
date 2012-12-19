@@ -8,7 +8,7 @@ class akismet_advanced_spam_cleaner extends base_advanced_spam_cleaner {
 
         $apikey = get_config('advancedspamcleaner', 'akismetkey');
         if (!$apikey) {
-            print_error("Set api key from settings before using this option");
+            print_error("noakismetkey", 'tool_advancedspamcleaner', new moodle_url($CFG->wwwroot . '/admin/settings.php', array('section' => 'advancedspamcleaner')));
         }
 
         $akismet = new Akismet($CFG->wwwroot, $apikey);

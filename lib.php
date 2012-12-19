@@ -105,9 +105,9 @@ class advanced_spam_cleaner {
         $sql2 = "SELECT u.*, p.id as pid, p.summary FROM {user} AS u, {post} AS p WHERE $conditions2 AND u.deleted = 0 AND u.id=p.userid AND u.id <> :userid";
         $sql3 = "SELECT u.*, p.id as pid, p.subject as subject FROM {user} AS u, {post} AS p WHERE $conditions3 AND u.deleted = 0 AND u.id=p.userid AND u.id <> :userid";
         $sql4 = "SELECT u.*, c.id as cid, c.content as comment FROM {user} AS u, {comments} AS c WHERE $conditions4 AND u.deleted = 0 AND u.id=c.userid AND u.id <> :userid";
-        $sql5 = "SELECT u.*, m.fullmessage FROM {user} AS u, {message} AS m WHERE $conditions5 AND u.deleted = 0 AND u.id=m.useridfrom AND u.id <> :userid";
-        $sql6 = "SELECT u.*, fp.message FROM {user} AS u, {forum_posts} AS fp WHERE $conditions6 AND u.deleted = 0 AND u.id=fp.userid AND u.id <> :userid";
-        $sql7 = "SELECT u.*, fp.subject FROM {user} AS u, {forum_posts} AS fp WHERE $conditions7 AND u.deleted = 0 AND u.id=fp.userid AND u.id <> :userid";
+        $sql5 = "SELECT u.*, m.id as mid, m.fullmessage FROM {user} AS u, {message} AS m WHERE $conditions5 AND u.deleted = 0 AND u.id=m.useridfrom AND u.id <> :userid";
+        $sql6 = "SELECT u.*, fp.id as fid, fp.message FROM {user} AS u, {forum_posts} AS fp WHERE $conditions6 AND u.deleted = 0 AND u.id=fp.userid AND u.id <> :userid";
+        $sql7 = "SELECT u.*, fp.id as fid, fp.subject FROM {user} AS u, {forum_posts} AS fp WHERE $conditions7 AND u.deleted = 0 AND u.id=fp.userid AND u.id <> :userid";
 
         $spamusers = array();
 
@@ -174,7 +174,7 @@ class advanced_spam_cleaner {
                 } else {
                     $spamusers[$user->id]['spamcount']++;
                 }
-                $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('message' , $user->fullmessage);
+                $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('message' , $user->fullmessage, $user->mid);
             }
         }
 
@@ -188,7 +188,7 @@ class advanced_spam_cleaner {
                 } else {
                     $spamusers[$user->id]['spamcount']++;
                 }
-                $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('forummessage' , $user->message);
+                $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('forummessage' , $user->message, $user->fid);
             }
             $users = $DB->get_recordset_sql($sql3, $params);
             foreach( $users as $user) {
@@ -198,7 +198,7 @@ class advanced_spam_cleaner {
                 } else {
                     $spamusers[$user->id]['spamcount']++;
                 }
-                $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('forumsubject' , $user->subject);
+                $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('forumsubject' , $user->subject, $user->fid);
             }
         }
         if ($return) {
@@ -284,8 +284,8 @@ class advanced_spam_cleaner {
                 $row[] = $OUTPUT->user_picture($user);
                 $row[] = '<a href="'.$CFG->wwwroot.'/user/view.php?id='.$userid.'">'.fullname($user).'</a>';
                 $row[] = $userdata['spamcount'];
-                $row[] = array_pop($spamdata);
-                $row[] = advanced_spam_cleaner::get_spam_url($type, $id);
+                $row[] = $spamdata[1];
+                $row[] = advanced_spam_cleaner::get_spam_url($spamdata[0], $spamdata[2]);
                 $row[] .= '<button onclick="M.tool_spamcleaner.del_user(this,'.$userid.')">'.get_string('deleteuser', 'admin').'</button><br />';
                 $row[] .= '<button onclick="M.tool_spamcleaner.ignore_user(this,'.$userid.')">'.get_string('ignore', 'admin').'</button>';
                 $table->add_data($row);
@@ -303,14 +303,23 @@ class advanced_spam_cleaner {
      * @since V1.3
      */
     public static function get_spam_url($type, $id) {
+        global $CFG;
 
         switch($type) {
-            case 'userdesc': $url =  new moodle_url('user/profile.php', array('id' => $id));
+            case 'userdesc': $url =  new moodle_url($CFG->wwwroot.'/user/profile.php', array('id' => $id));
                              break;
+            case 'blogsummary':
+            case 'blogpost': $url =  new moodle_url($CFG->wwwroot.'/blog/index.php', array('entryid' => $id));
+                             break;
+            case 'forumsubject':
+            case 'forummessage': $url =  new moodle_url($CFG->wwwroot.'/mod/forum/discuss.php', array('d' => $id));
+                                 break;
+            default: $url = null;
+                    break;
         }
 
         if (!empty($url)) {
-            return html_writer::link($url, $type);
+            return html_writer::link($url, $type, array('target' => '_blank'));
         } else {
             return $type;
         }

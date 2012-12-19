@@ -39,6 +39,7 @@ $string['methodused'] = 'Spam detection method used: {$a}';
 $string['methodoptions'] = 'Method options';
 $string['missingkeywords'] = 'Keywords cannot be empty';
 $string['missingmethod'] = 'Method to use cannot be empty';
+$string['noakismetkey'] = 'Set api key from settings before using this option';
 $string['pluginname'] = 'Advanced spam cleaner';
 $string['pluginsettings'] = 'Advanced spam cleaner sub-plugins settings for {$a}';
 $string['searchblogs'] = 'Include blogs';
