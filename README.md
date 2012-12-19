@@ -36,6 +36,7 @@ Change log
 * 2012070801 - First public release - 1.0
 * 2012070816 - Adding support for custom date range - 1.1
 * 2012070821 - Minor bug fixes - 1.2
+* 2012121900 - Minor bug fixes and improvments - 1.3
 
 
 About Author
