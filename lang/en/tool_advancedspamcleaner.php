@@ -49,6 +49,8 @@ $string['searchmsgs'] = 'Include messages';
 $string['searchscope'] = 'Scope of spam search';
 $string['searchusers'] = 'Include user profiles';
 $string['settingpage'] = 'Advanced spam cleaner settings';
+$string['showstats'] = 'Following number of entries were checked for spam : <br/> Blogs: {$a->blogs}, User Profiles: {$a->users}, Comments: {$a->comments},
+    Messages: {$a->msgs}, Forum Posts: {$a->forums} <br/> Time used was {$a->time} seconds approximately';
 $string['spamauto'] = 'Auto detect spam using common spam keywords';
 $string['spamcannotdelete'] = 'Cannot delete this user';
 $string['spamcannotfinduser'] = 'No users matching your search';

@@ -86,7 +86,7 @@ echo $OUTPUT->header();
 echo $OUTPUT->box(get_string('spamcleanerintro', 'tool_spamcleaner'));
 
 $spamcleaner = new advanced_spam_cleaner();
-$pluginlist = $spamcleaner->plugin_list(get_system_context());
+$pluginlist = $spamcleaner->plugin_list(context_system::instance());
 
 $mform = new tool_advanced_spam_cleaner(null, array ('pluginlist' => $pluginlist));
 $mform->display();
@@ -145,6 +145,8 @@ if( $formdata = $mform->get_data()) {
         $spamcleaner->search_spammers($formdata, $keywords, $starttime, $endtime, false );
     // use the specified sub-plugin
     } else {
+        // Store stats for sub-plugins methods.
+        $stats = array('time' => time(), 'users' => 0, 'comments' => 0, 'msgs' => 0, 'forums' => 0, 'blogs' => 0);
         $plugin = $formdata->method;
         if (in_array($plugin, $pluginlist)) {
             print_error("Invalid sub plugin");
@@ -154,7 +156,7 @@ if( $formdata = $mform->get_data()) {
         $params = array('userid' => $USER->id, 'start' => $starttime, 'end' => $endtime);
         $spamusers = array();
 
-        if(isset($formdata->searchusers)) {
+        if(!empty($formdata->searchusers)) {
             $sql  = "SELECT * FROM {user} AS u WHERE deleted = 0 AND id <> :userid AND description != '' AND u.timemodified > :start AND u.timemodified < :end ";  // Exclude oneself
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
@@ -182,9 +184,10 @@ if( $formdata = $mform->get_data()) {
                     $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('userdesc' , $data->text, $user->id);
                     $hitcount++;
                 }
+                $stats['users']++;
             }
         }
-        if(isset($formdata->searchcomments)) {
+        if(!empty($formdata->searchcomments)) {
             $sql  = "SELECT u.*, c.id as cid, c.content FROM {user} AS u, {comments} AS c WHERE u.deleted = 0 AND u.id=c.userid AND u.id <> :userid AND c.timecreated > :start AND c.timecreated < :end";
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
@@ -199,7 +202,7 @@ if( $formdata = $mform->get_data()) {
                 $data = new stdClass();
                 $data->email = $user->email;
                 $data->ip = $user->lastip;
-                $data->text = $user->comments;
+                $data->text = $user->content;
                 $data->type = 'comment';
                 $is_spam = $plugin->detect_spam($data);
                 if ($is_spam) {
@@ -212,9 +215,10 @@ if( $formdata = $mform->get_data()) {
                     $hitcount++;
                     $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('comment' , $data->text, $user->cid);
                 }
+                $stats['comments']++;
             }
         }
-        if(isset($formdata->searchmsgs)) {
+        if(!empty($formdata->searchmsgs)) {
             $sql  = "SELECT u.*, m.id as mid, m.fullmessage FROM {user} AS u, {message} AS m WHERE u.deleted = 0 AND u.id=m.useridfrom AND u.id <> :userid AND m.timecreated > :start AND m.timecreated < :end";
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
@@ -242,10 +246,11 @@ if( $formdata = $mform->get_data()) {
                     $hitcount++;
                     $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('message' , $data->text, $user->mid);
                 }
+                $stats['msgs']++;
             }
         }
-        if(isset($formdata->searchforums)) {
-            $sql = "SELECT u.*, fb.id as fid, fp.message FROM {user} AS u, {forum_posts} AS fp WHERE u.deleted = 0 AND u.id=fp.userid AND u.id <> :userid AND fp.modified > :start AND fp.modified < :end";
+        if(!empty($formdata->searchforums)) {
+            $sql = "SELECT u.*, fp.id as fid, fp.message FROM {user} AS u, {forum_posts} AS fp WHERE u.deleted = 0 AND u.id=fp.userid AND u.id <> :userid AND fp.modified > :start AND fp.modified < :end";
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
                 // Limit checks
@@ -272,9 +277,10 @@ if( $formdata = $mform->get_data()) {
                     $hitcount++;
                     $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('forummessage' , $data->text, $user->fid);
                 }
+                $stats['forums']++;
             }
         }
-        if(isset($formdata->searchblogs)) {
+        if(!empty($formdata->searchblogs)) {
             $sql = "SELECT u.*, p.id as pid, p.summary FROM {user} AS u, {post} AS p WHERE u.deleted = 0 AND u.id=p.userid AND u.id <> :userid AND p.lastmodified > :start AND p.lastmodified < :end";
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
@@ -302,9 +308,13 @@ if( $formdata = $mform->get_data()) {
                     $hitcount++;
                     $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('blogpost' , $data->text, $user->pid);
                 }
+                $stats['blogs']++;
             }
         }
+        // Calculate time taken.
+        $stats['time'] = time() - $stats['time'];
         echo $OUTPUT->box(get_string('methodused', 'tool_advancedspamcleaner', $plugin->pluginname));
+        echo $OUTPUT->box(get_string('showstats', 'tool_advancedspamcleaner', $stats));
         $spamcleaner->print_table($spamusers, '', true, $limitflag);
     }
     echo '</div>';

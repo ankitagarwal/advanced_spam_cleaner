@@ -26,8 +26,6 @@ class base_advanced_spam_cleaner {
 }
 
 
-
-
 class advanced_spam_cleaner {
 
 
@@ -323,7 +321,6 @@ class advanced_spam_cleaner {
         } else {
             return $type;
         }
-
     }
 }
 

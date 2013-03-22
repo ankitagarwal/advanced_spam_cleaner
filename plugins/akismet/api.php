@@ -1,5 +1,7 @@
 <?php
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once('akismet.class.php');
 
 class akismet_advanced_spam_cleaner extends base_advanced_spam_cleaner {

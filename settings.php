@@ -27,11 +27,10 @@
 defined('MOODLE_INTERNAL') || die;
 require_once ( $CFG->dirroot . '/admin/tool/advancedspamcleaner/lib.php');
 
-// Implementing own parser as Moodle doesnt support subplugins to an admin tool
+// Implementing own parser as Moodle doesn't support subplugins to an admin tool.
 
 $spamcleaner = new advanced_spam_cleaner();
-$pluginlist = $spamcleaner->plugin_list(get_system_context());
-
+$pluginlist = $spamcleaner->plugin_list(context_system::instance());
 $settings = new admin_settingpage('advancedspamcleaner', get_string('settingpage', 'tool_advancedspamcleaner'), 'moodle/site:config');
 foreach ($pluginlist as $plugin => $pluginname) {
     $settingfile = $CFG->dirroot.'/admin/tool/advancedspamcleaner/plugins/'.$plugin.'/settings.php';
