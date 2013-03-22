@@ -83,10 +83,16 @@ $PAGE->requires->strings_for_js($strings, 'tool_spamcleaner');
 echo $OUTPUT->header();
 
 // Print headers and things
-echo $OUTPUT->box(get_string('spamcleanerintro', 'tool_spamcleaner'));
+echo $OUTPUT->box(get_string('spamcleanerintro', 'tool_advancedspamcleaner'));
 
 $spamcleaner = new advanced_spam_cleaner();
 $pluginlist = $spamcleaner->plugin_list(context_system::instance());
+
+$links = array();
+$links[] = html_writer::link("https://tracker.moodle.org/browse/CONTRIB/component/12336", get_string('reportissue', 'tool_advancedspamcleaner'), array('target' => '_blank'));
+$links[] = html_writer::link("https://moodle.org/plugins/view.php?plugin=tool_advancedspamcleaner", get_string('pluginpage', 'tool_advancedspamcleaner'), array('target' => '_blank'));
+$links = html_writer::alist($links);
+echo $OUTPUT->box($links);
 
 $mform = new tool_advanced_spam_cleaner(null, array ('pluginlist' => $pluginlist));
 $mform->display();

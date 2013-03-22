@@ -21,7 +21,7 @@ Things to do
 
 Maturity
 ====================
-Beta (use at your own risk)
+STABLE (use at your own risk)
 
 Features
 ====================
@@ -37,6 +37,7 @@ Change log
 * 2012070816 - Adding support for custom date range - 1.1
 * 2012070821 - Minor bug fixes - 1.2
 * 2012121900 - Minor bug fixes and improvments - 1.3
+* 2013032200 - Minor bug fixes, sats report, and other minor improvments - 1.4
 
 
 About Author
@@ -44,6 +45,7 @@ About Author
 Ankit Kumar Agarwal
 Moodle HQ developer
 https://github.com/ankitagarwal
+http://ankitkumaragarwal.com
 
 License
 =====================

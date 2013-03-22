@@ -41,7 +41,9 @@ $string['missingkeywords'] = 'Keywords cannot be empty';
 $string['missingmethod'] = 'Method to use cannot be empty';
 $string['noakismetkey'] = 'Set api key from settings before using this option';
 $string['pluginname'] = 'Advanced spam cleaner';
+$string['pluginpage'] = 'Plugin page';
 $string['pluginsettings'] = 'Advanced spam cleaner sub-plugins settings for {$a}';
+$string['reportissue'] = 'Report an issue';
 $string['searchblogs'] = 'Include blogs';
 $string['searchcomments'] = 'Include comments';
 $string['searchforums'] = 'Include forums';
@@ -54,7 +56,9 @@ $string['showstats'] = 'Following number of entries were checked for spam : <br/
 $string['spamauto'] = 'Auto detect spam using common spam keywords';
 $string['spamcannotdelete'] = 'Cannot delete this user';
 $string['spamcannotfinduser'] = 'No users matching your search';
-$string['spamcleanerintro'] = 'This script allows you to search all user profiles for certain strings and then delete those accounts which are obviously created by spammers.  You can search for multiple keywords using commas (eg casino, porn)<br /><br />Moodle docs has more information about <a href="http://docs.moodle.org/en/Reducing_spam_in_Moodle">Reducing spam in Moodle</a>.';
+$string['spamcleanerintro'] = 'This script allows you to search all user profiles , comments, blogposts, forum posts and messages for certain strings and then delete those accounts which are obviously created by spammers.
+    You can search for multiple keywords using commas (eg casino, porn) or use a third party system to scan your site (eg Akismet).
+    Please note this can take a while based on your method of search. Use limits to reduce scope of search';
 $string['spamcount'] = 'Spam count';
 $string['spamtext'] = 'Spam text';
 $string['spamtype'] = 'Spam type';
