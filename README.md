@@ -38,6 +38,7 @@ Change log
 * 2012070821 - Minor bug fixes - 1.2
 * 2012121900 - Minor bug fixes and improvments - 1.3
 * 2013032200 - Minor bug fixes, sats report, and other minor improvments - 1.4
+* 2013041000 - Turn off debug prints - 1.5
 
 
 About Author

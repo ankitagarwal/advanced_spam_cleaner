@@ -18,10 +18,7 @@ class akismet_advanced_spam_cleaner extends base_advanced_spam_cleaner {
         $akismet->setCommentContent($data->text);
         $akismet->setUserIP($data->ip);
 
-        if($akismet->isCommentSpam()) {
-            return true;
-        } else {
-            return false;
-        }
+        return $akismet->isCommentSpam()
+
     }
 }

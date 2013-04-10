@@ -204,7 +204,6 @@ class advanced_spam_cleaner {
         } else {
             echo $OUTPUT->box(get_string('spamresult', 'tool_advancedspamcleaner').s(implode(', ', $keywords))).' ...';
             advanced_spam_cleaner::print_table($spamusers, $keywords, true);
-            print_object($spamusers);
         }
     }
 
