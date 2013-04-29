@@ -5,6 +5,8 @@ require_once("$CFG->libdir/formslib.php");
 class tool_advanced_spam_cleaner extends moodleform {
     // Define the form
     function definition() {
+        global $CFG;
+
         $mform = $this->_form;
         $options = array (
                 'spamauto' => get_string('spamauto', 'tool_advancedspamcleaner'),
@@ -56,13 +58,23 @@ class tool_advanced_spam_cleaner extends moodleform {
         $mform->disabledif('enddate', 'usedatestartlimit');
 
         $this->add_action_buttons(false, get_string('spamsearch', 'tool_advancedspamcleaner'));
+        if ($CFG->version >= 2013042500) {
+            // Expand all section to force user see all settings.
+            $mform->setExpanded('searchscope');
+            $mform->setExpanded('limits');
+            $mform->setExpanded('datelimits');
+        }
     }
-    // add validations
+    // Add validations.
     function validation($data, $files) {
         $errors = array();
         $errors = parent::validation($data, $files);
         if ($data['method'] == 'usekeywords' && empty($data['keyword'])) {
             $errors['keyword'] = get_string('missingkeywords', 'tool_advancedspamcleaner');
+        }
+        if (empty($data['searchblogs']) && empty($data['searchusers']) && empty($data['searchcomments'])
+                && empty($data['searchmsgs']) && empty($data['searchforums'])) {
+            $errors['searchblogs'] = get_string('missingscope', 'tool_advancedspamcleaner');
         }
         return $errors;
     }

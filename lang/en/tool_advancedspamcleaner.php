@@ -39,6 +39,7 @@ $string['methodused'] = 'Spam detection method used: {$a}';
 $string['methodoptions'] = 'Method options';
 $string['missingkeywords'] = 'Keywords cannot be empty';
 $string['missingmethod'] = 'Method to use cannot be empty';
+$string['missingscope'] = 'No scope specified to search';
 $string['noakismetkey'] = 'Set api key from settings before using this option';
 $string['pluginname'] = 'Advanced spam cleaner';
 $string['pluginpage'] = 'Plugin page';
@@ -58,7 +59,7 @@ $string['spamcannotdelete'] = 'Cannot delete this user';
 $string['spamcannotfinduser'] = 'No users matching your search';
 $string['spamcleanerintro'] = 'This script allows you to search all user profiles , comments, blogposts, forum posts and messages for certain strings and then delete those accounts which are obviously created by spammers.
     You can search for multiple keywords using commas (eg casino, porn) or use a third party system to scan your site (eg Akismet).
-    Please note this can take a while based on your method of search. Use limits to reduce scope of search';
+    Please note this can take a while based on your method of search. Use limits to reduce scope of search.';
 $string['spamcount'] = 'Spam count';
 $string['spamtext'] = 'Spam text';
 $string['spamtype'] = 'Spam type';
@@ -78,6 +79,6 @@ $string['spamsearch'] = 'Search for spam';
 $string['startdate'] = 'Start date';
 $string['usekeywords'] = 'Use the entered keywords';
 $string['uselimits'] = 'Use limits';
-$string['uselimits_help'] = 'Use limits to reduce CPU usage <br /> (Note that limits are not used for auto detect and keyword methods';
+$string['uselimits_help'] = 'Use limits to reduce resource usage <br /> (Note that limits are not used for auto detect and keyword methods)';
 $string['usedatestartlimit'] = 'Use date limits';
 $string['usedatestartlimit_help'] = 'Enable to run the spam search on entities only between the selected date range';

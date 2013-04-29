@@ -188,7 +188,7 @@ class advanced_spam_cleaner {
                 }
                 $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('forummessage' , $user->message, $user->fid);
             }
-            $users = $DB->get_recordset_sql($sql3, $params);
+            $users = $DB->get_recordset_sql($sql7, $params);
             foreach( $users as $user) {
                 $spamusers[$user->id]['user'] = $user;
                 if(empty($spamusers[$user->id]['spamcount'])) {
@@ -259,9 +259,11 @@ class advanced_spam_cleaner {
         $table->collapsible(true);
 
         // This is done to prevent redundant data, when a user has multiple attempts
+        // We cannot supress spam count, since it may be the same for two diff users,
+        // altough ideally we dont want it shown again and again.
+        // TODO: Figure out a way to do this.
         $table->column_suppress('picture');
         $table->column_suppress('fullname');
-        $table->column_suppress('spamcount');
 
         $table->column_class('picture', 'picture');
 

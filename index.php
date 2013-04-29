@@ -82,7 +82,7 @@ $PAGE->requires->strings_for_js($strings, 'tool_spamcleaner');
 
 echo $OUTPUT->header();
 
-// Print headers and things
+// Print headers and things.
 echo $OUTPUT->box(get_string('spamcleanerintro', 'tool_advancedspamcleaner'));
 
 $spamcleaner = new advanced_spam_cleaner();
@@ -95,17 +95,17 @@ $links = html_writer::alist($links);
 echo $OUTPUT->box($links);
 
 $mform = new tool_advanced_spam_cleaner(null, array ('pluginlist' => $pluginlist));
-$mform->display();
 
-if( $formdata = $mform->get_data()) {
-    echo '<div id="result" class="mdl-align">';
+if ( $formdata = $mform->get_data()) {
+    $mform->display();
+    echo html_writer::start_div('mdl-align', array('id' => 'result'));
     $keywords = explode(',', $formdata->keyword);
     if ($formdata->method == 'usekeywords' && empty($formdata->keyword)) {
         print_error(get_string('missingkeywords', 'tool_advancedspamcleaner'));
     }
 
-    // Set limits
-    if(!empty($formdata->uselimits)) {
+    // Set limits.
+    if (!empty($formdata->uselimits)) {
         if (is_number($formdata->apilimit)) {
             $apilimit = $formdata->apilimit;
         } else {
@@ -125,8 +125,8 @@ if( $formdata = $mform->get_data()) {
     $hitcount = 0;
     $limitflag = false;
 
-    // Date limits
-    if(!empty($formdata->usedatestartlimit)) {
+    // Date limits.
+    if (!empty($formdata->usedatestartlimit)) {
         if (is_number($formdata->startdate)) {
             $starttime = $formdata->startdate;
         } else {
@@ -143,13 +143,13 @@ if( $formdata = $mform->get_data()) {
         $endtime = time();
     }
 
-    // Find spam using keywords
-    if($formdata->method == 'usekeywords' || $formdata->method == 'spamauto') {
-        if (empty($keywords)) {
+    // Find spam using keywords.
+    if ($formdata->method == 'usekeywords' || $formdata->method == 'spamauto') {
+        if (empty($keywords) || $formdata->method == 'spamauto') {
             $keywords = $autokeywords;
         }
         $spamcleaner->search_spammers($formdata, $keywords, $starttime, $endtime, false );
-    // use the specified sub-plugin
+    // Use the specified sub-plugin.
     } else {
         // Store stats for sub-plugins methods.
         $stats = array('time' => time(), 'users' => 0, 'comments' => 0, 'msgs' => 0, 'forums' => 0, 'blogs' => 0);
@@ -162,7 +162,7 @@ if( $formdata = $mform->get_data()) {
         $params = array('userid' => $USER->id, 'start' => $starttime, 'end' => $endtime);
         $spamusers = array();
 
-        if(!empty($formdata->searchusers)) {
+        if (!empty($formdata->searchusers)) {
             $sql  = "SELECT * FROM {user} AS u WHERE deleted = 0 AND id <> :userid AND description != '' AND u.timemodified > :start AND u.timemodified < :end ";  // Exclude oneself
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
@@ -193,7 +193,7 @@ if( $formdata = $mform->get_data()) {
                 $stats['users']++;
             }
         }
-        if(!empty($formdata->searchcomments)) {
+        if (!empty($formdata->searchcomments)) {
             $sql  = "SELECT u.*, c.id as cid, c.content FROM {user} AS u, {comments} AS c WHERE u.deleted = 0 AND u.id=c.userid AND u.id <> :userid AND c.timecreated > :start AND c.timecreated < :end";
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
@@ -224,12 +224,12 @@ if( $formdata = $mform->get_data()) {
                 $stats['comments']++;
             }
         }
-        if(!empty($formdata->searchmsgs)) {
+        if (!empty($formdata->searchmsgs)) {
             $sql  = "SELECT u.*, m.id as mid, m.fullmessage FROM {user} AS u, {message} AS m WHERE u.deleted = 0 AND u.id=m.useridfrom AND u.id <> :userid AND m.timecreated > :start AND m.timecreated < :end";
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
                 // Limit checks
-                if(($apilimit != 0 && $apilimit <= $apicount) || ($hitlimit !=0 && $hitlimit <= $hitcount)) {
+                if (($apilimit != 0 && $apilimit <= $apicount) || ($hitlimit !=0 && $hitlimit <= $hitcount)) {
                     $limitflag = true;
                     break;
                 }
@@ -255,7 +255,7 @@ if( $formdata = $mform->get_data()) {
                 $stats['msgs']++;
             }
         }
-        if(!empty($formdata->searchforums)) {
+        if (!empty($formdata->searchforums)) {
             $sql = "SELECT u.*, fp.id as fid, fp.message FROM {user} AS u, {forum_posts} AS fp WHERE u.deleted = 0 AND u.id=fp.userid AND u.id <> :userid AND fp.modified > :start AND fp.modified < :end";
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
@@ -286,7 +286,7 @@ if( $formdata = $mform->get_data()) {
                 $stats['forums']++;
             }
         }
-        if(!empty($formdata->searchblogs)) {
+        if (!empty($formdata->searchblogs)) {
             $sql = "SELECT u.*, p.id as pid, p.summary FROM {user} AS u, {post} AS p WHERE u.deleted = 0 AND u.id=p.userid AND u.id <> :userid AND p.lastmodified > :start AND p.lastmodified < :end";
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
@@ -306,7 +306,7 @@ if( $formdata = $mform->get_data()) {
                 $is_spam = $plugin->detect_spam($data);
                 if ($is_spam) {
                     $spamusers[$user->id]['user'] = $user;
-                    if(empty($spamusers[$user->id]['spamcount'])) {
+                    if (empty($spamusers[$user->id]['spamcount'])) {
                         $spamusers[$user->id]['spamcount'] = 1;
                     } else {
                         $spamusers[$user->id]['spamcount']++;
@@ -323,7 +323,9 @@ if( $formdata = $mform->get_data()) {
         echo $OUTPUT->box(get_string('showstats', 'tool_advancedspamcleaner', $stats));
         $spamcleaner->print_table($spamusers, '', true, $limitflag);
     }
-    echo '</div>';
+    echo html_writer::end_div();
+} else {
+    $mform->display();
 }
 
 echo $OUTPUT->footer();
