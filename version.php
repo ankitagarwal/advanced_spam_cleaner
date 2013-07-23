@@ -25,7 +25,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->version   = 2013072300;
 $plugin->requires  = 2012062500;
-$plugin->maturity  = MATURITY_STABLE;
+$plugin->maturity  = MATURITY_BETA;
 $plugin->release   = "1.7";
 $plugin->component = 'tool_advancedspamcleaner'; // Full name of the plugin (used for diagnostics).
 

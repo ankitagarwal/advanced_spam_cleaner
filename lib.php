@@ -26,6 +26,7 @@ require_once($CFG->dirroot . '/comment/lib.php');
 // TODO: use autoloading.
 require_once('classes/advanced_spammerlib.php');
 require_once('classes/spammerlib.php');
+require_once('classes/manager.php');
 
 class base_advanced_spam_cleaner {
     public $pluginname;
@@ -313,7 +314,7 @@ class advanced_spam_cleaner {
                 $row[] = self::get_spam_url($spamdata[0], $spamdata[2]);
                 $row[] .= '<button onclick="M.tool_spamcleaner.del_user(this,'.$userid.')">'.get_string('deleteuser', 'admin').'</button><br />';
                 $row[] .= '<button onclick="M.tool_spamcleaner.ignore_user(this,'.$userid.')">'.get_string('ignore', 'admin').'</button>';
-                $row[] .= advanced_spammerlib::nuke_user_button($userid, true);
+                $row[] .= tool_advancedspamcleaner_advanced_spammerlib::nuke_user_button($userid, true);
                 $table->add_data($row);
             }
         }

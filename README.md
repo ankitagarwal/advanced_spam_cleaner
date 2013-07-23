@@ -21,7 +21,7 @@ Things to do
 
 Maturity
 ====================
-STABLE (use at your own risk)
+BETA (use at your own risk)
 
 Features
 ====================
@@ -40,7 +40,7 @@ Change log
 * 2013032200 - Minor bug fixes, sats report, and other minor improvments - 1.4
 * 2013041000 - Turn off debug prints - 1.5
 * 2013042900 - Bug fixes, form improvments - 1.6
-* 2013072300 - Code cleanup, - 1.7
+* 2013072300 - Code cleanup, nuke user support, massive refactoring - 1.7
 
 
 About Author
