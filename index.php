@@ -25,10 +25,8 @@
 
 require_once('../../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
-require_once($CFG->libdir.'/tablelib.php');
 require_once('advanced_form.php');
 require_once('lib.php');
-require_once('spammerlib.php');
 
 // List of known spammy keywords, please add more here.
 $autokeywords = array(

@@ -22,7 +22,10 @@ require_once($CFG->dirroot . '/mod/forum/lib.php');
 require_once($CFG->dirroot.'/tag/lib.php');
 require_once($CFG->libdir .'/tablelib.php');
 require_once($CFG->dirroot . '/comment/lib.php');
-require_once('spammerlib.php');
+// We cannot use autloading yet as plugin is supposed to support 2.3.
+// TODO: use autoloading.
+require_once('classes/advanced_spammerlib.php');
+require_once('classes/spammerlib.php');
 
 class base_advanced_spam_cleaner {
     public $pluginname;
