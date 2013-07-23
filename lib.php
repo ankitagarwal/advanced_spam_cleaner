@@ -17,6 +17,13 @@
  * All sub -plugins must extend this class
  * The name of the extend class should be $pluginname_advanced_spam_cleaner
  */
+require_once($CFG->dirroot . '/user/lib.php');
+require_once($CFG->dirroot . '/mod/forum/lib.php');
+require_once($CFG->dirroot.'/tag/lib.php');
+require_once($CFG->libdir .'/tablelib.php');
+require_once($CFG->dirroot . '/comment/lib.php');
+require_once('spammerlib.php');
+
 class base_advanced_spam_cleaner {
     public $pluginname;
 
@@ -259,6 +266,8 @@ class advanced_spam_cleaner {
         $headers[]= get_string('deleteuser', 'admin');
         $columns[]= 'ignoreuser';
         $headers[]= get_string('ignore', 'admin');
+        $columns[]= 'nukeuser';
+        $headers[]= get_string('nukeuser', 'tool_advancedspamcleaner');
         //$columns[]= 'spamtype';
         //$headers[]= get_string('spamtype', 'tool_advancedspamcleaner');
 
@@ -301,6 +310,7 @@ class advanced_spam_cleaner {
                 $row[] = self::get_spam_url($spamdata[0], $spamdata[2]);
                 $row[] .= '<button onclick="M.tool_spamcleaner.del_user(this,'.$userid.')">'.get_string('deleteuser', 'admin').'</button><br />';
                 $row[] .= '<button onclick="M.tool_spamcleaner.ignore_user(this,'.$userid.')">'.get_string('ignore', 'admin').'</button>';
+                $row[] .= advanced_spammerlib::nuke_user_button($userid, true);
                 $table->add_data($row);
             }
         }
@@ -338,4 +348,3 @@ class advanced_spam_cleaner {
         }
     }
 }
-

@@ -40,6 +40,7 @@ $string['missingkeywords'] = 'Keywords cannot be empty';
 $string['missingmethod'] = 'Method to use cannot be empty';
 $string['missingscope'] = 'No scope specified to search';
 $string['noakismetkey'] = 'Set api key from settings before using this option';
+$string['nukeuser'] = 'Nuke user';
 $string['pluginname'] = 'Advanced spam cleaner';
 $string['pluginpage'] = 'Plugin page';
 $string['pluginsettings'] = 'Advanced spam cleaner sub-plugins settings for {$a}';
@@ -81,3 +82,34 @@ $string['uselimits'] = 'Use limits';
 $string['uselimits_help'] = 'Use limits to reduce resource usage <br /> (Note that limits are not used for auto detect and keyword methods)';
 $string['usedatestartlimit'] = 'Use date limits';
 $string['usedatestartlimit_help'] = 'Enable to run the spam search on entities only between the selected date range';
+
+// -------------------------------Block spam strings -----------------------------------------------------------
+
+$string['alreadyreported'] = 'You\'ve already reported this content as spam.';
+$string['cannotdelete'] = 'Cannot delete content for this user.';
+$string['confirmdeletemsg'] = 'Are you sure, you want to mark <strong>{$a->firstname} {$a->lastname} ({$a->username})</strong> as spammer? Data belonging to this user will be blanked out or removed.';
+$string['confirmdelete'] = 'Delete spammer';
+$string['confirmspamreportmsg'] = 'Are you sure you wish to report this content as spam?';
+$string['countmessageunread'] = 'Unread messages: {$a}';
+$string['countmessageread'] = 'Read messages: {$a}';
+$string['countforum'] = 'Forum posts: {$a}';
+$string['countcomment'] = 'Comments: {$a}';
+$string['counttags'] = 'Unique tags: {$a}';
+$string['deletebutton'] = 'Delete spammer';
+$string['notrecentlyaccessed'] = 'Beware! The first access date of this account is more than 1 month ago. Make double sure it is really a spammer.';
+$string['messageprovider:spamreport'] = 'Spam report';
+$string['messageblocked'] = 'Your post has been blocked, as our spam prevention system has flagged it as possibly containing spam. If this is not the case, please see \'My post has been incorrectly flagged as containing spam\' in <a href="http://docs.moodle.org/en/Moodle.org_FAQ#My_post_has_been_incorrectly_flagged_as_containing_spam">http://docs.moodle.org/en/Moodle.org_FAQ</a>. Your message is below if you need to copy and paste it.';
+$string['messageblockedtitle'] = 'Potential spam detected!';
+$string['pluginname'] = 'Spam deletion';
+$string['reportasspam'] = 'Report as spam';
+$string['reportcontentasspam'] = 'Report content as spam';
+$string['spamreportmessage'] = '{$a->spammer} may be a spammer.
+View spam reports at {$a->url}';
+$string['spamreportmessagetitle'] = '{$a->spammer} may be a spammer.';
+$string['spam_deletion:addinstance'] = 'Add delete spammer block';
+$string['spam_deletion:spamdelete'] = 'Delete Spam';
+$string['spam_deletion:viewspamreport'] = 'View spam reports';
+$string['spamdescription'] = 'Spammer - spam deleted and account blocked {$a}';
+$string['spamreports'] = 'Spam reports: {$a}';
+$string['thanksspamrecorded'] = 'Thanks, your spam report has been recorded.';
+$string['totalcount'] = 'Total records by this user:-';

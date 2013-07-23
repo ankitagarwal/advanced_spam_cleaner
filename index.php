@@ -28,6 +28,7 @@ require_once($CFG->libdir.'/adminlib.php');
 require_once($CFG->libdir.'/tablelib.php');
 require_once('advanced_form.php');
 require_once('lib.php');
+require_once('spammerlib.php');
 
 // List of known spammy keywords, please add more here.
 $autokeywords = array(
@@ -302,7 +303,8 @@ if ( $formdata = $mform->get_data()) {
             }
         }
         if (!empty($formdata->searchblogs)) {
-            $sql = "SELECT u.*, p.id as pid, p.summary FROM {user} AS u, {post} AS p WHERE u.deleted = 0 AND u.id=p.userid AND u.id <> :userid AND p.lastmodified > :start AND p.lastmodified < :end";
+            $sql = "SELECT u.*, p.id as pid, p.summary FROM {user} AS u, {post} AS p WHERE u.deleted = 0 AND u.id=p.userid AND u.id <> :userid AND p
+            .lastmodified > :start AND p.lastmodified < :end";
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
                 // Limit checks.
