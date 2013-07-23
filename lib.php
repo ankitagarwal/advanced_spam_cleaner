@@ -1,4 +1,18 @@
 <?php
+// This file is part of Advanced Spam Cleaner tool for Moodle
+//
+// Advanced Spam Cleaner is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Advanced Spam Cleaner is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// For a copy of the GNU General Public License, see <http://www.gnu.org/licenses/>.
+
 /* Base sub-plugin class
  * All sub -plugins must extend this class
  * The name of the extend class should be $pluginname_advanced_spam_cleaner
@@ -14,13 +28,13 @@ class base_advanced_spam_cleaner {
      *
      * @return bool true if $data is probable spam else false
      */
-    function detect_spam ($data) {
-        // Implement wrapper for your sub-plugins api in here
+    public function detect_spam ($data) {
+        // Implement wrapper for your sub-plugins api in here.
         return false;
     }
 
-    function canview($context) {
-        // Implement your custom cap checks here
+    public function canview($context) {
+        // Implement your custom cap checks here.
         return true;
     }
 }
@@ -34,7 +48,7 @@ class advanced_spam_cleaner {
     * @param context context level to check caps against
     * @return array list of valid reports present
     */
-    function plugin_list($context) {
+    public function plugin_list($context) {
         global $CFG;
         static $pluginlist;
         if (!empty($pluginlist)) {
@@ -58,16 +72,16 @@ class advanced_spam_cleaner {
         return $pluginlist;
     }
 
-    static function search_spammers($data, $keywords = null, $starttime = 0, $endtime = 0, $return = false) {
+    static public function search_spammers($data, $keywords = null, $starttime = 0, $endtime = 0, $return = false) {
 
         global $CFG, $USER, $DB, $OUTPUT;
 
 
         if (!is_array($keywords)) {
-            $keywords = array($keywords);    // Make it into an array
+            $keywords = array($keywords);    // Make it into an array.
         }
         if ($endtime == 0) {
-            $enttime = time();
+            $endtime = time();
         }
 
         $params = array('userid' => $USER->id, 'start' => $starttime, 'end' => $endtime);
@@ -109,12 +123,12 @@ class advanced_spam_cleaner {
 
         $spamusers = array();
 
-        // Search user profiles
+        // Search user profiles.
         if (!empty($data->searchusers)) {
             $users = $DB->get_recordset_sql($sql, $params);
-            foreach( $users as $user) {
+            foreach ($users as $user) {
                 $spamusers[$user->id]['user'] = $user;
-                if(empty($spamusers[$user->id]['spamcount'])) {
+                if (empty($spamusers[$user->id]['spamcount'])) {
                     $spamusers[$user->id]['spamcount'] = 1;
                 } else {
                     $spamusers[$user->id]['spamcount']++;
@@ -124,12 +138,12 @@ class advanced_spam_cleaner {
         }
 
 
-        // Search blogs
+        // Search blogs.
         if (!empty($data->searchblogs)) {
             $users = $DB->get_recordset_sql($sql2, $params);
-            foreach( $users as $user) {
+            foreach ($users as $user) {
                 $spamusers[$user->id]['user'] = $user;
-                if(empty($spamusers[$user->id]['spamcount'])) {
+                if (empty($spamusers[$user->id]['spamcount'])) {
                     $spamusers[$user->id]['spamcount'] = 1;
                 } else {
                     $spamusers[$user->id]['spamcount']++;
@@ -137,9 +151,9 @@ class advanced_spam_cleaner {
                 $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('blogsummary' , $user->summary, $user->pid);
             }
             $users = $DB->get_recordset_sql($sql3, $params);
-            foreach( $users as $user) {
+            foreach ($users as $user) {
                 $spamusers[$user->id]['user'] = $user;
-                if(empty($spamusers[$user->id]['spamcount'])) {
+                if (empty($spamusers[$user->id]['spamcount'])) {
                     $spamusers[$user->id]['spamcount'] = 1;
                 } else {
                     $spamusers[$user->id]['spamcount']++;
@@ -148,12 +162,12 @@ class advanced_spam_cleaner {
             }
         }
 
-        // Search comments
+        // Search comments.
         if (!empty($data->searchcomments)) {
             $users = $DB->get_recordset_sql($sql4, $params);
-            foreach( $users as $user) {
+            foreach ($users as $user) {
                 $spamusers[$user->id]['user'] = $user;
-                if(empty($spamusers[$user->id]['spamcount'])) {
+                if (empty($spamusers[$user->id]['spamcount'])) {
                     $spamusers[$user->id]['spamcount'] = 1;
                 } else {
                     $spamusers[$user->id]['spamcount']++;
@@ -162,12 +176,12 @@ class advanced_spam_cleaner {
             }
         }
 
-        // Search message
+        // Search message.
         if (!empty($data->searchmsgs)) {
             $users = $DB->get_recordset_sql($sql5, $params);
-            foreach( $users as $user) {
+            foreach ($users as $user) {
                 $spamusers[$user->id]['user'] = $user;
-                if(empty($spamusers[$user->id]['spamcount'])) {
+                if (empty($spamusers[$user->id]['spamcount'])) {
                     $spamusers[$user->id]['spamcount'] = 1;
                 } else {
                     $spamusers[$user->id]['spamcount']++;
@@ -176,12 +190,12 @@ class advanced_spam_cleaner {
             }
         }
 
-        // Search forums
+        // Search forums.
         if (!empty($data->searchforums)) {
             $users = $DB->get_recordset_sql($sql6, $params);
-            foreach( $users as $user) {
+            foreach ($users as $user) {
                 $spamusers[$user->id]['user'] = $user;
-                if(empty($spamusers[$user->id]['spamcount'])) {
+                if (empty($spamusers[$user->id]['spamcount'])) {
                     $spamusers[$user->id]['spamcount'] = 1;
                 } else {
                     $spamusers[$user->id]['spamcount']++;
@@ -189,9 +203,9 @@ class advanced_spam_cleaner {
                 $spamusers[$user->id]['spamtext'][$spamusers[$user->id]['spamcount']] = array ('forummessage' , $user->message, $user->fid);
             }
             $users = $DB->get_recordset_sql($sql7, $params);
-            foreach( $users as $user) {
+            foreach ($users as $user) {
                 $spamusers[$user->id]['user'] = $user;
-                if(empty($spamusers[$user->id]['spamcount'])) {
+                if (empty($spamusers[$user->id]['spamcount'])) {
                     $spamusers[$user->id]['spamcount'] = 1;
                 } else {
                     $spamusers[$user->id]['spamcount']++;
@@ -203,12 +217,12 @@ class advanced_spam_cleaner {
             return $spamusers;
         } else {
             echo $OUTPUT->box(get_string('spamresult', 'tool_advancedspamcleaner').s(implode(', ', $keywords))).' ...';
-            advanced_spam_cleaner::print_table($spamusers, $keywords, true);
+            self::print_table($spamusers, $keywords, true);
         }
     }
 
     static function print_table($users_rs = null, $keywords = null, $resetsession = false, $limitflag = false) {
-        global $CFG, $SESSION, $OUTPUT, $PAGE;
+        global $CFG, $OUTPUT, $PAGE;
         /*if ($resetsession) {
             // reset session
             $SESSION->users_result = array();
@@ -222,10 +236,10 @@ class advanced_spam_cleaner {
         }
         $count = 0;*/
 
-        // Define table columns
+        // Define table columns.
         $columns = array();
         $headers = array();
-        // checkbox is not used atm
+        // Checkbox is not used atm.
         //$columns[]= 'checkbox';
         //$headers[]= null;
         $columns[]= 'picture';
@@ -245,7 +259,7 @@ class advanced_spam_cleaner {
         $headers[]= get_string('deleteuser', 'admin');
         $columns[]= 'ignoreuser';
         $headers[]= get_string('ignore', 'admin');
-        //$columns[]= 'spamtype';;
+        //$columns[]= 'spamtype';
         //$headers[]= get_string('spamtype', 'tool_advancedspamcleaner');
 
 
@@ -277,14 +291,14 @@ class advanced_spam_cleaner {
         foreach ($users_rs as $userid => $userdata) {
             $user = (object)$userdata['user'];
 
-            foreach($userdata['spamtext'] as $spamcount => $spamdata) {
+            foreach ($userdata['spamtext'] as $spamcount => $spamdata) {
                 $row = array();
                // $row[] = '<input type="checkbox" name="userid[]" value="'. $userid .'" />';
                 $row[] = $OUTPUT->user_picture($user);
                 $row[] = '<a href="'.$CFG->wwwroot.'/user/view.php?id='.$userid.'">'.fullname($user).'</a>';
                 $row[] = $userdata['spamcount'];
                 $row[] = $spamdata[1];
-                $row[] = advanced_spam_cleaner::get_spam_url($spamdata[0], $spamdata[2]);
+                $row[] = self::get_spam_url($spamdata[0], $spamdata[2]);
                 $row[] .= '<button onclick="M.tool_spamcleaner.del_user(this,'.$userid.')">'.get_string('deleteuser', 'admin').'</button><br />';
                 $row[] .= '<button onclick="M.tool_spamcleaner.ignore_user(this,'.$userid.')">'.get_string('ignore', 'admin').'</button>';
                 $table->add_data($row);

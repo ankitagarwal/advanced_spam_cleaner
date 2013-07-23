@@ -1,4 +1,17 @@
 <?php
+// This file is part of Advanced Spam Cleaner tool for Moodle
+//
+// Advanced Spam Cleaner is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Advanced Spam Cleaner is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// For a copy of the GNU General Public License, see <http://www.gnu.org/licenses/>.
 
 /**
  * Advanced Spam Cleaner
@@ -16,7 +29,7 @@ require_once($CFG->libdir.'/tablelib.php');
 require_once('advanced_form.php');
 require_once('lib.php');
 
-// List of known spammy keywords, please add more here
+// List of known spammy keywords, please add more here.
 $autokeywords = array(
                     "<img",
                     "fuck",
@@ -38,7 +51,7 @@ $id = optional_param('id', '', PARAM_INT);
 require_login();
 admin_externalpage_setup('tooladvancedspamcleaner');
 
-// Delete one user // sessions are not supported atm
+// Delete one user // sessions are not supported atm.
 if (!empty($del) && confirm_sesskey() && ($id != $USER->id)) {
     if ($user = $DB->get_record("user", array('id' => $id))) {
         if (delete_user($user)) {
@@ -53,7 +66,7 @@ if (!empty($del) && confirm_sesskey() && ($id != $USER->id)) {
     exit;
 }
 
-// Delete lots of users
+// Delete lots of users.
 if (!empty($delall) && confirm_sesskey()) {
     if (!empty($SESSION->users_result)) {
         foreach ($SESSION->users_result as $userid => $user) {
@@ -77,7 +90,7 @@ if (!empty($ignore)) {
 
 
 $PAGE->requires->js_init_call('M.tool_spamcleaner.init', array(me()), true);
-$strings = Array('spaminvalidresult','spamdeleteallconfirm','spamcannotdelete','spamdeleteconfirm');
+$strings = array('spaminvalidresult', 'spamdeleteallconfirm', 'spamcannotdelete', 'spamdeleteconfirm');
 $PAGE->requires->strings_for_js($strings, 'tool_spamcleaner');
 
 echo $OUTPUT->header();
@@ -89,8 +102,10 @@ $spamcleaner = new advanced_spam_cleaner();
 $pluginlist = $spamcleaner->plugin_list(context_system::instance());
 
 $links = array();
-$links[] = html_writer::link("https://tracker.moodle.org/browse/CONTRIB/component/12336", get_string('reportissue', 'tool_advancedspamcleaner'), array('target' => '_blank'));
-$links[] = html_writer::link("https://moodle.org/plugins/view.php?plugin=tool_advancedspamcleaner", get_string('pluginpage', 'tool_advancedspamcleaner'), array('target' => '_blank'));
+$links[] = html_writer::link("https://tracker.moodle.org/browse/CONTRIB/component/12336", get_string('reportissue', 'tool_advancedspamcleaner'),
+    array('target' => '_blank'));
+$links[] = html_writer::link("https://moodle.org/plugins/view.php?plugin=tool_advancedspamcleaner", get_string('pluginpage', 'tool_advancedspamcleaner'),
+    array('target' => '_blank'));
 $links = html_writer::alist($links);
 echo $OUTPUT->box($links);
 
@@ -149,7 +164,7 @@ if ( $formdata = $mform->get_data()) {
             $keywords = $autokeywords;
         }
         $spamcleaner->search_spammers($formdata, $keywords, $starttime, $endtime, false );
-    // Use the specified sub-plugin.
+        // Use the specified sub-plugin.
     } else {
         // Store stats for sub-plugins methods.
         $stats = array('time' => time(), 'users' => 0, 'comments' => 0, 'msgs' => 0, 'forums' => 0, 'blogs' => 0);
@@ -166,14 +181,14 @@ if ( $formdata = $mform->get_data()) {
             $sql  = "SELECT * FROM {user} AS u WHERE deleted = 0 AND id <> :userid AND description != '' AND u.timemodified > :start AND u.timemodified < :end ";  // Exclude oneself
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
-                // Limit checks
+                // Limit checks.
                 if(($apilimit != 0 && $apilimit <= $apicount) || ($hitlimit !=0 && $hitlimit <= $hitcount)) {
                     $limitflag = true;
                     break;
                 }
                 $apicount++;
 
-                // Data should be consistent for the sub-plugins
+                // Data should be consistent for the sub-plugins.
                 $data = new stdClass();
                 $data->email = $user->email;
                 $data->ip = $user->lastip;
@@ -182,7 +197,7 @@ if ( $formdata = $mform->get_data()) {
                 $is_spam = $plugin->detect_spam($data);
                 if ($is_spam) {
                     $spamusers[$user->id]['user'] = $user;
-                    if(empty($spamusers[$user->id]['spamcount'])) {
+                    if (empty($spamusers[$user->id]['spamcount'])) {
                         $spamusers[$user->id]['spamcount'] = 1;
                     } else {
                         $spamusers[$user->id]['spamcount']++;
@@ -197,14 +212,14 @@ if ( $formdata = $mform->get_data()) {
             $sql  = "SELECT u.*, c.id as cid, c.content FROM {user} AS u, {comments} AS c WHERE u.deleted = 0 AND u.id=c.userid AND u.id <> :userid AND c.timecreated > :start AND c.timecreated < :end";
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
-                // Limit checks
-                if(($apilimit != 0 && $apilimit <= $apicount) || ($hitlimit !=0 && $hitlimit <= $hitcount)) {
+                // Limit checks.
+                if (($apilimit != 0 && $apilimit <= $apicount) || ($hitlimit !=0 && $hitlimit <= $hitcount)) {
                     $limitflag = true;
                     break;
                 }
                 $apicount++;
 
-                // Data should be consistent for the sub-plugins
+                // Data should be consistent for the sub-plugins.
                 $data = new stdClass();
                 $data->email = $user->email;
                 $data->ip = $user->lastip;
@@ -213,7 +228,7 @@ if ( $formdata = $mform->get_data()) {
                 $is_spam = $plugin->detect_spam($data);
                 if ($is_spam) {
                     $spamusers[$user->id]['user'] = $user;
-                    if(empty($spamusers[$user->id]['spamcount'])) {
+                    if (empty($spamusers[$user->id]['spamcount'])) {
                         $spamusers[$user->id]['spamcount'] = 1;
                     } else {
                         $spamusers[$user->id]['spamcount']++;
@@ -228,14 +243,14 @@ if ( $formdata = $mform->get_data()) {
             $sql  = "SELECT u.*, m.id as mid, m.fullmessage FROM {user} AS u, {message} AS m WHERE u.deleted = 0 AND u.id=m.useridfrom AND u.id <> :userid AND m.timecreated > :start AND m.timecreated < :end";
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
-                // Limit checks
+                // Limit checks.
                 if (($apilimit != 0 && $apilimit <= $apicount) || ($hitlimit !=0 && $hitlimit <= $hitcount)) {
                     $limitflag = true;
                     break;
                 }
                 $apicount++;
 
-                // Data should be consistent for the sub-plugins
+                // Data should be consistent for the sub-plugins.
                 $data = new stdClass();
                 $data->email = $user->email;
                 $data->ip = $user->lastip;
@@ -244,7 +259,7 @@ if ( $formdata = $mform->get_data()) {
                 $is_spam = $plugin->detect_spam($data);
                 if ($is_spam) {
                     $spamusers[$user->id]['user'] = $user;
-                    if(empty($spamusers[$user->id]['spamcount'])) {
+                    if (empty($spamusers[$user->id]['spamcount'])) {
                         $spamusers[$user->id]['spamcount'] = 1;
                     } else {
                         $spamusers[$user->id]['spamcount']++;
@@ -259,14 +274,14 @@ if ( $formdata = $mform->get_data()) {
             $sql = "SELECT u.*, fp.id as fid, fp.message FROM {user} AS u, {forum_posts} AS fp WHERE u.deleted = 0 AND u.id=fp.userid AND u.id <> :userid AND fp.modified > :start AND fp.modified < :end";
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
-                // Limit checks
-                if(($apilimit != 0 && $apilimit <= $apicount) || ($hitlimit !=0 && $hitlimit <= $hitcount)) {
+                // Limit checks.
+                if (($apilimit != 0 && $apilimit <= $apicount) || ($hitlimit !=0 && $hitlimit <= $hitcount)) {
                     $limitflag = true;
                     break;
                 }
                 $apicount++;
 
-                // Data should be consistent for the sub-plugins
+                // Data should be consistent for the sub-plugins.
                 $data = new stdClass();
                 $data->email = $user->email;
                 $data->ip = $user->lastip;
@@ -275,7 +290,7 @@ if ( $formdata = $mform->get_data()) {
                 $is_spam = $plugin->detect_spam($data);
                 if ($is_spam) {
                     $spamusers[$user->id]['user'] = $user;
-                    if(empty($spamusers[$user->id]['spamcount'])) {
+                    if (empty($spamusers[$user->id]['spamcount'])) {
                         $spamusers[$user->id]['spamcount'] = 1;
                     } else {
                         $spamusers[$user->id]['spamcount']++;
@@ -290,14 +305,14 @@ if ( $formdata = $mform->get_data()) {
             $sql = "SELECT u.*, p.id as pid, p.summary FROM {user} AS u, {post} AS p WHERE u.deleted = 0 AND u.id=p.userid AND u.id <> :userid AND p.lastmodified > :start AND p.lastmodified < :end";
             $users = $DB->get_recordset_sql($sql, $params);
             foreach ($users as $user) {
-                // Limit checks
-                if(($apilimit != 0 && $apilimit <= $apicount) || ($hitlimit !=0 && $hitlimit <= $hitcount)) {
+                // Limit checks.
+                if (($apilimit != 0 && $apilimit <= $apicount) || ($hitlimit !=0 && $hitlimit <= $hitcount)) {
                     $limitflag = true;
                     break;
                 }
                 $apicount++;
 
-                // Data should be consistent for the sub-plugins
+                // Data should be consistent for the sub-plugins.
                 $data = new stdClass();
                 $data->email = $user->email;
                 $data->ip = $user->lastip;
