@@ -83,6 +83,11 @@ class tool_advancedspamcleaner_manager {
         }
     }
 
+    /**
+     * Populates manager's fields based on the provided form data
+     *
+     * @param $formdata
+     */
     public function set_form_data($formdata) {
         $this->formdata = $formdata;
         // Set API limits.
@@ -122,6 +127,9 @@ class tool_advancedspamcleaner_manager {
 
     }
 
+    /**
+     * Trigger appropriate spam search and display method, based on the method requested.
+     */
     public function spam_search() {
         switch($this->method) {
             case 'spamauto':
@@ -133,6 +141,9 @@ class tool_advancedspamcleaner_manager {
 
     }
 
+    /**
+     * Search for spam using the specified plugin.
+     */
     public function spam_serach_by_plugin() {
         global $OUTPUT;
         $time = time();
@@ -154,9 +165,13 @@ class tool_advancedspamcleaner_manager {
         echo $OUTPUT->box(get_string('methodused', 'tool_advancedspamcleaner', $plugin->pluginname));
         echo $OUTPUT->box(get_string('showstats', 'tool_advancedspamcleaner', $this->stats));
         $this->spamcleaner->print_table($this->spamusers, '', true, $this->limitflag);
-        print_object($this->spamusers);
     }
 
+    /**
+     * Search for spam in user profiles, using given sub-plugin
+     *
+     * @param $plugin
+     */
     public function plugin_user_search($plugin) {
         if (!empty($this->formdata->searchusers)) {
             $sql  = "SELECT * FROM {user} AS u WHERE deleted = 0 AND id <> :userid AND description != '' AND u.timemodified > :start AND u.timemodified <
@@ -165,6 +180,11 @@ class tool_advancedspamcleaner_manager {
         }
     }
 
+    /**
+     * Search for spam in comments, using the given sub-plugin
+     *
+     * @param $plugin
+     */
     public function plugin_comments_search($plugin) {
         if (!empty($this->formdata->searchcomments)) {
             $sql  = "SELECT u.*, c.id as cid, c.content FROM {user} AS u, {comments} AS c WHERE u.deleted = 0 AND u.id=c.userid AND u.id <> :userid AND c
@@ -173,6 +193,11 @@ class tool_advancedspamcleaner_manager {
         }
     }
 
+    /**
+     * Search for spam in private messages, using the given sub-plugin
+     *
+     * @param $plugin
+     */
     public function plugin_msgs_search($plugin) {
         if (!empty($this->formdata->searchmsgs)) {
             $sql  = "SELECT u.*, m.id as mid, m.fullmessage FROM {user} AS u, {message} AS m WHERE u.deleted = 0 AND u.id=m.useridfrom AND u.id <> :userid
@@ -181,6 +206,11 @@ class tool_advancedspamcleaner_manager {
         }
     }
 
+    /**
+     * Search for spam in forums, using the given sub-plugin
+     *
+     * @param $plugin
+     */
     public function plugin_forums_search($plugin) {
         if (!empty($this->formdata->searchforums)) {
             $sql = "SELECT u.*, fp.id as fid, fp.message FROM {user} AS u, {forum_posts} AS fp WHERE u.deleted = 0 AND u.id=fp.userid AND u.id <> :userid AND
@@ -189,6 +219,11 @@ class tool_advancedspamcleaner_manager {
         }
     }
 
+    /**
+     * Search for spam in blogs, using the given sub-plugin
+     *
+     * @param $plugin
+     */
     public function plugin_blogs_search($plugin) {
         if (!empty($this->formdata->searchblogs)) {
             $sql = "SELECT u.*, p.id as pid, p.summary FROM {user} AS u, {post} AS p WHERE u.deleted = 0 AND u.id=p.userid AND u.id <> :userid AND p
@@ -198,6 +233,15 @@ class tool_advancedspamcleaner_manager {
         }
     }
 
+    /**
+     * Structures data and triggers requested plugin's spam detection api. Populates stats, and spam users array.
+     *
+     * @param $plugin      string Requested plugin method.
+     * @param $sql         string Sql to get the data to pass onto the plugin for spam checks.
+     * @param $text        string Which field to check for spam in the given sql.
+     * @param $type        string What is the type of data tjat is checked.
+     * @param $statfield   string Which field in the stat array to increase for this check.
+     */
     public function plugin_spam_search($plugin, $sql, $text, $type, $statfield) {
         global $USER, $DB;
         $params = array('userid' => $USER->id, 'start' => $this->starttime, 'end' => $this->endtime);

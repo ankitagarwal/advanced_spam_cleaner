@@ -1,7 +1,10 @@
 advanced_spam_cleaner
 =====================
-
 Advanced Spam Cleaner tool for Moodle
+
+This plugin helps moodle administrators to find and remove spamming users in Moodle. It supports various methods for spam detections, including akismet apis,
+which is used by most wordpress sites for spam detection. Also the plugin provides hooks, if you want to implement any other thrid party api,
+spam detection methods.
 
 Installation Instruction
 =====================
@@ -9,13 +12,13 @@ Installation Instruction
 * Extrat the folder from zip and copy it to your moodle/admin/tool
 * Login as admin and go to site admin>reports>advanced spam cleaner settings and change the settings as required
 * Goto site admin > reports > advanced spam cleaner page to run the tool
+* Due to destructive nature of this tool, only a moodle administrator is allowed to run/manage this tool.
 
 Things to do
 =====================
 * Adding paging support
 * Adding support to remember last run time and search since last run
 * Highlight spam keywords in the results
-* Ability to completly nuke user with all comments, forum posts, blogs etc
 * Redo the ajax methods
 * Pro-active marking of spam!
 
@@ -30,6 +33,7 @@ Features
 * Can search for specified date range
 * Easy to implement any third party apis
 * Akismet Api support included by default
+* Ability to completly delete all contents from spamming users, including blogs, forums, profile cleanup, comments and private messages.
 
 Change log
 =====================
@@ -46,8 +50,11 @@ Change log
 About Author
 =====================
 Ankit Kumar Agarwal
+
 Moodle HQ developer
+
 https://github.com/ankitagarwal
+
 http://ankitkumaragarwal.com
 
 License
