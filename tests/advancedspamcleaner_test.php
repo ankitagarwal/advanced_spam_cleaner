@@ -65,6 +65,33 @@ class test_tool_advancedspamcleaner extends advanced_testcase {
         $spamtext = array_pop($spam['spamtext']);
         $this->assertSame(array('userdesc', $user->description, $user->id), $spamtext);
     }
+
+    public function test_spam_search() {
+
+        $this->resetAfterTest();
+        $this->setAdminUser();
+
+        $spamcleaner = new test_tool_advanced_spam_cleaner();
+        $manager = new tool_advancedspamcleaner_manager();
+        $keywords = $manager->autokeywords;
+
+
+        // Create a spamming user.
+        $record = new stdClass();
+        $record->description = "All things that play poker, like poker.";
+        $user = $this->getDataGenerator()->create_user($record);
+
+        // Test user description spam search test.
+        $data = new stdClass();
+        $data->searchusers = true;
+        $spamusers = $spamcleaner->search_spammers($data, $keywords, 0, time() + 1000, true);
+        $this->assertEquals(1, count($spamusers));
+        $spam = array_pop($spamusers);
+        $this->assertEquals($user->id, $spam['user']->id);
+        $this->assertEquals(1, $spam['spamcount']);
+        $spamtext = array_pop($spam['spamtext']);
+        $this->assertSame(array('userdesc', $user->description, $user->id), $spamtext);
+    }
 }
 
 /**
