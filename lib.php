@@ -13,10 +13,6 @@
 //
 // For a copy of the GNU General Public License, see <http://www.gnu.org/licenses/>.
 
-/* Base sub-plugin class
- * All sub -plugins must extend this class
- * The name of the extend class should be $pluginname_advanced_spam_cleaner
- */
 require_once($CFG->dirroot . '/user/lib.php');
 require_once($CFG->dirroot . '/mod/forum/lib.php');
 require_once($CFG->dirroot.'/tag/lib.php');
@@ -28,6 +24,10 @@ require_once('classes/advanced_spammerlib.php');
 require_once('classes/spammerlib.php');
 require_once('classes/manager.php');
 
+/* Base sub-plugin class
+ * All sub -plugins must extend this class
+ * The name of the extend class should be $pluginname_advanced_spam_cleaner
+ */
 class base_advanced_spam_cleaner {
     public $pluginname;
 
@@ -134,7 +134,7 @@ class advanced_spam_cleaner {
         $sql6 = "SELECT u.*, fp.id as fid, fp.message FROM {user} AS u, {forum_posts} AS fp WHERE $conditions6 AND u.deleted = 0 AND u.id=fp.userid AND u.id <> :userid";
         $sql7 = "SELECT u.*, fp.id as fid, fp.subject FROM {user} AS u, {forum_posts} AS fp WHERE $conditions7 AND u.deleted = 0 AND u.id=fp.userid AND u.id <> :userid";
 
-        $spamusers = array();
+        $this->spamusers = array();
 
         // Search user profiles.
         if (!empty($data->searchusers)) {

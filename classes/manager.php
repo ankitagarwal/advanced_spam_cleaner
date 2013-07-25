@@ -117,15 +117,17 @@ class tool_advancedspamcleaner_manager {
         // Set method and keywords.
         $this->method = $formdata->method;
         if ($this->method == 'usekeywords') {
-            $this->keywords = explode(',', $formdata->keyword);
+            $this->keywords = array_map('trim', explode(',', $formdata->keyword));
             if (empty($this->keywords)) {
                 print_error(get_string('missingkeywords', 'tool_advancedspamcleaner'));
             }
+        } else if ($this->method == 'spamauto') {
+            $this->keywords = array_map('trim', $this->autokeywords);
+        } else {
+            if (!in_array($this->method, $this->pluginlist)) {
+                print_error("Invalid sub plugin");
+            }
         }
-        if ($this->method == 'spamauto') {
-            $this->keywords = $this->autokeywords;
-        }
-
     }
 
     /**
@@ -149,9 +151,6 @@ class tool_advancedspamcleaner_manager {
         global $OUTPUT;
         $time = time();
         $plugin = $this->method;
-        if (in_array($plugin, $this->pluginlist)) {
-            print_error("Invalid sub plugin");
-        }
         $pluginclassname = "$plugin" . "_advanced_spam_cleaner";
         $plugin = new $pluginclassname($plugin);
         $this->plugin_user_search($plugin);

@@ -62,7 +62,7 @@ class tool_advanced_spam_cleaner extends moodleform {
         $mform->disabledif('hitlimit', 'uselimits');
         $mform->addHelpButton('hitlimit', 'hitlimit', 'tool_advancedspamcleaner');
 
-        // Custome date range.
+        // Custom date range.
         $mform->addElement('header', 'datelimits', get_string('datelimits', 'tool_advancedspamcleaner'));
         $mform->addElement('advcheckbox', 'usedatestartlimit', get_string('usedatestartlimit', 'tool_advancedspamcleaner'));
         $mform->addHelpButton('usedatestartlimit', 'usedatestartlimit', 'tool_advancedspamcleaner');
