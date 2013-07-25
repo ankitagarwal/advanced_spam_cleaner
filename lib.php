@@ -126,7 +126,7 @@ class advanced_spam_cleaner {
         $conditions6 = '( '.implode(' OR ', $keywordfull6).' ) AND fp.modified > :start AND fp.modified < :end';
         $conditions7 = '( '.implode(' OR ', $keywordfull7).' ) AND fp.modified > :start AND fp.modified < :end';
 
-        $sql  = "SELECT * FROM {user} AS u WHERE deleted = 0 AND id <> :userid AND $conditions";  // Exclude oneself
+        $sql  = "SELECT * FROM {user} AS u WHERE deleted = 0 AND id <> :userid AND $conditions";  // Exclude oneself.
         $sql2 = "SELECT u.*, p.id as pid, p.summary FROM {user} AS u, {post} AS p WHERE $conditions2 AND u.deleted = 0 AND u.id=p.userid AND u.id <> :userid";
         $sql3 = "SELECT u.*, p.id as pid, p.subject as subject FROM {user} AS u, {post} AS p WHERE $conditions3 AND u.deleted = 0 AND u.id=p.userid AND u.id <> :userid";
         $sql4 = "SELECT u.*, c.id as cid, c.content as comment FROM {user} AS u, {comments} AS c WHERE $conditions4 AND u.deleted = 0 AND u.id=c.userid AND u.id <> :userid";
@@ -138,7 +138,7 @@ class advanced_spam_cleaner {
 
         // Search user profiles.
         if (!empty($data->searchusers)) {
-            $this->keyword_spam_search($sql5, $params, 'userdesc', 'description', 'id');
+            $this->keyword_spam_search($sql, $params, 'userdesc', 'description', 'id');
         }
 
 
@@ -295,11 +295,11 @@ class advanced_spam_cleaner {
      *.
      * @param $sql         string Sql to get the data to pass onto the plugin for spam checks.
      * @param $params      string params for the $sql
-     * @param $text        string Which field to check for spam in the given sql.
      * @param $type        string What is the type of data that is checked.
+     * @param $text        string Which field to check for spam in the given sql.
      * @param $id          string identifier for the spam entry.
      */
-    protected function keyword_spam_search($sql, $params, $text, $type, $id) {
+    protected function keyword_spam_search($sql, $params, $type, $text, $id) {
         global $DB;
         $users = $DB->get_recordset_sql($sql, $params);
         foreach ($users as $user) {
