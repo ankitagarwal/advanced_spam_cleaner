@@ -12,6 +12,7 @@
 // GNU General Public License for more details.
 //
 // For a copy of the GNU General Public License, see <http://www.gnu.org/licenses/>.
+
 defined('MOODLE_INTERNAL') || die();
 
 class tool_advancedspamcleaner_manager {
@@ -242,7 +243,7 @@ class tool_advancedspamcleaner_manager {
      * @param $type        string What is the type of data tjat is checked.
      * @param $statfield   string Which field in the stat array to increase for this check.
      */
-    public function plugin_spam_search($plugin, $sql, $text, $type, $statfield) {
+    public function plugin_spam_search($plugin, $sql, $text, $type, $statfield, $id) {
         global $USER, $DB;
         $params = array('userid' => $USER->id, 'start' => $this->starttime, 'end' => $this->endtime);
         $users = $DB->get_recordset_sql($sql, $params);
