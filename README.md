@@ -14,6 +14,11 @@ Installation Instruction
 * Goto site admin > reports > advanced spam cleaner page to run the tool
 * Due to destructive nature of this tool, only a moodle administrator is allowed to run/manage this tool.
 
+Disclaimer
+=====================
+This tool can be destructive if not used properly. I recomend you backup your install before deleting users using this plugin. Use this plugin at your own
+risk.
+
 Things to do
 =====================
 * Adding paging support
@@ -24,7 +29,8 @@ Things to do
 
 Maturity
 ====================
-BETA (use at your own risk)
+This version is a BETA release.
+Please use version 1.6 of the plugin if you want a STABLE release.
 
 Features
 ====================
@@ -44,7 +50,7 @@ Change log
 * 2013032200 - Minor bug fixes, sats report, and other minor improvments - 1.4
 * 2013041000 - Turn off debug prints - 1.5
 * 2013042900 - Bug fixes, form improvments - 1.6
-* 2013072300 - Code cleanup, nuke user support, massive refactoring - 1.7
+* 2013072600 - Code cleanup, nuke user support, massive refactoring,unit tests - 2.0-beta
 
 
 About Author
@@ -65,3 +71,7 @@ GPL 3 or later
 Report bugs
 =====================
 http://tracker.moodle.org/browse/CONTRIB/component/12336
+
+Credits
+====================
+Jason Fowler for the awesome logo.
