@@ -155,7 +155,7 @@ class advanced_spam_cleaner {
 
         // Search message.
         if (!empty($data->searchmsgs)) {
-            $this->keyword_spam_search($sql5, $params, 'fullmessage', 'message', 'mid');
+            $this->keyword_spam_search($sql5, $params, 'message', 'fullmessage', 'mid');
         }
 
         // Search forums.

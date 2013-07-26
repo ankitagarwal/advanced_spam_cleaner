@@ -67,6 +67,7 @@ class test_tool_advancedspamcleaner extends advanced_testcase {
     }
 
     public function test_spam_search() {
+        global $DB;
 
         $this->resetAfterTest();
         $this->setAdminUser();
@@ -81,6 +82,11 @@ class test_tool_advancedspamcleaner extends advanced_testcase {
         $record->description = "All things that play poker, like poker.";
         $user = $this->getDataGenerator()->create_user($record);
 
+        // Create a non spamming user.
+        $record = new stdClass();
+        $record->description = "Better to be a geek, than being an idiot.";
+        $user2 = $this->getDataGenerator()->create_user($record);
+
         // Test user description spam search test.
         $data = new stdClass();
         $data->searchusers = true;
@@ -91,6 +97,37 @@ class test_tool_advancedspamcleaner extends advanced_testcase {
         $this->assertEquals(1, $spam['spamcount']);
         $spamtext = array_pop($spam['spamtext']);
         $this->assertSame(array('userdesc', $user->description, $user->id), $spamtext);
+
+        // Test Messages.
+        $message = new stdClass();
+        $message->useridfrom = $user2->id;
+        $message->useridto = $user->id;
+        $message->subject = "This is subject";
+        $message->fullmessage = "Let us play poker tonight";
+        $message->timecreated = time();
+        $mid = $DB->insert_record("message", $message);
+        $data->searchusers = false;
+        $data->searchmsgs = true;
+        $spamusers = $spamcleaner->search_spammers($data, $keywords, 0, time() + 1000, true);
+        $this->assertEquals(1, count($spamusers));
+        $spam = array_pop($spamusers);
+        $this->assertEquals($user2->id, $spam['user']->id);
+        $this->assertEquals(1, $spam['spamcount']);
+        $spamtext = array_pop($spam['spamtext']);
+        $this->assertSame(array('message', $message->fullmessage, "$mid"), $spamtext);
+
+        // Test that oneself is always excluded.
+        $this->setUser($user->id);
+        $data->searchusers = true;
+        $data->searchmsgs = true;
+        $spamusers = $spamcleaner->search_spammers($data, $keywords, 0, time() + 1000, true);
+        $this->assertEquals(1, count($spamusers));
+
+        // TODO: Test forum posts
+        // TODO: Test blog summary
+        // TODO: Test blog subject
+        // TODO: Test comments
+
     }
 }
 
