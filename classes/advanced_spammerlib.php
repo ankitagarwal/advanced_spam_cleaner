@@ -50,7 +50,35 @@ class tool_advancedspamcleaner_advanced_spammerlib extends tool_advancedspamclea
         } else {
             echo $content;
         }
-
-
     }
+
+    /**
+     * Delete user records and mark user as spammer, by doing following:
+     * 1. Delete comment, message form this user
+     * 2. Update forum post and blog post with spam message
+     * 3. Suspend account and set profile description as spammer
+     *
+     * Extenstion was required to remove references to votes table, present in upstream.
+     */
+    public function set_spammer() {
+        global $DB;
+        // Make sure deletion should only happen for recently created account.
+        if ($this->is_active()) {
+            $transaction = $DB->start_delegated_transaction();
+            try {
+                $this->delete_user_comments();
+                $this->delete_user_forum();
+                $this->delete_user_messages();
+                $this->delete_user_tags();
+                $this->set_profile_as_spammer();
+                $transaction->allow_commit();
+            } catch (Exception $e) {
+                $transaction->rollback($e);
+                throw $e;
+            }
+        } else {
+            throw new moodle_exception('cannotdelete', 'tool_advancedspamcleaner');
+        }
+    }
+
 }

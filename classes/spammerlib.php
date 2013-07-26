@@ -100,7 +100,7 @@ class tool_advancedspamcleaner_spammerlib {
     /**
      * Mark user as spammer, by deactivating account and setting description in profile
      */
-    private function set_profile_as_spammer() {
+    protected function set_profile_as_spammer() {
         global $DB;
 
 
@@ -139,7 +139,7 @@ class tool_advancedspamcleaner_spammerlib {
     /**
      * Delete all user messages
      */
-    private function delete_user_messages() {
+    protected function delete_user_messages() {
         global $DB;
         $userid = $this->user->id;
 
@@ -155,7 +155,7 @@ WHERE unreadmessageid IN
     /**
      * Replace user forum subject and message with spam string
      */
-    private function delete_user_forum() {
+    protected function delete_user_forum() {
         global $DB;
 
         // Get discussions started by the spammer.
@@ -200,7 +200,7 @@ WHERE unreadmessageid IN
     /**
      * Delete all user comments
      */
-    private function delete_user_comments() {
+    protected function delete_user_comments() {
         global $DB;
         $userid = $this->user->id;
         $DB->delete_records('comments', array('userid' => $userid));
@@ -209,14 +209,14 @@ WHERE unreadmessageid IN
     /**
      * Delete all tags
      */
-    private function delete_user_tags() {
+    protected function delete_user_tags() {
         tag_set('user', $this->user->id, array());
     }
 
     /**
      * Delete any spam reports from this block..
      */
-    private function delete_spam_votes() {
+    protected function delete_spam_votes() {
         global $DB;
         $DB->delete_records('tool_advancedspamcleaner_votes', array('spammerid' => $this->user->id));
     }
