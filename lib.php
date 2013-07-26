@@ -246,7 +246,7 @@ class advanced_spam_cleaner {
                 $row = array();
                // $row[] = '<input type="checkbox" name="userid[]" value="'. $userid .'" />';
                 $row[] = $OUTPUT->user_picture($user);
-                $row[] = '<a href="'.$CFG->wwwroot.'/user/view.php?id='.$userid.'">'.fullname($user).'</a>';
+                $row[] = html_writer::link(new moodle_url('/user/view.php?id='.$userid), fullname($user));
                 $row[] = $userdata['spamcount'];
                 $row[] = $spamdata[1];
                 $row[] = self::get_spam_url($spamdata[0], $spamdata[2]);
@@ -270,6 +270,7 @@ class advanced_spam_cleaner {
     public static function get_spam_url($type, $id) {
         global $CFG;
 
+        // Comments do not have url.
         switch($type) {
             case 'userdesc': $url =  new moodle_url($CFG->wwwroot.'/user/profile.php', array('id' => $id));
                              break;
@@ -284,9 +285,9 @@ class advanced_spam_cleaner {
         }
 
         if (!empty($url)) {
-            return html_writer::link($url, $type, array('target' => '_blank'));
+            return html_writer::link($url, get_string($type, 'tool_advancedspamcleaner'), array('target' => '_blank'));
         } else {
-            return $type;
+            return get_string($type, 'tool_advancedspamcleaner');
         }
     }
 

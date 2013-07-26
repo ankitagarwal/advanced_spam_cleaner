@@ -26,8 +26,13 @@ $string['akismetkey'] = 'Your akismet key';
 $string['akismetkey_desc'] = 'Enter the key that you got from akismet.com';
 $string['apilimit'] = 'Api limit';
 $string['apilimit_help'] = 'Maximum amount of Api calls to make. (0 = unlimited)';
+$string['blogpost'] = 'Blog post';
+$string['blogsummar'] = 'Blog summary';
+$string['commment'] = 'Comment';
 $string['datelimits'] = 'Date limits';
 $string['enddate'] = 'End date';
+$string['forumsubject'] = 'Forum subject';
+$string['forummessage'] = 'Forum message';
 $string['hitlimit'] = 'Hit limit';
 $string['hitlimit_help'] = 'Stop after this amount of spam entries have been detected (0 = unlimited)';
 $string['keywordstouse'] = 'Keywords to use';
@@ -82,6 +87,7 @@ $string['uselimits'] = 'Use limits';
 $string['uselimits_help'] = 'Use limits to reduce resource usage <br /> (Note that limits are not used for auto detect and keyword methods)';
 $string['usedatestartlimit'] = 'Use date limits';
 $string['usedatestartlimit_help'] = 'Enable to run the spam search on entities only between the selected date range';
+$string['userdesc'] = 'User description';
 
 // -------------------------------Block spam strings -----------------------------------------------------------
 
@@ -95,7 +101,7 @@ $string['countmessageread'] = 'Read messages: {$a}';
 $string['countforum'] = 'Forum posts: {$a}';
 $string['countcomment'] = 'Comments: {$a}';
 $string['counttags'] = 'Unique tags: {$a}';
-$string['deletebutton'] = 'Delete spammer';
+$string['deletebutton'] = 'Nuke spammer';
 $string['notrecentlyaccessed'] = 'Beware! The first access date of this account is more than 1 month ago. Make double sure it is really a spammer.';
 $string['messageprovider:spamreport'] = 'Spam report';
 $string['messageblocked'] = 'Your post has been blocked, as our spam prevention system has flagged it as possibly containing spam. If this is not the case, please see \'My post has been incorrectly flagged as containing spam\' in <a href="http://docs.moodle.org/en/Moodle.org_FAQ#My_post_has_been_incorrectly_flagged_as_containing_spam">http://docs.moodle.org/en/Moodle.org_FAQ</a>. Your message is below if you need to copy and paste it.';
