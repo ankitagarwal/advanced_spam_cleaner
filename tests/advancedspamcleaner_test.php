@@ -74,7 +74,7 @@ class test_tool_advancedspamcleaner extends advanced_testcase {
 
         $spamcleaner = new test_tool_advanced_spam_cleaner();
         $manager = new tool_advancedspamcleaner_manager();
-        $keywords = $manager->autokeywords;
+        $keywords = array("poker", "whatever");
 
 
         // Create a spamming user.
@@ -117,16 +117,41 @@ class test_tool_advancedspamcleaner extends advanced_testcase {
         $this->assertSame(array('message', $message->fullmessage, "$mid"), $spamtext);
 
         // Test that oneself is always excluded.
-        $this->setUser($user->id);
-        $data->searchusers = true;
+        $this->setUser($user2->id);
+        $data->searchusers = false;
         $data->searchmsgs = true;
         $spamusers = $spamcleaner->search_spammers($data, $keywords, 0, time() + 1000, true);
+        $this->assertEquals(0, count($spamusers));
+        $this->setAdminUser();
+
+        // Test comments.
+        $params = new stdClass();
+        $params->contextid = context_system::instance()->id;
+        $params->commentarea = 'phpunit';
+        $params->itemid = '1';
+        $params->timecreated = time();
+        $params->format = FORMAT_MOODLE;
+        $params->content = $user->username.'comment'; // Normal comment.
+        $params->userid = $user->id;
+        $DB->insert_record('comments', $params);
+        $params->content = $user2->username.'comment poker'; // Spam comment.
+        $params->userid = $user2->id;
+        $cid = $DB->insert_record('comments', $params);
+
+        $data->searchusers = false;
+        $data->searchmsgs = false;
+        $data->searchcomments = true;
+        $spamusers = $spamcleaner->search_spammers($data, $keywords, 0, time() + 1000, true);
         $this->assertEquals(1, count($spamusers));
+        $spam = array_pop($spamusers);
+        $this->assertEquals($user2->id, $spam['user']->id);
+        $this->assertEquals(1, $spam['spamcount']);
+        $spamtext = array_pop($spam['spamtext']);
+        $this->assertSame(array('comment', $params->content, "$cid"), $spamtext);
 
         // TODO: Test forum posts
         // TODO: Test blog summary
         // TODO: Test blog subject
-        // TODO: Test comments
 
     }
 }
