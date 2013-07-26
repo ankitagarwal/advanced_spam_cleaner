@@ -124,7 +124,7 @@ class tool_advancedspamcleaner_manager {
         } else if ($this->method == 'spamauto') {
             $this->keywords = array_map('trim', $this->autokeywords);
         } else {
-            if (!in_array($this->method, $this->pluginlist)) {
+            if (!in_array($this->method, array_keys($this->pluginlist))) {
                 print_error("Invalid sub plugin");
             }
         }
