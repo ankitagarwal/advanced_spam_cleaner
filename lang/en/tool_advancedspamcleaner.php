@@ -100,7 +100,6 @@ $string['notrecentlyaccessed'] = 'Beware! The first access date of this account 
 $string['messageprovider:spamreport'] = 'Spam report';
 $string['messageblocked'] = 'Your post has been blocked, as our spam prevention system has flagged it as possibly containing spam. If this is not the case, please see \'My post has been incorrectly flagged as containing spam\' in <a href="http://docs.moodle.org/en/Moodle.org_FAQ#My_post_has_been_incorrectly_flagged_as_containing_spam">http://docs.moodle.org/en/Moodle.org_FAQ</a>. Your message is below if you need to copy and paste it.';
 $string['messageblockedtitle'] = 'Potential spam detected!';
-$string['pluginname'] = 'Spam deletion';
 $string['reportasspam'] = 'Report as spam';
 $string['reportcontentasspam'] = 'Report content as spam';
 $string['spamreportmessage'] = '{$a->spammer} may be a spammer.
