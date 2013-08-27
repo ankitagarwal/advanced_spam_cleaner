@@ -38,6 +38,7 @@ $string['hitlimit_help'] = 'Stop after this amount of spam entries have been det
 $string['keywordstouse'] = 'Keywords to use';
 $string['limits'] = 'Limits';
 $string['limithit'] = 'Set limit was hit. Results that follow may not be complete..';
+$string['message'] = 'Message';
 $string['method'] = 'Method to use';
 $string['methodused'] = 'Spam detection method used: {$a}';
 $string['methodoptions'] = 'Method options';

@@ -31,7 +31,7 @@ require_once('classes/manager.php');
 class base_advanced_spam_cleaner {
     public $pluginname;
 
-    function __construct($pluginname) {
+    public function __construct($pluginname) {
         $this->pluginname = $pluginname;
     }
     /* Detect if the supplied data is probable spam or not
@@ -55,7 +55,6 @@ class advanced_spam_cleaner {
 
     protected $spamusers = array();
 
-
     /* Generates and returns list of available Advanced spam cleaner sub-plugins
      *
     * @param context context level to check caps against
@@ -77,7 +76,7 @@ class advanced_spam_cleaner {
                     $plugin = new $pluginclassname($pluginname);
 
                     if ($plugin->canview($context)) {
-                        $pluginlist[$pluginname] =  ucfirst($pluginname);
+                        $pluginlist[$pluginname] = ucfirst($pluginname);
                     }
                 }
             }
@@ -88,7 +87,6 @@ class advanced_spam_cleaner {
     public function search_spammers($data, $keywords = null, $starttime = 0, $endtime = 0, $return = false) {
 
         global $USER, $DB, $OUTPUT;
-
 
         if (!is_array($keywords)) {
             $keywords = array($keywords);    // Make it into an array.
@@ -141,7 +139,6 @@ class advanced_spam_cleaner {
             $this->keyword_spam_search($sql, $params, 'userdesc', 'description', 'id');
         }
 
-
         // Search blogs.
         if (!empty($data->searchblogs)) {
             $this->keyword_spam_search($sql2, $params, 'blogsummary', 'summary', 'pid');
@@ -171,7 +168,7 @@ class advanced_spam_cleaner {
         }
     }
 
-    static public function print_table($users_rs = null, $keywords = null, $resetsession = false, $limitflag = false) {
+    static public function print_table($usersrs = null, $keywords = null, $resetsession = false, $limitflag = false) {
         global $CFG, $OUTPUT, $PAGE;
         // TODO: Highlight $keywords
         /*if ($resetsession) {
@@ -193,26 +190,24 @@ class advanced_spam_cleaner {
         // Checkbox is not used atm.
         //$columns[]= 'checkbox';
         //$headers[]= null;
-        $columns[]= 'picture';
-        $headers[]= '';
-        $columns[]= 'fullname';
-        $headers[]= get_string('name');
+        $columns[] = 'picture';
+        $headers[] = '';
+        $columns[] = 'fullname';
+        $headers[] = get_string('name');
 
+        $columns[] = 'spamcount';
+        $headers[] = get_string('spamcount', 'tool_advancedspamcleaner');
+        $columns[] = 'spamtext';
+        $headers[] = get_string('spamtext', 'tool_advancedspamcleaner');
+        $columns[] = 'spamtype';
+        $headers[] = get_string('spamtype', 'tool_advancedspamcleaner');
 
-        $columns[]= 'spamcount';
-        $headers[]= get_string('spamcount', 'tool_advancedspamcleaner');
-        $columns[]= 'spamtext';
-        $headers[]= get_string('spamtext', 'tool_advancedspamcleaner');
-        $columns[]= 'spamtype';
-        $headers[]= get_string('spamtype', 'tool_advancedspamcleaner');
-
-        $columns[]= 'deleteuser';
-        $headers[]= get_string('deleteuser', 'admin');
-        $columns[]= 'ignoreuser';
-        $headers[]= get_string('ignore', 'admin');
-        $columns[]= 'nukeuser';
-        $headers[]= get_string('nukeuser', 'tool_advancedspamcleaner');
-
+        $columns[] = 'deleteuser';
+        $headers[] = get_string('deleteuser', 'admin');
+        $columns[] = 'ignoreuser';
+        $headers[] = get_string('ignore', 'admin');
+        $columns[] = 'nukeuser';
+        $headers[] = get_string('nukeuser', 'tool_advancedspamcleaner');
 
         $table = new flexible_table('advanced-spam-cleaner');
 
@@ -239,7 +234,7 @@ class advanced_spam_cleaner {
         if ($limitflag) {
             echo $OUTPUT->box(get_string('limithit', 'tool_advancedspamcleaner'));
         }
-        foreach ($users_rs as $userid => $userdata) {
+        foreach ($usersrs as $userid => $userdata) {
             $user = (object)$userdata['user'];
 
             foreach ($userdata['spamtext'] as $spamcount => $spamdata) {
@@ -272,13 +267,13 @@ class advanced_spam_cleaner {
 
         // Comments do not have url.
         switch($type) {
-            case 'userdesc': $url =  new moodle_url($CFG->wwwroot.'/user/profile.php', array('id' => $id));
+            case 'userdesc': $url = new moodle_url($CFG->wwwroot.'/user/profile.php', array('id' => $id));
                              break;
             case 'blogsummary':
-            case 'blogpost': $url =  new moodle_url($CFG->wwwroot.'/blog/index.php', array('entryid' => $id));
+            case 'blogpost': $url = new moodle_url($CFG->wwwroot.'/blog/index.php', array('entryid' => $id));
                              break;
             case 'forumsubject':
-            case 'forummessage': $url =  new moodle_url($CFG->wwwroot.'/mod/forum/discuss.php', array('d' => $id));
+            case 'forummessage': $url = new moodle_url($CFG->wwwroot.'/mod/forum/discuss.php', array('d' => $id));
                                  break;
             default: $url = null;
                     break;

@@ -73,11 +73,9 @@ class tool_advancedspamcleaner_manager {
 
     public $spamusers = array();
 
-
-
     public function __construct($formdata = null) {
         $this->endtime = time();
-        $this->spamcleaner =  new advanced_spam_cleaner();
+        $this->spamcleaner = new advanced_spam_cleaner();
         $this->pluginlist = $this->spamcleaner->plugin_list(context_system::instance());
         if ($formdata) {
             $this->set_form_data($formdata);
@@ -261,8 +259,8 @@ class tool_advancedspamcleaner_manager {
             $data->ip = $user->lastip;
             $data->text = $user->$text;
             $data->type = $type;
-            $is_spam = $plugin->detect_spam($data);
-            if ($is_spam) {
+            $isspam = $plugin->detect_spam($data);
+            if ($isspam) {
                 $this->spamusers[$user->id]['user'] = $user;
                 if (empty($this->spamusers[$user->id]['spamcount'])) {
                     $this->spamusers[$user->id]['spamcount'] = 1;
