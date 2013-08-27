@@ -28,7 +28,6 @@ class tool_advancedspamcleaner_advanced_spammerlib extends tool_advancedspamclea
      * @return string
      */
     public static function nuke_user_button ($userid, $return = false) {
-        global $OUTPUT;
         if (!self::is_suspendable_user($userid)) {
             if ($return) {
                 return get_string('cannotdelete', 'tool_advancedspamcleaner');
@@ -44,7 +43,7 @@ class tool_advancedspamcleaner_advanced_spammerlib extends tool_advancedspamclea
         $url = new moodle_url('/admin/tool/advancedspamcleaner/confirmdelete.php', $urlparams);
         $buttontext = get_string('deletebutton', 'tool_advancedspamcleaner');
         $button = new single_button($url, $buttontext);
-        $content = $OUTPUT->render($button);
+        $content = self::render_single_button($button);
         if ($return) {
             return $content;
         } else {
@@ -79,6 +78,55 @@ class tool_advancedspamcleaner_advanced_spammerlib extends tool_advancedspamclea
         } else {
             throw new moodle_exception('cannotdelete', 'tool_advancedspamcleaner');
         }
+    }
+
+    /**
+     * Renders a single button widget.
+     *
+     * This will return HTML to display a form containing a single button.
+     * We need this to add target = _blank. Moodle doesn't support it.
+     *
+     * @param single_button $button
+     * @return string HTML fragment
+     */
+    private static function render_single_button(single_button $button) {
+        $attributes = array('type'     => 'submit',
+                            'value'    => $button->label,
+                            'disabled' => $button->disabled ? 'disabled' : null,
+                            'title'    => $button->tooltip);
+
+        // First the input element.
+        $output = html_writer::empty_tag('input', $attributes);
+
+        // Then hidden fields.
+        $params = $button->url->params();
+        if ($button->method === 'post') {
+            $params['sesskey'] = sesskey();
+        }
+        foreach ($params as $var => $val) {
+            $output .= html_writer::empty_tag('input', array('type' => 'hidden', 'name' => $var, 'value' => $val));
+        }
+
+        // Then div wrapper for xhtml strictness.
+        $output = html_writer::tag('div', $output);
+
+        // Now the form itself around it.
+        if ($button->method === 'get') {
+            $url = $button->url->out_omit_querystring(true); // url without params, the anchor part allowed
+        } else {
+            $url = $button->url->out_omit_querystring();     // url without params, the anchor part not allowed
+        }
+        if ($url === '') {
+            $url = '#'; // There has to be always some action.
+        }
+        $attributes = array('method' => $button->method,
+                            'action' => $url,
+                            'id'     => $button->formid,
+                            'target' => '_blank');
+        $output = html_writer::tag('form', $output, $attributes);
+
+        // And finally one more wrapper with class.
+        return html_writer::tag('div', $output, array('class' => $button->class));
     }
 
 }
