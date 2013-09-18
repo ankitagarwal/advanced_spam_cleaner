@@ -51,6 +51,7 @@ Change log
 * 2013041000 - Turn off debug prints - 1.5
 * 2013042900 - Bug fixes, form improvments - 1.6
 * 2013072600 - Code cleanup, nuke user support, massive refactoring,unit tests - 2.0-beta
+* 2013091800 - Minor bug fixes
 
 
 About Author
