@@ -87,7 +87,7 @@ $manager = new tool_advancedspamcleaner_manager();
 $pluginlist = $manager->spamcleaner->plugin_list(context_system::instance());
 
 $links = array();
-$links[] = html_writer::link("https://tracker.moodle.org/browse/CONTRIB/component/12336", get_string('reportissue', 'tool_advancedspamcleaner'),
+$links[] = html_writer::link("https://github.com/ankitagarwal/advanced_spam_cleaner/issues", get_string('reportissue', 'tool_advancedspamcleaner'),
     array('target' => '_blank'));
 $links[] = html_writer::link("https://moodle.org/plugins/view.php?plugin=tool_advancedspamcleaner", get_string('pluginpage', 'tool_advancedspamcleaner'),
     array('target' => '_blank'));
