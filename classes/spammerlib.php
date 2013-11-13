@@ -133,7 +133,7 @@ class tool_advancedspamcleaner_spammerlib {
         $DB->delete_records('user_info_data', array('userid' => $this->user->id));
 
         // Force logout.
-        session_kill_user($this->user->id);
+        \core\session\manager::kill_user_sessions($this->user->id);
     }
 
     /**
