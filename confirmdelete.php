@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 require_once('../../../config.php');
-require_once($CFG->dirroot . '/admin/tool/advancedspamcleaner/lib.php');
+require_once("$CFG->dirroot/$CFG->admin/tool/advancedspamcleaner/lib.php");
 
 /** @var int user id for spammer.  */
 $userid = required_param('userid', PARAM_INT);

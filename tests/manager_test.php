@@ -20,7 +20,7 @@ class test_tool_advancedspamcleaner_manager extends advanced_testcase {
 
     protected function setUp() {
         global $CFG;
-        require_once($CFG->dirroot.'/admin/tool/advancedspamcleaner/lib.php');
+        require_once("$CFG->dirroot/$CFG->admin/tool/advancedspamcleaner/lib.php");
     }
 
     public function test_set_form_data() {

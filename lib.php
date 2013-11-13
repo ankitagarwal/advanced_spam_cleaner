@@ -66,9 +66,9 @@ class advanced_spam_cleaner {
         if (!empty($pluginlist)) {
             return $pluginlist;
         }
-        $installed = get_list_of_plugins('', '', $CFG->dirroot.'/admin/tool/advancedspamcleaner/plugins');
+        $installed = get_list_of_plugins('', '', "$CFG->dirroot/$CFG->admin/tool/advancedspamcleaner/plugins");
         foreach ($installed as $pluginname) {
-            $pluginfile = $CFG->dirroot.'/admin/tool/advancedspamcleaner/plugins/'.$pluginname.'/api.php';
+            $pluginfile = "$CFG->dirroot/$CFG->admin/tool/advancedspamcleaner/plugins/$pluginname/api.php";
             if (is_readable($pluginfile)) {
                 include_once($pluginfile);
                 $pluginclassname = "{$pluginname}_advanced_spam_cleaner";

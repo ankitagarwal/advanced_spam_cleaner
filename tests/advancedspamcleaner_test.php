@@ -14,7 +14,7 @@
 // For a copy of the GNU General Public License, see <http://www.gnu.org/licenses/>.
 
 global $CFG;
-require_once($CFG->dirroot.'/admin/tool/advancedspamcleaner/lib.php');
+require_once("$CFG->dirroot/$CFG->admin/tool/advancedspamcleaner/lib.php");
 /**
  * Class test_tool_advancedspamcleaner Test calss for advanced_spam_cleaner
  */

@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->dirroot.'/admin/tool/advancedspamcleaner/lib.php');
+require_once("$CFG->dirroot/$CFG->admin/tool/advancedspamcleaner/lib.php");
 
 class block_spam_deletion_lib_testcase extends advanced_testcase {
     public function test_invalid_user() {
