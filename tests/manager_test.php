@@ -16,7 +16,7 @@
 /**
  * Class test_tool_advancedspamcleaner_manager Test calss for tool_advancedspamcleaner_manager
  */
-class test_tool_advancedspamcleaner_manager extends advanced_testcase {
+class tool_advancedspamcleaner_manager_testcase extends advanced_testcase {
 
     protected function setUp() {
         global $CFG;

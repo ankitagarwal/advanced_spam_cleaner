@@ -18,7 +18,7 @@ require_once("$CFG->dirroot/$CFG->admin/tool/advancedspamcleaner/lib.php");
 /**
  * Class test_tool_advancedspamcleaner Test calss for advanced_spam_cleaner
  */
-class test_tool_advancedspamcleaner extends advanced_testcase {
+class tool_advancedspamcleaner_advancedspamcleaner_testcase extends advanced_testcase {
 
     public function test_plugin_list() {
 
