@@ -138,7 +138,7 @@ class advanced_spam_cleaner {
                     AND u.deleted = 0
                     AND u.id=p.userid
                     AND u.id <> :userid";
-        $sql4 = "SELECT u.*, c.id as cid, c.content as comment FROM {user} u, {comments} c
+        $sql4 = "SELECT u.*, c.id as cid, c.content as comments FROM {user} u, {comments} c
                   WHERE $conditions4
                     AND u.deleted = 0
                     AND u.id=c.userid
@@ -174,7 +174,7 @@ class advanced_spam_cleaner {
 
         // Search comments.
         if (!empty($data->searchcomments)) {
-            $this->keyword_spam_search($sql4, $params, 'comment', 'comment', 'cid');
+            $this->keyword_spam_search($sql4, $params, 'comment', 'comments', 'cid');
         }
 
         // Search message.
