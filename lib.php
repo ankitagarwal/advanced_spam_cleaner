@@ -261,6 +261,7 @@ class advanced_spam_cleaner {
         if ($limitflag) {
             echo $OUTPUT->box(get_string('limithit', 'tool_advancedspamcleaner'));
         }
+        $replace = self::get_replace_keywords($keywords);
         foreach ($usersrs as $userid => $userdata) {
             $user = (object)$userdata['user'];
 
@@ -270,7 +271,7 @@ class advanced_spam_cleaner {
                 $row[] = $OUTPUT->user_picture($user);
                 $row[] = html_writer::link(new moodle_url('/user/view.php?id='.$userid), fullname($user));
                 $row[] = $userdata['spamcount'];
-                $row[] = $spamdata[1];
+                $row[] = self::get_spam_content($spamdata[1], $keywords, $replace);
                 $row[] = self::get_spam_url($spamdata[0], $spamdata[2]);
                 $row[] .= '<button onclick="M.tool_spamcleaner.del_user(this,'.$userid.')">'.get_string('deleteuser', 'admin').'</button><br />';
                 $row[] .= '<button onclick="M.tool_spamcleaner.ignore_user(this,'.$userid.')">'.get_string('ignore', 'admin').'</button>';
@@ -311,6 +312,45 @@ class advanced_spam_cleaner {
         } else {
             return get_string($type, 'tool_advancedspamcleaner');
         }
+    }
+
+    /**
+     * Get Spam content
+     *
+     * @param string $content spam content to display
+     * @param array $keywords keywords to highlight
+     * @param array $replace replace content that replaces keywords
+     *
+     * @return string html to display
+     * @since V2.0
+     */
+    public static function get_spam_content($content, $keywords, $replace) {
+
+        $html = str_ireplace($keywords, $replace, $content);
+
+        return $html;
+    }
+
+    /**
+     * Generates a replace content for the keywords passed by adding a span to highlight the spam keyword
+     *
+     * @param array $keywords list of keywords
+     * @since V2.0
+     *
+     * @return array replace array
+     */
+    protected static function get_replace_keywords($keywords) {
+        return array_map('self::add_spam_span', $keywords);
+    }
+
+    /**
+     * Add a span of spam class to the given item by reference.
+     *
+     * @since V2.0
+     * @param $item
+     */
+    protected static function add_spam_span(&$item) {
+        $item = '<span class=spamkeyword>' . $item . '</span>';
     }
 
     /**
