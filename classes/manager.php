@@ -15,6 +15,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Manager class for advanced spam cleaner.
+ *
+ * Class tool_advancedspamcleaner_manager
+ */
 class tool_advancedspamcleaner_manager {
 
     /* bool Use api limits? */
@@ -73,6 +78,11 @@ class tool_advancedspamcleaner_manager {
 
     public $spamusers = array();
 
+    /**
+     * Constructor
+     *
+     * @param null|stdClass $formdata
+     */
     public function __construct($formdata = null) {
         $this->endtime = time();
         $this->spamcleaner = new advanced_spam_cleaner();
@@ -172,8 +182,12 @@ class tool_advancedspamcleaner_manager {
      */
     public function plugin_user_search($plugin) {
         if (!empty($this->formdata->searchusers)) {
-            $sql  = "SELECT * FROM {user} AS u WHERE deleted = 0 AND id <> :userid AND description != '' AND u.timemodified > :start AND u.timemodified <
-            :end ";  // Exclude oneself.
+            $sql  = "SELECT * FROM {user} u
+                      WHERE deleted = 0
+                        AND id <> :userid
+                        AND description != ''
+                        AND u.timemodified > :start
+                        AND u.timemodified < :end ";  // Exclude oneself.
             $this->plugin_spam_search($plugin, $sql, 'description', 'userdesc', 'users', 'id');
         }
     }
@@ -185,8 +199,12 @@ class tool_advancedspamcleaner_manager {
      */
     public function plugin_comments_search($plugin) {
         if (!empty($this->formdata->searchcomments)) {
-            $sql  = "SELECT u.*, c.id as cid, c.content FROM {user} AS u, {comments} AS c WHERE u.deleted = 0 AND u.id=c.userid AND u.id <> :userid AND c
-            .timecreated > :start AND c.timecreated < :end";
+            $sql  = "SELECT u.*, c.id as cid, c.content
+                        FROM {user} u, {comments} c
+                      WHERE u.deleted = 0
+                         AND u.id=c.userid
+                         AND u.id <> :userid
+                         AND c.timecreated > :start AND c.timecreated < :end";
             $this->plugin_spam_search($plugin, $sql, 'content', 'comment', 'comments', 'cid');
         }
     }
@@ -198,8 +216,13 @@ class tool_advancedspamcleaner_manager {
      */
     public function plugin_msgs_search($plugin) {
         if (!empty($this->formdata->searchmsgs)) {
-            $sql  = "SELECT u.*, m.id as mid, m.fullmessage FROM {user} AS u, {message} AS m WHERE u.deleted = 0 AND u.id=m.useridfrom AND u.id <> :userid
-            AND m.timecreated > :start AND m.timecreated < :end";
+            $sql  = "SELECT u.*, m.id as mid, m.fullmessage
+                        FROM {user} u, {message} m
+                      WHERE u.deleted = 0
+                         AND u.id=m.useridfrom
+                         AND u.id <> :userid
+                         AND m.timecreated > :start
+                         AND m.timecreated < :end";
             $this->plugin_spam_search($plugin, $sql, 'fullmessage', 'message', 'msgs', 'mid');
         }
     }
@@ -211,8 +234,13 @@ class tool_advancedspamcleaner_manager {
      */
     public function plugin_forums_search($plugin) {
         if (!empty($this->formdata->searchforums)) {
-            $sql = "SELECT u.*, fp.id as fid, fp.message FROM {user} AS u, {forum_posts} AS fp WHERE u.deleted = 0 AND u.id=fp.userid AND u.id <> :userid AND
-             fp.modified > :start AND fp.modified < :end";
+            $sql = "SELECT u.*, fp.id as fid, fp.message
+                        FROM {user} u, {forum_posts} fp
+                     WHERE u.deleted = 0
+                         AND u.id=fp.userid
+                         AND u.id <> :userid
+                         AND fp.modified > :start
+                         AND fp.modified < :end";
             $this->plugin_spam_search($plugin, $sql, 'message', 'forummessage', 'forums', 'fid');
         }
     }
@@ -224,8 +252,13 @@ class tool_advancedspamcleaner_manager {
      */
     public function plugin_blogs_search($plugin) {
         if (!empty($this->formdata->searchblogs)) {
-            $sql = "SELECT u.*, p.id as pid, p.summary FROM {user} AS u, {post} AS p WHERE u.deleted = 0 AND u.id=p.userid AND u.id <> :userid AND p
-            .lastmodified > :start AND p.lastmodified < :end";
+            $sql = "SELECT u.*, p.id as pid, p.summary
+                        FROM {user} u, {post} p
+                     WHERE u.deleted = 0
+                         AND u.id=p.userid
+                         AND u.id <> :userid
+                         AND p.lastmodified > :start
+                         AND p.lastmodified < :end";
             $this->plugin_spam_search($plugin, $sql, 'summary', 'blogpost', 'blogs', 'pid');
 
         }

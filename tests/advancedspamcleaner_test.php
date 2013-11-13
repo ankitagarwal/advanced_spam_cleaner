@@ -48,7 +48,10 @@ class tool_advancedspamcleaner_advancedspamcleaner_testcase extends advanced_tes
             $i++;
         }
         $conditions = '( '.implode(' OR ', $keywordfull).' ) AND u.timemodified > :start AND u.timemodified < :end';
-        $sql  = "SELECT * FROM {user} AS u WHERE deleted = 0 AND id <> :userid AND $conditions";  // Exclude oneself.
+        $sql  = "SELECT * FROM {user} u
+                  WHERE deleted = 0
+                    AND id <> :userid
+                    AND $conditions";  // Exclude oneself.
         $spamcleaner->keyword_spam_search($sql, $params, 'userdesc', 'description', 'id');
         $this->assertSame(array(), $spamcleaner->get_spamusers()); // No content so far.
 
