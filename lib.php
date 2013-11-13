@@ -124,13 +124,40 @@ class advanced_spam_cleaner {
         $conditions6 = '( '.implode(' OR ', $keywordfull6).' ) AND fp.modified > :start AND fp.modified < :end';
         $conditions7 = '( '.implode(' OR ', $keywordfull7).' ) AND fp.modified > :start AND fp.modified < :end';
 
-        $sql  = "SELECT * FROM {user} AS u WHERE deleted = 0 AND id <> :userid AND $conditions";  // Exclude oneself.
-        $sql2 = "SELECT u.*, p.id as pid, p.summary FROM {user} AS u, {post} AS p WHERE $conditions2 AND u.deleted = 0 AND u.id=p.userid AND u.id <> :userid";
-        $sql3 = "SELECT u.*, p.id as pid, p.subject as subject FROM {user} AS u, {post} AS p WHERE $conditions3 AND u.deleted = 0 AND u.id=p.userid AND u.id <> :userid";
-        $sql4 = "SELECT u.*, c.id as cid, c.content as comment FROM {user} AS u, {comments} AS c WHERE $conditions4 AND u.deleted = 0 AND u.id=c.userid AND u.id <> :userid";
-        $sql5 = "SELECT u.*, m.id as mid, m.fullmessage FROM {user} AS u, {message} AS m WHERE $conditions5 AND u.deleted = 0 AND u.id=m.useridfrom AND u.id <> :userid";
-        $sql6 = "SELECT u.*, fp.id as fid, fp.message FROM {user} AS u, {forum_posts} AS fp WHERE $conditions6 AND u.deleted = 0 AND u.id=fp.userid AND u.id <> :userid";
-        $sql7 = "SELECT u.*, fp.id as fid, fp.subject FROM {user} AS u, {forum_posts} AS fp WHERE $conditions7 AND u.deleted = 0 AND u.id=fp.userid AND u.id <> :userid";
+        $sql  = "SELECT * FROM {user} u
+                  WHERE deleted = 0
+                    AND id <> :userid
+                    AND $conditions";  // Exclude oneself.
+        $sql2 = "SELECT u.*, p.id as pid, p.summary FROM {user} u, {post} p
+                  WHERE $conditions2
+                    AND u.deleted = 0
+                    AND u.id=p.userid
+                    AND u.id <> :userid";
+        $sql3 = "SELECT u.*, p.id as pid, p.subject as subject FROM {user} u, {post} p
+                  WHERE $conditions3
+                    AND u.deleted = 0
+                    AND u.id=p.userid
+                    AND u.id <> :userid";
+        $sql4 = "SELECT u.*, c.id as cid, c.content as comment FROM {user} u, {comments} c
+                  WHERE $conditions4
+                    AND u.deleted = 0
+                    AND u.id=c.userid
+                    AND u.id <> :userid";
+        $sql5 = "SELECT u.*, m.id as mid, m.fullmessage FROM {user} u, {message} m
+                  WHERE $conditions5
+                    AND u.deleted = 0
+                    AND u.id=m.useridfrom
+                    AND u.id <> :userid";
+        $sql6 = "SELECT u.*, fp.id as fid, fp.message FROM {user} u, {forum_posts} fp
+                  WHERE $conditions6
+                    AND u.deleted = 0
+                    AND u.id=fp.userid
+                    AND u.id <> :userid";
+        $sql7 = "SELECT u.*, fp.id as fid, fp.subject FROM {user} u, {forum_posts} fp
+                  WHERE $conditions7
+                    AND u.deleted = 0
+                    AND u.id=fp.userid
+                    AND u.id <> :userid";
 
         $this->spamusers = array();
 
