@@ -30,7 +30,12 @@ require_once("$CFG->dirroot/$CFG->admin/tool/advancedspamcleaner/lib.php");
 
 $spamcleaner = new advanced_spam_cleaner();
 $pluginlist = $spamcleaner->plugin_list(context_system::instance());
+$options = array('' => get_string('choosedots')) + $pluginlist;
 $settings = new admin_settingpage('advancedspamcleaner', get_string('settingpage', 'tool_advancedspamcleaner'), 'moodle/site:config');
+$settings->add(new admin_setting_configcheckbox('advancedspamcleaner/realtime', get_string('realtime',
+        'tool_advancedspamcleaner'), get_string('realtime_desc', 'tool_advancedspamcleaner'), '1'));
+$settings->add(new admin_setting_configselect('advancedspamcleaner/realtimeplugin', get_string('realtimeplugin',
+    'tool_advancedspamcleaner'), '', '', $options));
 foreach ($pluginlist as $plugin => $pluginname) {
     $settingfile = "$CFG->dirroot/$CFG->admin/tool/advancedspamcleaner/plugins/".$plugin.'/settings.php';
     if (is_readable($settingfile)) {

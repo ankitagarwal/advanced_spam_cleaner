@@ -16,30 +16,77 @@
 
 namespace tool_advancedspamcleaner;
 
-use core\session\exception;
-
 defined('MOODLE_INTERNAL') || die();
+
+require_once("$CFG->dirroot/$CFG->admin/tool/advancedspamcleaner/lib.php");
 
 class observer {
     use eventlist;
-    public function process_event(\core\event\base $event) {
-        global $CFG;
+    public static function process_event(\core\event\base $event) {
+        global $CFG, $DB;
+
         if ($event->crud != 'c') {
             // Monitor only create events. We can optionally also monitor update events but ignore that for the time being.
             return;
         }
-        $eventlist = $this->get_event_list();
+
+        if (!get_config('advancedspamcleaner', 'realtime')) {
+            return; // Scanning not enabled.
+        }
+
+        if (!$plugin = get_config('advancedspamcleaner', 'realtimeplugin')) {
+            return; // Plugin not selected..
+        }
+
+        $file = "$CFG->dirroot/$CFG->admin/tool/advancedspamcleaner/plugins/$plugin/api.php";
+        if (!file_exists($file)) {
+            return;
+        }
+
+        include_once($file);
+        $pluginclassname = "$plugin" . "_advanced_spam_cleaner";
+        $plugin = new $pluginclassname($plugin);
+        $eventlist = self::get_events_list();
 
         $class = get_class($event);
-
         if (!isset($eventlist[$class])) {
             // We are not interested in this event.
             return;
         }
 
+        $eventdata = $event->get_data();
+        $eventdata['other'] = serialize($eventdata['other']);
+        if (CLI_SCRIPT) {
+            $eventdata['origin'] = 'cli';
+            $eventdata['ip'] = null;
+        } else {
+            $eventdata['origin'] = 'web';
+            $eventdata['ip'] = getremoteaddr();
+        }
+        $eventdata['realuserid'] = \core\session\manager::is_loggedinas() ? $_SESSION['USER']->realuser : null;
+
+        $data = new \stdClass();
+        $data->email = ''; // Expensive to get user email.
+        $data->ip = $eventdata['ip'];
+        $data->text = '';
+        $data->type = 'event';
+
         $fields = isset($eventlist[$class]['fields']) ? (array) $eventlist[$class]['fields'] : array();
         foreach ($fields as $field) {
             // Detect spam and store in db if potential threat.
+            $data->text = $eventdata[$field];
+            try {
+                if ($isspam = $plugin->detect_spam($data)) {
+                    $DB->insert_record('tool_advancedspamcleaner_rts', $eventdata);
+                    return; // No need of any more tests.
+                }
+            } catch (\Exception $e) {
+                if ($CFG->debug == DEBUG_DEVELOPER) {
+                    throw $e;
+                } else {
+                    debugging('Something went wrong when processing snapshots for ' . $class, DEBUG_DEVELOPER);
+                }
+            }
         }
 
         $snaps = isset($eventlist[$class]['snapshots']) ? (array) $eventlist[$class]['snapshots'] : array();
@@ -47,13 +94,18 @@ class observer {
             $id = $snap[1]; // Id to identify the snapshot.
             $table = $snap[0]; // Table to fetch snapshot from.
             try {
-                $snapshot = $event->get_record_snapshot($table, $id);
+                $snapshot = $event->get_record_snapshot($table, $eventdata[$id]);
                 $fields = isset($snap[2]) ? (array) $snap[2] : array();
                 foreach ($fields as $field) {
-                    $content = $snapshot->field;
                     // Detect spam and store in db if potential threat.
+                    $content = $snapshot->$field;
+                    $data->text = $content;
+                    if ($isspam = $plugin->detect_spam($data)) {
+                        $DB->insert_record('tool_advancedspamcleaner_rts', $eventdata);
+                        return; // No need of any more tests.
+                    }
                 }
-            } catch (exception $e) {
+            } catch (\Exception $e) {
                 if ($CFG->debug == DEBUG_DEVELOPER) {
                     throw $e;
                 } else {

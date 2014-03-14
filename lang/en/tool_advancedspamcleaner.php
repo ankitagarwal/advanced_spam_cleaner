@@ -119,3 +119,6 @@ $string['spamdescription'] = 'Spammer - spam deleted and account blocked {$a}';
 $string['spamreports'] = 'Spam reports: {$a}';
 $string['thanksspamrecorded'] = 'Thanks, your spam report has been recorded.';
 $string['totalcount'] = 'Total records by this user:-';
+$string['realtime'] = 'Scan for spam content on every create action';
+$string['realtime_desc'] = 'If enabled, advancedspam cleaner will scan all new content posted on the site for spam signatures in realtime';
+$string['realtimeplugin'] = 'Plugin to use for real time scans';

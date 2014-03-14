@@ -15,7 +15,7 @@
 // For a copy of the GNU General Public License, see <http://www.gnu.org/licenses/>.
 
 /* array('property', array('propertyname1', 'propertyname2')
-         'snapshot', array(array('tablename', 'id', array('propertyname')))
+         'snapshot', array(array('tablename', 'id', propertyname))
  *)
  */
 namespace tool_advancedspamcleaner;
@@ -23,8 +23,8 @@ namespace tool_advancedspamcleaner;
 defined('MOODLE_INTERNAL') || die();
 
 trait eventlist{
-    protected $eventlist = array(
-        'block_comments\event\comment_created' => array('snapshot' => array('comments', 'objectid', 'content'))
+    protected static $eventlist = array(
+        'block_comments\event\comment_created' => array('snapshots' => array(array('comments', 'objectid', 'content')))
     );
 
     /**
@@ -32,7 +32,7 @@ trait eventlist{
      *
      * @return array
      */
-    protected function get_events_list() {
-        return $this->eventlist;
+    protected static function get_events_list() {
+        return self::$eventlist;
     }
 }
