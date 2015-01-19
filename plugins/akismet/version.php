@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2013072200;
-$plugin->requires = 2012080100;
+$plugin->version  = 2015011900;
+$plugin->requires = 2013111800; // 2.6
 $plugin->component = 'advancedspamcleaner_akismet';
-$plugin->dependencies = array('tool_advancedspamcleaner' => ANY_VERSION);
+$plugin->dependencies = array('tool_advancedspamcleaner' => 2015011900);
