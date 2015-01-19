@@ -15,6 +15,8 @@
 
 global $CFG;
 require_once("$CFG->dirroot/$CFG->admin/tool/advancedspamcleaner/lib.php");
+require_once("$CFG->dirroot/blog/lib.php");
+require_once("$CFG->dirroot/blog/locallib.php");
 /**
  * Class test_tool_advancedspamcleaner Test calss for advanced_spam_cleaner
  */
@@ -153,9 +155,63 @@ class tool_advancedspamcleaner_advancedspamcleaner_testcase extends advanced_tes
         $this->assertSame(array('comment', $params->content, "$cid"), $spamtext);
 
         // TODO: Test forum posts
-        // TODO: Test blog summary
-        // TODO: Test blog subject
 
+        // Test blog subject.
+        $blog = new blog_entry();
+        $blog->subject = "comment poker"; // Spam entry.
+        $blog->userid = $user->id;
+        $states = blog_entry::get_applicable_publish_states();
+        $blog->publishstate = reset($states);
+        $blog->add();
+        $spamblogid = $blog->id;
+
+        $blog = new blog_entry();
+        $blog->subject = "comment"; // Normal entry.
+        $blog->userid = $user->id;
+        $states = blog_entry::get_applicable_publish_states();
+        $blog->publishstate = reset($states);
+        $blog->add();
+
+        $flags = new stdClass();
+        $flags->searchblogs = true;
+
+        $spamusers = $spamcleaner->search_spammers($flags, $keywords, 0, time() + 1000, true);
+        $this->assertEquals(1, count($spamusers));
+        $spam = array_pop($spamusers);
+        $this->assertEquals($user->id, $spam['user']->id);
+        $this->assertEquals(1, $spam['spamcount']);
+        $spamtext = array_pop($spam['spamtext']);
+        $this->assertSame(array('blogpost', "comment poker", "$spamblogid"), $spamtext);
+
+        // Test blog summary.
+        $blog = new blog_entry();
+        $blog->subject = "something";
+        $blog->summary = "comment poker summary"; // Spam entry.
+        $blog->userid = $user->id;
+        $states = blog_entry::get_applicable_publish_states();
+        $blog->publishstate = reset($states);
+        $blog->add();
+        $spamblogid = $blog->id;
+
+        $blog = new blog_entry();
+        $blog->subject = "something";
+        $blog->summary = "comment"; // Normal entry.
+        $blog->userid = $user->id;
+        $states = blog_entry::get_applicable_publish_states();
+        $blog->publishstate = reset($states);
+        $blog->add();
+
+        $flags = new stdClass();
+        $flags->searchblogs = true;
+
+        $spamusers = $spamcleaner->search_spammers($flags, $keywords, 0, time() + 1000, true);
+        $this->assertEquals(1, count($spamusers));
+        $spam = array_pop($spamusers);
+        $this->assertEquals($user->id, $spam['user']->id);
+        print_object($spam);
+//        $this->assertEquals(2, $spam['spamcount']);
+        $spamtext = reset($spam['spamtext']);
+        $this->assertSame(array('blogsummary', "comment poker summary", "$spamblogid"), $spamtext);
     }
 }
 
