@@ -335,7 +335,7 @@ class advanced_spam_cleaner {
         $users = $DB->get_recordset_sql($sql, $params);
         foreach ($users as $user) {
             $this->spamusers[$user->id]['user'] = $user;
-            if (empty($spamusers[$user->id]['spamcount'])) {
+            if (empty($this->spamusers[$user->id]['spamcount'])) {
                 $this->spamusers[$user->id]['spamcount'] = 1;
             } else {
                 $this->spamusers[$user->id]['spamcount']++;
