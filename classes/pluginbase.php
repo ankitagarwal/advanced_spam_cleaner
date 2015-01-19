@@ -13,24 +13,28 @@
 //
 // For a copy of the GNU General Public License, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
+/* Base sub-plugin class
+ * All sub -plugins must extend this class
+ * The name of the extend class should be $pluginname_advanced_spam_cleaner
+ */
+class tool_advancedspamcleaner_pluginbase {
+    public $pluginname;
 
-require_once('akismet.class.php');
-
-class akismet_advanced_spam_cleaner extends tool_advancedspamcleaner_pluginbase {
+    public function __construct($pluginname) {
+        $this->pluginname = $pluginname;
+    }
+    /* Detect if the supplied data is probable spam or not
+     * @param stdClass $data data to be examined
+     *
+     * @return bool true if $data is probable spam else false
+     */
     public function detect_spam ($data) {
-        global $CFG;
+        // Implement wrapper for your sub-plugins api in here.
+        return false;
+    }
 
-        $apikey = get_config('advancedspamcleaner', 'akismetkey');
-        if (!$apikey) {
-            print_error("noakismetkey", 'tool_advancedspamcleaner', new moodle_url($CFG->wwwroot . '/admin/settings.php', array('section' => 'advancedspamcleaner')));
-        }
-
-        $akismet = new Akismet($CFG->wwwroot, $apikey);
-        $akismet->setCommentAuthorEmail($data->email);
-        $akismet->setCommentContent($data->text);
-        $akismet->setUserIP($data->ip);
-
-        return $akismet->isCommentSpam();
+    public function canview($context) {
+        // Implement your custom cap checks here.
+        return true;
     }
 }

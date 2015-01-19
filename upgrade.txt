@@ -1,0 +1,4 @@
+=== 2.1-beta ===
+
+* Class 'base_advanced_spam_cleaner' has been renamed to 'tool_advancedspamcleaner_pluginbase' for consistency with moodle
+codebase and autoloading.

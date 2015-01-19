@@ -18,38 +18,6 @@ require_once($CFG->dirroot . '/mod/forum/lib.php');
 require_once($CFG->dirroot.'/tag/lib.php');
 require_once($CFG->libdir .'/tablelib.php');
 require_once($CFG->dirroot . '/comment/lib.php');
-// We cannot use autloading yet as plugin is supposed to support 2.3.
-// TODO: use autoloading.
-require_once('classes/spammerlib.php');
-require_once('classes/advanced_spammerlib.php');
-require_once('classes/manager.php');
-
-/* Base sub-plugin class
- * All sub -plugins must extend this class
- * The name of the extend class should be $pluginname_advanced_spam_cleaner
- */
-class base_advanced_spam_cleaner {
-    public $pluginname;
-
-    public function __construct($pluginname) {
-        $this->pluginname = $pluginname;
-    }
-    /* Detect if the supplied data is probable spam or not
-     * @param stdClass $data data to be examined
-     *
-     * @return bool true if $data is probable spam else false
-     */
-    public function detect_spam ($data) {
-        // Implement wrapper for your sub-plugins api in here.
-        return false;
-    }
-
-    public function canview($context) {
-        // Implement your custom cap checks here.
-        return true;
-    }
-}
-
 
 class advanced_spam_cleaner {
 
