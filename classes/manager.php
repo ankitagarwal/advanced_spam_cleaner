@@ -281,7 +281,8 @@ class tool_advancedspamcleaner_manager {
         $users = $DB->get_recordset_sql($sql, $params);
         foreach ($users as $user) {
             // Limit checks.
-            if (($this->apilimit != 0 && $this->apilimit <= $this->apicount) || ($this->hitlimit != 0 && $this->hitlimit <= $this->hitcount)) {
+            if (($this->apilimit != 0 && $this->apilimit <= $this->apicount) ||
+                ($this->hitlimit != 0 && $this->hitlimit <= $this->hitcount)) {
                 $this->limitflag = true;
                 return;
             }

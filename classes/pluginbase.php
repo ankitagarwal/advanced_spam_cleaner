@@ -13,9 +13,12 @@
 //
 // For a copy of the GNU General Public License, see <http://www.gnu.org/licenses/>.
 
-/* Base sub-plugin class
+/**
+ * Base sub-plugin class
  * All sub -plugins must extend this class
  * The name of the extend class should be $pluginname_advanced_spam_cleaner
+ *
+ * Class tool_advancedspamcleaner_pluginbase
  */
 class tool_advancedspamcleaner_pluginbase {
     public $pluginname;

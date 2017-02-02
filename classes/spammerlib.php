@@ -107,7 +107,7 @@ class tool_advancedspamcleaner_spammerlib {
         // Remove profile picture files from users file area.
         $fs = get_file_storage();
         $context = context_user::instance($this->user->id, MUST_EXIST);
-        $fs->delete_area_files($context->id, 'user', 'icon'); // drop all images in area
+        $fs->delete_area_files($context->id, 'user', 'icon'); // Drop all images in area.
 
         $updateuser = new stdClass();
         $updateuser->id = $this->user->id;
@@ -229,7 +229,7 @@ WHERE unreadmessageid IN
      */
     public function set_spammer() {
         global $DB;
-        //Make sure deletion should only happen for recently created account
+        // Make sure deletion should only happen for recently created account.
         if ($this->is_active()) {
             $transaction = $DB->start_delegated_transaction();
             try {
@@ -258,16 +258,26 @@ WHERE unreadmessageid IN
         global $DB;
         $htmlstr = '';
         $params = array('userid' => $this->user->id);
-        $userdata[] = get_string('countmessageunread', 'tool_advancedspamcleaner', (int)$DB->count_records('message', array('useridfrom' => $this->user->id)));
-        $userdata[] = get_string('countmessageread', 'tool_advancedspamcleaner', (int)$DB->count_records('message_read', array('useridfrom' => $this->user->id)));
-        $userdata[] = get_string('countforum', 'tool_advancedspamcleaner', (int)$DB->count_records('forum_posts', $params));
-        $userdata[] = get_string('countcomment', 'tool_advancedspamcleaner', (int)$DB->count_records('comments', $params));
-        $userdata[] = get_string('counttags', 'tool_advancedspamcleaner', (int)$DB->count_records('tag', $params));
+        $userdata[] = get_string('countmessageunread', 'tool_advancedspamcleaner',
+                (int)$DB->count_records('message', array('useridfrom' => $this->user->id)));
+        $userdata[] = get_string('countmessageread', 'tool_advancedspamcleaner',
+                (int)$DB->count_records('message_read', array('useridfrom' => $this->user->id)));
+        $userdata[] = get_string('countforum', 'tool_advancedspamcleaner',
+                (int)$DB->count_records('forum_posts', $params));
+        $userdata[] = get_string('countcomment', 'tool_advancedspamcleaner',
+                (int)$DB->count_records('comments', $params));
+        $userdata[] = get_string('counttags', 'tool_advancedspamcleaner',
+                (int)$DB->count_records('tag', $params));
         $htmlstr = html_writer::tag('div class="block_spam_bold block_spam_highlight"', get_string('totalcount', 'tool_advancedspamcleaner'));
         $htmlstr .= html_writer::alist($userdata);
         return $htmlstr;
     }
 
+    /**
+     * Return $this->>user.
+     *
+     * @return mixed|stdClass
+     */
     public function get_user() {
         return $this->user;
     }

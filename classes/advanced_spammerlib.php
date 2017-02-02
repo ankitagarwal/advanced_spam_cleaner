@@ -112,9 +112,9 @@ class tool_advancedspamcleaner_advanced_spammerlib extends tool_advancedspamclea
 
         // Now the form itself around it.
         if ($button->method === 'get') {
-            $url = $button->url->out_omit_querystring(true); // url without params, the anchor part allowed
+            $url = $button->url->out_omit_querystring(true); // URL without params, the anchor part allowed.
         } else {
-            $url = $button->url->out_omit_querystring();     // url without params, the anchor part not allowed
+            $url = $button->url->out_omit_querystring();     // URL without params, the anchor part not allowed.
         }
         if ($url === '') {
             $url = '#'; // There has to be always some action.
