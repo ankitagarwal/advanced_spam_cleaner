@@ -39,7 +39,7 @@ class tool_advancedspamcleaner_advancedspamcleaner_testcase extends advanced_tes
 
         $spamcleaner = new test_tool_advanced_spam_cleaner();
         $manager = new tool_advancedspamcleaner_manager();
-        $keywords = $manager->autokeywords;
+        $keywords = $manager::AUTO_KEYWORDS;
         $keywordfull = array();
         $params = array('userid' => $USER->id, 'start' => 0, 'end' => time());
         $i = 0;
@@ -80,7 +80,6 @@ class tool_advancedspamcleaner_advancedspamcleaner_testcase extends advanced_tes
         $spamcleaner = new test_tool_advanced_spam_cleaner();
         $manager = new tool_advancedspamcleaner_manager();
         $keywords = array("poker", "whatever");
-
 
         // Create a spamming user.
         $record = new stdClass();
@@ -208,7 +207,6 @@ class tool_advancedspamcleaner_advancedspamcleaner_testcase extends advanced_tes
         $this->assertEquals(1, count($spamusers));
         $spam = array_pop($spamusers);
         $this->assertEquals($user->id, $spam['user']->id);
-        print_object($spam);
 //        $this->assertEquals(2, $spam['spamcount']);
         $spamtext = reset($spam['spamtext']);
         $this->assertSame(array('blogsummary', "comment poker summary", "$spamblogid"), $spamtext);

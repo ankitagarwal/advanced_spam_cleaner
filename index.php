@@ -66,13 +66,12 @@ if (!empty($delall) && confirm_sesskey()) {
     exit;
 }
 
+// Ignore a user.
 if (!empty($ignore)) {
     unset($SESSION->users_result[$id]);
     echo json_encode(true);
     exit;
 }
-
-
 
 $PAGE->requires->js_init_call('M.tool_spamcleaner.init', array(me()), true);
 $strings = array('spaminvalidresult', 'spamdeleteallconfirm', 'spamcannotdelete', 'spamdeleteconfirm');

@@ -16,9 +16,13 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once("$CFG->libdir/formslib.php");
+
+/**
+ * Class tool_advanced_spam_cleaner
+ */
 class tool_advanced_spam_cleaner extends moodleform {
     // Define the form.
-    function definition() {
+    public function definition() {
         global $CFG;
 
         $mform = $this->_form;
@@ -79,8 +83,15 @@ class tool_advanced_spam_cleaner extends moodleform {
             $mform->setExpanded('datelimits');
         }
     }
-    // Add validations.
-    function validation($data, $files) {
+
+    /**
+     * Add validations.
+     *
+     * @param array $data
+     * @param array $files
+     * @return array
+     */
+    public function validation($data, $files) {
         $errors = parent::validation($data, $files);
         if ($data['method'] == 'usekeywords' && empty($data['keyword'])) {
             $errors['keyword'] = get_string('missingkeywords', 'tool_advancedspamcleaner');

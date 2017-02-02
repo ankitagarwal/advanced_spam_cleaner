@@ -28,6 +28,9 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once("$CFG->dirroot/$CFG->admin/tool/advancedspamcleaner/lib.php");
 
+/**
+ * Class block_spam_deletion_lib_testcase
+ */
 class block_spam_deletion_lib_testcase extends advanced_testcase {
     public function test_invalid_user() {
         $this->setExpectedException('moodle_exception');
@@ -39,21 +42,21 @@ class block_spam_deletion_lib_testcase extends advanced_testcase {
         $admin = get_admin();
 
         $this->setExpectedException('moodle_exception');
-        $lib = new spammerlib($admin->id);
+        new spammerlib($admin->id);
     }
 
     public function test_guest_user() {
         $guest = guest_user();
 
         $this->setExpectedException('moodle_exception');
-        $lib = new spammerlib($guest->id);
+        new spammerlib($guest->id);
     }
 
     public function test_current_user() {
         global $USER;
 
         $this->setExpectedException('moodle_exception');
-        $lib = new spammerlib($USER->id);
+        new spammerlib($USER->id);
     }
 
     public function test_old_user() {
@@ -137,7 +140,7 @@ class block_spam_deletion_lib_testcase extends advanced_testcase {
         $params->timecreated = time();
         $params->format = FORMAT_MOODLE;
 
-        for ($i=0; $i<10; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $params->content = $user->username.'comment'.$i;
             $params->userid = $user->id;
             $DB->insert_record('comments', $params);
@@ -147,18 +150,18 @@ class block_spam_deletion_lib_testcase extends advanced_testcase {
             $DB->insert_record('comments', $params);
         }
 
-        $usercommentcount = $DB->count_records('comments', array('userid'=>$user->id));
+        $usercommentcount = $DB->count_records('comments', array('userid' => $user->id));
         $this->assertEquals($usercommentcount, 10);
-        $spammercommentcount = $DB->count_records('comments', array('userid'=>$spammer->id));
+        $spammercommentcount = $DB->count_records('comments', array('userid' => $spammer->id));
         $this->assertEquals($spammercommentcount, 10);
 
         $lib = new spammerlib($spammer->id);
         $this->assertInstanceOf('spammerlib', $lib);
         $lib->set_spammer();
 
-        $usercommentcount = $DB->count_records('comments', array('userid'=>$user->id));
+        $usercommentcount = $DB->count_records('comments', array('userid' => $user->id));
         $this->assertEquals($usercommentcount, 10);
-        $spammercommentcount = $DB->count_records('comments', array('userid'=>$spammer->id));
+        $spammercommentcount = $DB->count_records('comments', array('userid' => $spammer->id));
         $this->assertEmpty($spammercommentcount);
     }
 

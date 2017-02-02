@@ -22,6 +22,19 @@ defined('MOODLE_INTERNAL') || die();
  */
 class tool_advancedspamcleaner_manager {
 
+    /* List of known spammy keywords, please add more here. */
+    const AUTO_KEYWORDS = array(
+        "<img",
+        "fuck",
+        "casino",
+        "porn",
+        "xxx",
+        "cialis",
+        "viagra",
+        "poker",
+        "warcraft"
+    );
+
     /* bool Use api limits? */
     public $uselimits = false;
 
@@ -43,18 +56,6 @@ class tool_advancedspamcleaner_manager {
     /* End boundry to look for spam content */
     public $endtime = 0;
 
-    // List of known spammy keywords, please add more here.
-    public $autokeywords = array(
-            "<img",
-            "fuck",
-            "casino",
-            "porn",
-            "xxx",
-            "cialis",
-            "viagra",
-            "poker",
-            "warcraft"
-            );
     /** @var array keywords to use during search */
     public $keywords = array();
 
@@ -130,7 +131,7 @@ class tool_advancedspamcleaner_manager {
                 print_error(get_string('missingkeywords', 'tool_advancedspamcleaner'));
             }
         } else if ($this->method == 'spamauto') {
-            $this->keywords = array_map('trim', $this->autokeywords);
+            $this->keywords = array_map('trim', self::AUTO_KEYWORDS);
         } else {
             if (!in_array($this->method, array_keys($this->pluginlist))) {
                 print_error("Invalid sub plugin");

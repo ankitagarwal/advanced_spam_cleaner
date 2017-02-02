@@ -52,6 +52,16 @@ class advanced_spam_cleaner {
         return $pluginlist;
     }
 
+    /**
+     * Search spammers.
+     *
+     * @param $data
+     * @param null $keywords
+     * @param int $starttime
+     * @param int $endtime
+     * @param bool $return
+     * @return array
+     */
     public function search_spammers($data, $keywords = null, $starttime = 0, $endtime = 0, $return = false) {
 
         global $USER, $DB, $OUTPUT;
@@ -163,6 +173,14 @@ class advanced_spam_cleaner {
         }
     }
 
+    /**
+     * Print the table.
+     *
+     * @param null $usersrs
+     * @param null $keywords
+     * @param bool $resetsession
+     * @param bool $limitflag
+     */
     static public function print_table($usersrs = null, $keywords = null, $resetsession = false, $limitflag = false) {
         global $CFG, $OUTPUT, $PAGE;
         // TODO: Highlight $keywords
@@ -323,7 +341,7 @@ class advanced_spam_cleaner {
 
     /**
      * Structures data and triggers requested plugin's spam detection api. Populates stats, and spam users array.
-     *.
+     *
      * @param $sql         string Sql to get the data to pass onto the plugin for spam checks.
      * @param $params      string params for the $sql
      * @param $type        string What is the type of data that is checked.
