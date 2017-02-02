@@ -33,7 +33,7 @@ require_once("$CFG->dirroot/$CFG->admin/tool/advancedspamcleaner/lib.php");
  */
 class block_spam_deletion_lib_testcase extends advanced_testcase {
     public function test_invalid_user() {
-        $this->setExpectedException('moodle_exception');
+        $this->expectException('moodle_exception');
 
         $doesnotexist = new spammerlib(23242342);
     }
@@ -41,21 +41,21 @@ class block_spam_deletion_lib_testcase extends advanced_testcase {
     public function test_admin_user() {
         $admin = get_admin();
 
-        $this->setExpectedException('moodle_exception');
+        $this->expectException('moodle_exception');
         new spammerlib($admin->id);
     }
 
     public function test_guest_user() {
         $guest = guest_user();
 
-        $this->setExpectedException('moodle_exception');
+        $this->expectException('moodle_exception');
         new spammerlib($guest->id);
     }
 
     public function test_current_user() {
         global $USER;
 
-        $this->setExpectedException('moodle_exception');
+        $this->expectException('moodle_exception');
         new spammerlib($USER->id);
     }
 
@@ -87,7 +87,7 @@ class block_spam_deletion_lib_testcase extends advanced_testcase {
         $this->assertInstanceOf('spammerlib', $lib);
         $this->assertFalse($lib->is_recentuser());
         $this->assertFalse($lib->is_active());
-        $this->setExpectedException('moodle_exception');
+        $this->expectException('moodle_exception');
         $lib->set_spammer();
     }
 
@@ -101,7 +101,7 @@ class block_spam_deletion_lib_testcase extends advanced_testcase {
         $this->assertInstanceOf('spammerlib', $lib);
 
         // Expect exception because can't set an old user as a spammer.
-        $this->setExpectedException('moodle_exception');
+        $this->expectException('moodle_exception');
         $lib->set_spammer();
     }
 

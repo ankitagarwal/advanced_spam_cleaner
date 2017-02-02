@@ -83,7 +83,7 @@ class tool_advancedspamcleaner_manager_testcase extends advanced_testcase {
         $this->assertSame($arr, $manager->keywords);
 
         $formdata->method = 'random';
-        $this->setExpectedException('moodle_exception');
+        $this->expectException('moodle_exception');
         $manager->set_form_data($formdata);
     }
 
