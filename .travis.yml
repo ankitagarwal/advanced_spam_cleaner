@@ -1,42 +1,54 @@
 notifications:
-email:
-on_success: never
-on_failure: always
-before_install:
-- "export DISPLAY=:99.0"
-- "sh -e /etc/init.d/xvfb start"
+  email:
+    on_success: never
+    on_failure: always
+
 language: php
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
 php:
-- "5.4"
-- "5.5"
-- "5.6"
+  - "5.6"
+
 env:
-- DB=pgsql MOODLE_VERSION=master
-- DB=pgsql MOODLE_VERSION=MOODLE_28_STABLE
-- DB=pgsql MOODLE_VERSION=MOODLE_27_STABLE
-- DB=pgsql MOODLE_VERSION=MOODLE_26_STABLE
-before_script:
-- git clone git://github.com/moodle/moodle ../moodle && cd ../moodle
-- git checkout $MOODLE_VERSION
-- sudo apt-get update > /dev/null
-- mv ../advanced_spam_cleaner ./admin/tool/advancedspamcleaner
-- composer self-update
-- sudo apt-get install -y --force-yes php5-curl php5-pgsql php5-intl php5-curl php5-dev php5-gd php5-mcrypt php5-tidy php5-xmlrpc
-- cp config-dist.php config.php
-- sh -c "sed -i -e s/\'password\'/\'\'/ -e s%example.com/moodle%moodle.travis/moodle% -e s%/home/example%$HOME% -e 's%\(\$CFG.*bht\)%\n\1%' -e 's%\(\$CFG.*phpunit\)%\n\1%' -e 's%\(\$CFG.*behat_wwwroot.*http://127\)%\n\1%' -e s%127.0.0.1/moodle%localhost:8000% config.php"
-- cat config.php
-- sh -c "psql -c 'create database moodle;' -U postgres"
-- sh -c "sed -i s/\'username\'/\'postgres\'/ config.php"
-- mkdir -m777 $HOME/moodledata
-- mkdir -m777 $HOME/bht_moodledata
-- mkdir -m777 $HOME/phpu_moodledata
-- php admin/tool/behat/cli/init.php
-- php admin/tool/phpunit/cli/init.php
-- "(php -S localhost:8000 &) 2> /dev/null > /dev/null"
-- "wget http://selenium-release.storage.googleapis.com/2.44/selenium-server-standalone-2.44.0.jar"
-- "(java -jar selenium-server-standalone-2.44.0.jar &) 2> /dev/null > /dev/null"
-# Give time to selenium to start up.
-- sleep 10
+  - DB=pgsql MOODLE_BRANCH=MOODLE_30_STABLE
+  - DB=pgsql MOODLE_BRANCH=MOODLE_31_STABLE
+  - DB=mysqli MOODLE_BRANCH=MOODLE_30_STABLE
+  - DB=mysqli MOODLE_BRANCH=MOODLE_31_STABLE
+
+matrix:
+  include:
+    - php: 7.1
+      env: DB=pgsql MOODLE_BRANCH=master
+    - php: 7.1
+      env: DB=mysqli MOODLE_BRANCH=MOODLE_32_STABLE
+    - php: 7.0
+      env: DB=pgsql MOODLE_BRANCH=master
+    - php: 7.0
+      env: DB=mysqli MOODLE_BRANCH=MOODLE_32_STABLE
+
+before_install:
+  - phpenv config-rm xdebug.ini
+  - cd ../..
+  - composer selfupdate
+  - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^1
+  - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
+
+install:
+  - moodle-plugin-ci install
+
 script:
-- vendor/bin/phpunit
-- vendor/bin/behat --config /home/travis/bht_moodledata/behat/behat.yml --tags @tool_advancedspamcleaner
+  - moodle-plugin-ci phplint
+  - moodle-plugin-ci phpcpd
+  - moodle-plugin-ci phpmd
+  - moodle-plugin-ci codechecker
+  - moodle-plugin-ci csslint
+  - moodle-plugin-ci shifter
+  - moodle-plugin-ci jshint
+  - moodle-plugin-ci validate
+  - moodle-plugin-ci phpunit
+  - moodle-plugin-ci behat
