@@ -22,7 +22,6 @@
  * @license GPL3 or later
  */
 
-
 require_once('../../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
 require_once('advanced_form.php');

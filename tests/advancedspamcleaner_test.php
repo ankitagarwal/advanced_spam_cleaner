@@ -219,6 +219,9 @@ class tool_advancedspamcleaner_advancedspamcleaner_testcase extends advanced_tes
 
 class test_tool_advanced_spam_cleaner extends advanced_spam_cleaner {
 
+    /**
+     * @return array
+     */
     public function get_spamusers() {
         return $this->spamusers;
     }

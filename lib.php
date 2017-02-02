@@ -19,6 +19,9 @@ require_once($CFG->dirroot.'/tag/lib.php');
 require_once($CFG->libdir .'/tablelib.php');
 require_once($CFG->dirroot . '/comment/lib.php');
 
+/**
+ * Class advanced_spam_cleaner
+ */
 class advanced_spam_cleaner {
 
     protected $spamusers = array();

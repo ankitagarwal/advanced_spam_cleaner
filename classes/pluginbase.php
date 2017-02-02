@@ -23,9 +23,14 @@
 class tool_advancedspamcleaner_pluginbase {
     public $pluginname;
 
+    /**
+     * tool_advancedspamcleaner_pluginbase constructor.
+     * @param $pluginname
+     */
     public function __construct($pluginname) {
         $this->pluginname = $pluginname;
     }
+
     /* Detect if the supplied data is probable spam or not
      * @param stdClass $data data to be examined
      *
@@ -36,6 +41,12 @@ class tool_advancedspamcleaner_pluginbase {
         return false;
     }
 
+    /**
+     * Can view this plugin or not.
+     *
+     * @param $context
+     * @return bool
+     */
     public function canview($context) {
         // Implement your custom cap checks here.
         return true;

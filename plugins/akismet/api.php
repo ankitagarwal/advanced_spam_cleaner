@@ -17,13 +17,24 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once('akismet.class.php');
 
+/**
+ * Class akismet_advanced_spam_cleaner
+ */
 class akismet_advanced_spam_cleaner extends tool_advancedspamcleaner_pluginbase {
+
+    /**
+     * Detect spam in given data.
+     *
+     * @param $data
+     * @return bool
+     */
     public function detect_spam ($data) {
         global $CFG;
 
         $apikey = get_config('advancedspamcleaner', 'akismetkey');
         if (!$apikey) {
-            print_error("noakismetkey", 'tool_advancedspamcleaner', new moodle_url($CFG->wwwroot . '/admin/settings.php', array('section' => 'advancedspamcleaner')));
+            print_error("noakismetkey", 'tool_advancedspamcleaner',
+                    new moodle_url($CFG->wwwroot . '/admin/settings.php', array('section' => 'advancedspamcleaner')));
         }
 
         $akismet = new Akismet($CFG->wwwroot, $apikey);
