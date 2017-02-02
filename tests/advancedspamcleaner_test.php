@@ -37,7 +37,7 @@ class tool_advancedspamcleaner_advancedspamcleaner_testcase extends advanced_tes
         $this->resetAfterTest();
         $this->setAdminUser();
 
-        $spamcleaner = new test_tool_advanced_spam_cleaner();
+        $spamcleaner = new advanced_spam_cleaner();
         $manager = new tool_advancedspamcleaner_manager();
         $keywords = $manager::AUTO_KEYWORDS;
         $keywordfull = array();
@@ -54,15 +54,18 @@ class tool_advancedspamcleaner_advancedspamcleaner_testcase extends advanced_tes
                   WHERE deleted = 0
                     AND id <> :userid
                     AND $conditions";  // Exclude oneself.
-        $spamcleaner->keyword_spam_search($sql, $params, 'userdesc', 'description', 'id');
-        $this->assertSame(array(), $spamcleaner->get_spamusers()); // No content so far.
+        phpunit_util::call_internal_method($spamcleaner, "keyword_spam_search",
+                array($sql, $params, 'userdesc', 'description', 'id'), "advanced_spam_cleaner");
+        $this->assertSame(array(),
+            phpunit_util::call_internal_method($spamcleaner, "get_spamusers", array(), "advanced_spam_cleaner")); // No content so far.
 
         $record = new stdClass();
         $record->description = "All things that play poker, like poker.";
         $user = $this->getDataGenerator()->create_user($record);
         $params['end'] += 1000; // Make sure time is not a issue.
-        $spamcleaner->keyword_spam_search($sql, $params, 'userdesc', 'description', 'id');
-        $spamusers = $spamcleaner->get_spamusers();
+        phpunit_util::call_internal_method($spamcleaner, "keyword_spam_search",
+            array($sql, $params, 'userdesc', 'description', 'id'), "advanced_spam_cleaner");
+        $spamusers = phpunit_util::call_internal_method($spamcleaner, "get_spamusers", array(), "advanced_spam_cleaner");
         $this->assertEquals(1, count($spamusers));
         $spam = array_pop($spamusers);
         $this->assertEquals($user->id, $spam['user']->id);
@@ -77,7 +80,7 @@ class tool_advancedspamcleaner_advancedspamcleaner_testcase extends advanced_tes
         $this->resetAfterTest();
         $this->setAdminUser();
 
-        $spamcleaner = new test_tool_advanced_spam_cleaner();
+        $spamcleaner = new advanced_spam_cleaner();
         $manager = new tool_advancedspamcleaner_manager();
         $keywords = array("poker", "whatever");
 
@@ -210,23 +213,5 @@ class tool_advancedspamcleaner_advancedspamcleaner_testcase extends advanced_tes
 //        $this->assertEquals(2, $spam['spamcount']);
         $spamtext = reset($spam['spamtext']);
         $this->assertSame(array('blogsummary', "comment poker summary", "$spamblogid"), $spamtext);
-    }
-}
-
-/**
- * Class test_tool_advanced_spam_cleaner wrapper to expose a few things for unit testing.
- */
-
-class test_tool_advanced_spam_cleaner extends advanced_spam_cleaner {
-
-    /**
-     * @return array
-     */
-    public function get_spamusers() {
-        return $this->spamusers;
-    }
-
-    public function keyword_spam_search($sql, $params, $text, $type, $id) {
-        parent::keyword_spam_search($sql, $params, $text, $type, $id);
     }
 }
