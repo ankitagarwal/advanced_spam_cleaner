@@ -54,6 +54,7 @@ Change log
 * 2013091800 - Minor bug fixes - 2.0-beta
 * 2013111300 - $CFG->admin support, autoloading for unittests, - 2.0
 * 2015011900 - more unit tests, oracle bug fixes, autloading of plugin base class, travis support - 2.1-beta
+* 2017013100 - Cleanup, remove deprecated apis from core, make phpunit tests phpunit 6.0 compatible, change versions - 2.2-beta
 
 
 About Author
