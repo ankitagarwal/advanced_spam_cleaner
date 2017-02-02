@@ -210,7 +210,7 @@ WHERE unreadmessageid IN
      * Delete all tags
      */
     protected function delete_user_tags() {
-        tag_set('user', $this->user->id, array());
+        core_tag_tag::delete_instances("core", "user", context_user::instance($this->user->id)->id);
     }
 
     /**

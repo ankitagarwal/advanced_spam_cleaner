@@ -364,4 +364,13 @@ class advanced_spam_cleaner {
             $this->spamusers[$user->id]['spamtext'][$this->spamusers[$user->id]['spamcount']] = array ($type , $user->$text, $user->$id);
         }
     }
+
+    /**
+     * Intentionally protected used only in unit tests.
+     * @return array
+     */
+    protected function get_spamusers() {
+        return $this->spamusers;
+    }
+
 }
