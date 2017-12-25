@@ -27,7 +27,7 @@ $string['akismetkey_desc'] = 'Enter the key that you got from akismet.com';
 $string['apilimit'] = 'Api limit';
 $string['apilimit_help'] = 'Maximum amount of Api calls to make. (0 = unlimited)';
 $string['blogpost'] = 'Blog post';
-$string['blogsummar'] = 'Blog summary';
+$string['blogsummary'] = 'Blog summary';
 $string['commment'] = 'Comment';
 $string['datelimits'] = 'Date limits';
 $string['enddate'] = 'End date';
