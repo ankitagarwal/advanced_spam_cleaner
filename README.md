@@ -56,6 +56,7 @@ Change log
 * 2015011900 - more unit tests, oracle bug fixes, autloading of plugin base class, travis support - 2.1-beta
 * 2017013100 - Cleanup, remove deprecated apis from core, make phpunit tests phpunit 6.0 compatible, change versions - 2.2-beta
 * 2016052300 - Update to Moodle 3.4
+* 2019031300 - Update to Moodle 3.6
 
 About Author
 =====================
