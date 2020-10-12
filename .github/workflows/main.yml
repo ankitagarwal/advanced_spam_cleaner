@@ -25,6 +25,12 @@ jobs:
       DB: ${{ matrix.db }}
       MOODLE_BRANCH: ${{ matrix.moodle_branch }}
 
+    services:
+      mysql:
+        image: mysql
+      postgres:
+        image: postgres
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
