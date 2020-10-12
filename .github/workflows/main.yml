@@ -63,7 +63,7 @@ jobs:
       - name: Install Moodle CI
         run: |
           echo $PATH
-          moodle-plugin-ci install
+          moodle-plugin-ci install --db-pass ${{ matrix.db_pass }} --db-user ${{ matrix.db_user }}
 
       - name: Run tests
         run: |
