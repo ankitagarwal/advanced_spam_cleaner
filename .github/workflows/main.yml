@@ -43,11 +43,6 @@ jobs:
 
       - name: Setup Mysqli
         uses: mirromutth/mysql-action@v1.1
-        with:
-          mysql version: '8.0'
-          mysql database: "moodle"
-          mysql user: ${{ matrix.db_user }}
-          mysql password: ${{ matrix.db_pass }}
 
       - name: Setup PgSql
         uses: harmon758/postgresql-action@v1
@@ -96,8 +91,8 @@ jobs:
           moodle-plugin-ci behat
 
       - name: Debugging
+        if: ${{ failure() }}
         run: |
-          sudo service mysql start
           systemctl status mysql.service
           journalctl -xe
 
