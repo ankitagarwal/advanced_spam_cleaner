@@ -47,9 +47,13 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
 
-      - name: Set up moodle plugin ci
+      - name: Set up phpenv
         run: |
           curl -L http://git.io/phpenv-installer | bash
+          echo "$PHPENV_ROOT/bin" >> $GITHUB_PATH
+
+      - name: Set up moodle plugin ci
+        run: |
           phpenv config-rm xdebug.ini
           cd ../..
           composer self-update
