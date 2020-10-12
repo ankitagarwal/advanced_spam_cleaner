@@ -28,10 +28,6 @@ jobs:
       MOODLE_BRANCH: ${{ matrix.moodle_branch }}
 
     services:
-      mysql:
-        image: mysql
-        env:
-          MYSQL_ROOT_PASSWORD: ${{ matrix.db_pass }}
       postgres:
         image: postgres
 
@@ -39,6 +35,10 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+      - uses: mirromutth/mysql-action@v1.1
+        with:
+          - mysql user: ${{ matrix.db_user }}
+          - mysql password: ${{ matrix.db_pass }}
 
       # Set up PHP.
       - name: Setup PHP
