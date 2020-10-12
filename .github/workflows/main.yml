@@ -16,6 +16,15 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: test
+        ports:
+          - '8888:3306'
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     strategy:
       matrix:
         php-versions: ['7.0']
@@ -24,15 +33,13 @@ jobs:
     env:
       DB: ${{ matrix.db }}
       MOODLE_BRANCH: ${{ matrix.moodle_branch }}
-
-    services:
-      postgres:
-        image: postgres
+      DB_HOST: "127.0.0.1"
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+      - run: mysql -h 127.0.0.1 --port 8888 -u root -ppassword -e 'CREATE DATABASE IF NOT EXISTS test;'
 
       - name: Run mysqli
         run: |
