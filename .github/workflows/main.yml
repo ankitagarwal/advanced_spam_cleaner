@@ -33,10 +33,13 @@ jobs:
 
       - name: Set up moodle plugin ci
         run: |
+          pwd
           cd ../..
+          pwd
           composer selfupdate
           composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^1
           export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
+          echo PATH
 
       - name: Install Moodle CI
         run: moodle-plugin-ci install
