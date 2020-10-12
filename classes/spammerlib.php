@@ -146,7 +146,7 @@ class tool_advancedspamcleaner_spammerlib {
         // Delete message workers..
         $sql = 'DELETE FROM {message_working}
 WHERE unreadmessageid IN
-(SELECT id FROM {message} WHERE useridfrom = ?)';
+(SELECT id FROM {messages} WHERE useridfrom = ?)';
         $DB->execute($sql, array($userid));
         $DB->delete_records('message', array('useridfrom' => $userid));
         $DB->delete_records('message_read', array('useridfrom' => $userid));

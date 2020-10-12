@@ -218,7 +218,7 @@ class tool_advancedspamcleaner_manager {
     public function plugin_msgs_search($plugin) {
         if (!empty($this->formdata->searchmsgs)) {
             $sql  = "SELECT u.*, m.id as mid, m.fullmessage
-                        FROM {user} u, {message} m
+                        FROM {user} u, {messages} m
                       WHERE u.deleted = 0
                          AND u.id=m.useridfrom
                          AND u.id <> :userid
