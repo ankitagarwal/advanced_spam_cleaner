@@ -95,9 +95,9 @@ jobs:
           moodle-plugin-ci behat
 
       - name: Debugging
-        if: ${{ failure() }}
-          run: |
-            sudo service mysql start
-            systemctl status mysql.service
-            journalctl -xe
+      if: ${{ failure() }}
+        run: |
+          sudo service mysql start
+          systemctl status mysql.service
+          journalctl -xe
 
