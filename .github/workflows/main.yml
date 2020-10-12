@@ -38,8 +38,8 @@ jobs:
           pwd
           composer selfupdate
           composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^1
-          echo "ci/bin" >> $GITHUB_PATH
-          echo "ci/vendor/bin" >> $GITHUB_PATH
+          echo "$(cd ci/bin; pwd)" >> $GITHUB_PATH
+          echo "$(cd ci/vendor/bin; pwd)" >> $GITHUB_PATH
           echo $PATH
           cd ci/bin
           ls -la
