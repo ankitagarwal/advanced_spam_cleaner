@@ -64,7 +64,7 @@ jobs:
       - name: Install Moodle CI
         run: |
           echo $PATH
-          moodle-plugin-ci install --db-host 127.0.0.1
+          moodle-plugin-ci install --db-host 127.0.0.1 --db-port 8888
 
       - name: Run tests
         run: |
