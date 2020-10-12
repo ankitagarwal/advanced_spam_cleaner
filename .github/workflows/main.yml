@@ -57,7 +57,7 @@ jobs:
 
       - name: Run mysqli
         run: |
-          sudo service postgresql stop
+          sudo service postgresql start
 
       # Set up PHP.
       - name: Setup PHP
