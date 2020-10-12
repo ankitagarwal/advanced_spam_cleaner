@@ -54,6 +54,7 @@ jobs:
 
       - name: Set up moodle plugin ci
         run: |
+          phpenv init
           phpenv config-rm xdebug.ini
           cd ../..
           composer self-update
