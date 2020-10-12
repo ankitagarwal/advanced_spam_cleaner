@@ -51,7 +51,7 @@ jobs:
         run: |
           cd ../..
           composer self-update
-          composer create-project -n --no-dev moodlehq/moodle-plugin-ci ci ^1
+          composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^3
           echo "$(cd ci/bin; pwd)" >> $GITHUB_PATH
           echo "$(cd ci/vendor/bin; pwd)" >> $GITHUB_PATH
 
