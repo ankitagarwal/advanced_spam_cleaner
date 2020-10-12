@@ -47,7 +47,10 @@ jobs:
 
 
       - name: Run mysqli
-        run: sudo service mysql start
+        run: |
+        sudo service mysql start
+        systemctl status mysql.service
+        journalctl -xe
 
       - name: Setup PgSql
         uses: harmon758/postgresql-action@v1
