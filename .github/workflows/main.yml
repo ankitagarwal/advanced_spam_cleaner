@@ -41,11 +41,6 @@ jobs:
       - uses: actions/checkout@v2
       - run: mysql -h 127.0.0.1 -u root -ppassword -e 'CREATE DATABASE IF NOT EXISTS test;'
 
-      - name: Run mysqli
-        run: |
-          sudo service mysql restart
-          sudo service postgresql restart
-
       # Set up PHP.
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
