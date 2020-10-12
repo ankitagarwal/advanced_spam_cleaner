@@ -44,6 +44,7 @@ jobs:
       - name: Setup Mysqli
         uses: mirromutth/mysql-action@v1.1
         with:
+          mysql version: '8.0'
           mysql database: "moodle"
           mysql user: ${{ matrix.db_user }}
           mysql password: ${{ matrix.db_pass }}
@@ -79,7 +80,7 @@ jobs:
       - name: Install Moodle CI
         run: |
           echo $PATH
-          moodle-plugin-ci install --db-pass ${{ matrix.db_pass }} --db-user ${{ matrix.db_user }}
+          moodle-plugin-ci install --db-pass ${{ matrix.db_pass }} --db-user ${{ matrix.db_user }} --db-name moodle
 
       - name: Run tests
         run: |
