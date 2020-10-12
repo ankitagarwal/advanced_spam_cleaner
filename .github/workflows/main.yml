@@ -31,10 +31,25 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Set up moodle plugin ci
         run: |
           cd ../..
           composer selfupdate
           composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^1
           export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
+
+      - name: Install Moodle CI
+        run: moodle-plugin-ci install
+
+      - name: Run tests
+        run: |
+          moodle-plugin-ci phplint
+          moodle-plugin-ci phpcpd
+          moodle-plugin-ci phpmd
+          moodle-plugin-ci codechecker
+          moodle-plugin-ci csslint
+          moodle-plugin-ci shifter
+          moodle-plugin-ci jshint
+          moodle-plugin-ci validate
+          moodle-plugin-ci phpunit
+          moodle-plugin-ci behat
