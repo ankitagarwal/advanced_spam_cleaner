@@ -37,7 +37,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Shutdown Ubuntu MySQL (SUDO)
-        run: sudo service mysql stop
+        run: |
+          sudo service mysql stop
+          sudo service postgresql stop
 
       - name: Setup Mysqli
         uses: mirromutth/mysql-action@v1.1
@@ -45,16 +47,18 @@ jobs:
           mysql user: ${{ matrix.db_user }}
           mysql password: ${{ matrix.db_pass }}
 
-
-      - name: Run mysqli
-        run: |
-          sudo service mysql start
-
       - name: Setup PgSql
         uses: harmon758/postgresql-action@v1
         with:
           postgresql user: ${{ matrix.db_user }}
           postgresql password: ${{ matrix.db_pass }}
+
+
+
+      - name: Run mysqli
+        run: |
+          sudo service mysql start
+          sudo service postgresql stop
 
       # Set up PHP.
       - name: Setup PHP
@@ -95,7 +99,6 @@ jobs:
           moodle-plugin-ci behat
 
       - name: Debugging
-      if: failure()
         run: |
           sudo service mysql start
           systemctl status mysql.service
