@@ -21,6 +21,8 @@ jobs:
         php-versions: ['7.0','7.3', '8.0']
         db: ['pgsql', 'mysqli']
         moodle_branch: ['MOODLE_38_STABLE', 'MOODLE_39_STABLE']
+        db_user: ['root']
+        db_pass: ['root']
     env:
       DB: ${{ matrix.db }}
       MOODLE_BRANCH: ${{ matrix.moodle_branch }}
@@ -28,6 +30,8 @@ jobs:
     services:
       mysql:
         image: mysql
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ matrix.db_pass }}
       postgres:
         image: postgres
 
