@@ -41,7 +41,7 @@ jobs:
           export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
           echo $PATH
           cd ci/bin
-          ls
+          ls -la
 
 
       - name: Install Moodle CI
