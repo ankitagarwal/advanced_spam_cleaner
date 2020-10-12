@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: ['7.0','7.3', '8.0']
+        php-versions: ['7.0']
         db: ['pgsql', 'mysqli']
         moodle_branch: ['MOODLE_38_STABLE', 'MOODLE_39_STABLE']
         db_user: ['root']
@@ -49,8 +49,6 @@ jobs:
       - name: Run mysqli
         run: |
           sudo service mysql start
-          systemctl status mysql.service
-          journalctl -xe
 
       - name: Setup PgSql
         uses: harmon758/postgresql-action@v1
@@ -95,3 +93,11 @@ jobs:
           moodle-plugin-ci validate
           moodle-plugin-ci phpunit
           moodle-plugin-ci behat
+
+      - name: Debugging
+        if: ${{ failure() }}
+          run: |
+            sudo service mysql start
+            systemctl status mysql.service
+            journalctl -xe
+
