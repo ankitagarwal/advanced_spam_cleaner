@@ -46,7 +46,9 @@ jobs:
 
 
       - name: Install Moodle CI
-        run: moodle-plugin-ci install
+        run: |
+          echo $PATH
+          moodle-plugin-ci install
 
       - name: Run tests
         run: |
