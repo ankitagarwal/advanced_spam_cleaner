@@ -5,6 +5,11 @@ notifications:
 
 language: php
 
+services:
+  - mysql
+  - postgresql
+  - docker
+
 sudo: false
 
 cache:
