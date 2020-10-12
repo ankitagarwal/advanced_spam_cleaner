@@ -23,7 +23,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: test
         ports:
-          - '8888:3306'
+          - '3306'
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     strategy:
       matrix:
@@ -39,7 +39,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - run: mysql -h 127.0.0.1 --port 8888 -u root -ppassword -e 'CREATE DATABASE IF NOT EXISTS test;'
+      - run: mysql -h 127.0.0.1 --port 3306 -u root -ppassword -e 'CREATE DATABASE IF NOT EXISTS test;'
 
       - name: Run mysqli
         run: |
@@ -64,7 +64,7 @@ jobs:
       - name: Install Moodle CI
         run: |
           echo $PATH
-          moodle-plugin-ci install --db-host 127.0.0.1 --db-port 8888
+          moodle-plugin-ci install --db-host 127.0.0.1
 
       - name: Run tests
         run: |
