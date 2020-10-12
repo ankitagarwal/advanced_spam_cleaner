@@ -36,21 +36,13 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Shutdown Ubuntu MySQL (SUDO)
-        run: |
-          sudo service mysql stop
-          sudo service postgresql stop
-
-      - name: Setup Mysqli
-        uses: mirromutth/mysql-action@v1.1
-
       - name: Setup PgSql
         uses: harmon758/postgresql-action@v1
 
       - name: Run mysqli
         run: |
-          sudo service mysql start
-          sudo service postgresql start
+          sudo service mysql restart
+          sudo service postgresql restart
 
       # Set up PHP.
       - name: Setup PHP
