@@ -19,10 +19,8 @@ jobs:
     strategy:
       matrix:
         php-versions: ['7.0']
-        db: ['pgsql', 'mysqli']
+        db: ['mysqli']
         moodle_branch: ['MOODLE_38_STABLE', 'MOODLE_39_STABLE']
-        db_user: ['admin']
-        db_pass: ['admin']
     env:
       DB: ${{ matrix.db }}
       MOODLE_BRANCH: ${{ matrix.moodle_branch }}
@@ -35,9 +33,6 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
-      - name: Setup PgSql
-        uses: harmon758/postgresql-action@v1
 
       - name: Run mysqli
         run: |
@@ -52,16 +47,11 @@ jobs:
 
       - name: Set up moodle plugin ci
         run: |
-          pwd
           cd ../..
-          pwd
           composer selfupdate
           composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^1
           echo "$(cd ci/bin; pwd)" >> $GITHUB_PATH
           echo "$(cd ci/vendor/bin; pwd)" >> $GITHUB_PATH
-          echo $PATH
-          cd ci/bin
-          ls -la
 
 
       - name: Install Moodle CI
