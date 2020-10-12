@@ -16,18 +16,26 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: ['7.0','7.3', '8.0']
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      # Set up PHP.
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          phpenv config-rm xdebug.ini
+          cd ../..
+          composer selfupdate
+          composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^1
+          export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
