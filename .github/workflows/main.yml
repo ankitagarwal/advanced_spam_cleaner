@@ -21,9 +21,9 @@ jobs:
         php-versions: ['7.0','7.3', '8.0']
         db: ['pqsql', 'msqli']
         moodle_branch: ['MOODLE_38_STABLE', 'MOODLE_39_STABLE']
-      env:
-        DB: ${{ matrix.db }}
-        MOODLE_BRANCH: ${{ matrix.moodle_branch }}
+    env:
+      DB: ${{ matrix.db }}
+      MOODLE_BRANCH: ${{ matrix.moodle_branch }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
