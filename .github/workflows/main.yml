@@ -41,6 +41,8 @@ jobs:
         with:
           mysql user: ${{ matrix.db_user }}
           mysql password: ${{ matrix.db_pass }}
+        run:
+          sudo /etc/init.d/mysql start
 
       - name: Setup PgSql
         uses: harmon758/postgresql-action@v1
