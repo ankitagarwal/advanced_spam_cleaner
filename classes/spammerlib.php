@@ -144,12 +144,7 @@ class tool_advancedspamcleaner_spammerlib {
         $userid = $this->user->id;
 
         // Delete message workers..
-        $sql = 'DELETE FROM {message_working}
-WHERE unreadmessageid IN
-(SELECT id FROM {messages} WHERE useridfrom = ?)';
-        $DB->execute($sql, array($userid));
-        $DB->delete_records('message', array('useridfrom' => $userid));
-        $DB->delete_records('message_read', array('useridfrom' => $userid));
+        $DB->delete_records('messages', array('useridfrom' => $userid));
     }
 
     /**
@@ -258,10 +253,8 @@ WHERE unreadmessageid IN
         global $DB;
         $htmlstr = '';
         $params = array('userid' => $this->user->id);
-        $userdata[] = get_string('countmessageunread', 'tool_advancedspamcleaner',
-                (int)$DB->count_records('message', array('useridfrom' => $this->user->id)));
         $userdata[] = get_string('countmessageread', 'tool_advancedspamcleaner',
-                (int)$DB->count_records('message_read', array('useridfrom' => $this->user->id)));
+                (int)$DB->count_records('messages', array('useridfrom' => $this->user->id)));
         $userdata[] = get_string('countforum', 'tool_advancedspamcleaner',
                 (int)$DB->count_records('forum_posts', $params));
         $userdata[] = get_string('countcomment', 'tool_advancedspamcleaner',

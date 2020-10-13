@@ -112,7 +112,7 @@ class tool_advancedspamcleaner_advancedspamcleaner_testcase extends advanced_tes
         $message->subject = "This is subject";
         $message->fullmessage = "Let us play poker tonight";
         $message->timecreated = time();
-        $mid = $DB->insert_record("message", $message);
+        $mid = $DB->insert_record("messages", $message);
         $data->searchusers = false;
         $data->searchmsgs = true;
         $spamusers = $spamcleaner->search_spammers($data, $keywords, 0, time() + 1000, true);

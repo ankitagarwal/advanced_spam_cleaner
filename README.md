@@ -58,6 +58,7 @@ Change log
 * 2016052300 - Update to Moodle 3.4
 * 2019031300 - Update to Moodle 3.6
 * 2019092800 - Update to Moodle 3.7
+* 2020101201 - Update to Moodle 3.8, upgrade to new msging structure.
 
 About Author
 =====================
