@@ -17,8 +17,8 @@ cache:
     - $HOME/.composer/cache
 
 php:
-  - "7.0"
   - "7.3"
+  - "7.5"
   - "8.0"
 
 env:
@@ -31,7 +31,7 @@ before_install:
   - phpenv config-rm xdebug.ini
   - cd ../..
   - composer selfupdate
-  - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^1
+  - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^3
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
 
 install:

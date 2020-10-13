@@ -124,7 +124,7 @@ class advanced_spam_cleaner {
                     AND u.deleted = 0
                     AND u.id=c.userid
                     AND u.id <> :userid";
-        $sql5 = "SELECT u.*, m.id as mid, m.fullmessage FROM {user} u, {message} m
+        $sql5 = "SELECT u.*, m.id as mid, m.fullmessage FROM {user} u, {messages} m
                   WHERE $conditions5
                     AND u.deleted = 0
                     AND u.id=m.useridfrom

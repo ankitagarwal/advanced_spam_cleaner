@@ -44,6 +44,7 @@ class tool_advanced_spam_cleaner extends moodleform {
 
         $mform->addElement('text', 'keyword', get_string('keywordstouse', 'tool_advancedspamcleaner'));
         $mform->setType('keyword', PARAM_TEXT);
+        $mform->disabledIf('keyword', 'method', 'neq', 'usekeywords');
 
         $mform->addElement('header', 'searchscope', get_string('searchscope', 'tool_advancedspamcleaner'));
         $mform->addElement('advcheckbox', 'searchblogs', get_string('searchblogs', 'tool_advancedspamcleaner'));
